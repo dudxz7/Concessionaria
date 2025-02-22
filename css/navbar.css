@@ -1,0 +1,89 @@
+/* Estilo da barra de navegação */
+header {
+    background-color: #18131f;
+    padding: 10px 0;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between; /* Espaço entre os itens */
+    align-items: center;
+    padding: 0 20px;
+    width: 100%;
+}
+
+/* Ajustando a parte esquerda */
+nav .left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+nav .left a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Centralizando a logo na parte do meio */
+nav .center {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1; /* Faz a nav-center ocupar o restante do espaço */
+    align-items: center;
+}
+
+/* Ajustando a parte direita */
+nav .right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+nav .right a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Para os links dentro de nav-left, nav-center e nav-right */
+nav .left a span, nav .right a span {
+    color: white;
+    font-size: 16px;
+    margin-left: 10px; /* Espaçamento entre o ícone e o texto */
+}
+
+nav .icon {
+    width: 30px;
+    height: 30px;
+}
+
+/* Menu hambúrguer */
+nav .menu img {
+    width: 30px;
+    height: 30px;
+}
+
+nav .menu span {
+    font-size: 16px;
+    color: white;
+    margin-left: 10px;
+    text-align: center;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column; /* Organiza os itens em uma coluna em telas pequenas */
+        align-items: center; /* Centraliza os itens na coluna */
+    }
+
+    /* Ajusta o tamanho do texto na versão mobile */
+    nav .right span {
+        font-size: 14px;
+    }
+
+    nav .left a, nav .center a, nav .right a {
+        margin-bottom: 15px; /* Dá espaçamento entre os itens */
+    }
+}
