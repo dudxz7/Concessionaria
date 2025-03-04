@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const navbarHTML = `
         <header>
             <nav class="navbar">
-                <!-- Logo -->
                 <div class="logo">
                     <a href="index.html">
                         <img src="img/logoofcbmw.png" alt="Logo BMW">
@@ -10,19 +9,16 @@ document.addEventListener("DOMContentLoaded", function() {
                     <a href="index.html" id="textlogo">BMW</a>
                 </div>
 
-                <!-- Barra vertical -->
                 <div class="divider"></div>
 
-                <!-- Localização -->
-                <div class="location">
+                <div class="location" id="open-location-modal">
                     <img src="img/pin-de-localizacao.png" alt="Ícone de localização">
                     <div class="location-text">
-                        <span>pesquisando ofertas em</span>  
-                        <u><strong>Fortaleza e Região</strong></u>
+                        <span>Pesquisando ofertas em</span>  
+                        <u><strong id="user-location">XXXX e Região</strong></u>
                     </div>
                 </div>
 
-                <!-- Ícones -->
                 <div class="nav-icons">
                     <a href="carrinho.html">
                         <img src="img/heart.png" alt="Favoritos" class="heart-icon">
@@ -36,5 +32,30 @@ document.addEventListener("DOMContentLoaded", function() {
         </header>
     `;
 
+    // Carrega o conteúdo da navbar
     document.getElementById("navbar").innerHTML = navbarHTML;
+
+    // Lógica para o modal (exibido ao clicar na localização)
+    const locationModal = document.getElementById("location-modal");
+    const overlay = document.getElementById("overlay");
+    const openLocationModal = document.getElementById("open-location-modal");
+    const closeModal = document.getElementById("close-modal");
+
+    // Abre o modal
+    openLocationModal.addEventListener("click", function() {
+        locationModal.style.display = "block";
+        overlay.style.display = "block";
+    });
+
+    // Fecha o modal
+    closeModal.addEventListener("click", function() {
+        locationModal.style.display = "none";
+        overlay.style.display = "none";
+    });
+
+    // Fecha o modal quando clicar no overlay
+    overlay.addEventListener("click", function() {
+        locationModal.style.display = "none";
+        overlay.style.display = "none";
+    });
 });

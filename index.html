@@ -9,8 +9,22 @@
 </head>
 <body>
 
-    <!-- A navbar será carregada aqui -->
+    <!-- Navbar (carregada dinamicamente pelo navbar.js) -->
     <div id="navbar"></div>
+
+    <!-- Modal de pesquisa por CEP (Sem botão de pesquisa) -->
+    <div id="location-modal" class="modal">
+        <div class="modal-content">
+            <button id="close-modal" class="close-modal">&times;</button>
+            <h2>Bem-vindo ao <strong>Site Oficial da BMW</strong></h2>
+            <p>Digite seu CEP para encontrar as<br>melhores ofertas de sua região:</p>
+            <input type="text" id="cep-input" placeholder="CEP"
+name="cep-fake" autocomplete="new-password" list="fake-datalist">
+<datalist id="fake-datalist"></datalist>
+
+        </div>
+    </div>
+    <div id="overlay" class="overlay"></div>
 
     <!-- Carrossel de banners -->
     <div class="carousel-container">
@@ -35,6 +49,5 @@
     </div>
 
     <script src="js/main.js" type="module"></script>
-
 </body>
 </html>

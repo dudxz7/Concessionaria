@@ -1,0 +1,103 @@
+/* Fundo escurecido do modal */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Caixa do modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #D9D9D9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 400px; /* Ajuste a largura conforme necessário */
+    height: auto; /* Deixe a altura se ajustar automaticamente */
+    min-height: 200px; /* Defina uma altura mínima para garantir que o modal tenha altura suficiente */
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Alinha os itens no topo do modal */
+}
+
+/* Fonte personalizada para todos os textos dentro do modal */
+.modal, .modal p, .modal h2 {
+    font-family: 'Instrument Sans', sans-serif; /* Aplica a fonte 'Inter' */
+}
+
+/* Botão de fechar (X) */
+.close-modal {
+    position: absolute;
+    top: 1px; /* Ajustando a posição para o canto superior */
+    right: 5px; /* Ajustando a posição para o canto superior direito */
+    background: none;
+    border: none;
+    font-size: 20px; /* Tamanho do "X" */
+    cursor: pointer;
+}
+
+/* Título do modal */
+.modal h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: normal;
+    white-space: nowrap; /* Impede quebra de linha no título */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adiciona "..." se o texto for muito longo */
+}
+
+/* Negrito para a parte do título */
+.modal h2 strong {
+    font-weight: bold; /* Aplica o negrito ao título */
+}
+
+/* Texto do modal */
+.modal p {
+    font-size: 16px;
+    color: #000000;
+    margin: 10px 0; /* Adiciona espaçamento entre os parágrafos */
+    line-height: 1.5; /* Ajuste de espaçamento entre linhas */
+}
+
+/* Modificação para forçar a quebra de linha no subtítulo */
+.modal p strong {
+    display: block; /* Força a quebra de linha */
+}
+
+/* Estilo para os títulos */
+.modal p br {
+    display: block; /* Quebra de linha */
+}
+
+/* Campo de input do CEP */
+#cep-input {
+    padding: 12px 15px; /* Aumenta o padding para dar mais espaço ao texto */
+    font-size: 16px;
+    width: 90%; /* Aumenta a largura para aproveitar melhor o espaço */
+    margin-top: 20px;
+    margin-bottom: 15px; /* Adiciona espaçamento abaixo do input */
+    border-radius: 8px; /* Bordas arredondadas */
+    border: 1px solid black; /* Borda suave */
+    background-color: #d9d9d9; /* Cor de fundo mais clara */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    transition: all 0.3s ease; /* Transição suave para os efeitos */
+}
+
+#cep-input:focus {
+    border-color: #2657F2; /* Cor da borda quando o campo está focado */
+    background-color: #fff; /* Muda a cor de fundo ao focar */
+    box-shadow: 0 0 5px rgba(1, 43, 179, 0.541); /* Sombra azul para destaque */
+    outline: none; /* Remove o contorno padrão */
+}
