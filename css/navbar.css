@@ -1,89 +1,103 @@
-/* Estilo da barra de navegação */
-header {
-    background-color: #18131f;
-    padding: 10px 0;
-}
-
-nav {
+.navbar {
+    height: 60px; /* Diminuindo a altura */
     display: flex;
-    justify-content: space-between; /* Espaço entre os itens */
+    justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
-    width: 100%;
-}
-
-/* Ajustando a parte esquerda */
-nav .left {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-nav .left a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Centralizando a logo na parte do meio */
-nav .center {
-    display: flex;
-    justify-content: center;
-    flex-grow: 1; /* Faz a nav-center ocupar o restante do espaço */
-    align-items: center;
-}
-
-/* Ajustando a parte direita */
-nav .right {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-nav .right a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Para os links dentro de nav-left, nav-center e nav-right */
-nav .left a span, nav .right a span {
+    padding: 15px 30px; /* Reduzindo o padding */
+    background-color: #141414;
     color: white;
-    font-size: 16px;
-    margin-left: 10px; /* Espaçamento entre o ícone e o texto */
+    font-family: Arial, sans-serif;
+    position: relative;
 }
 
-nav .icon {
-    width: 30px;
-    height: 30px;
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-/* Menu hambúrguer */
-nav .menu img {
-    width: 30px;
-    height: 30px;
+.logo a {
+    text-decoration: none; /* Remove sublinhado */
+    color: inherit; /* Mantém a cor do texto */
 }
 
-nav .menu span {
-    font-size: 16px;
-    color: white;
-    margin-left: 10px;
-    text-align: center;
+.logo img {
+    width: 58px; /* Reduzindo o tamanho do logo */
+    height: auto;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    nav {
-        flex-direction: column; /* Organiza os itens em uma coluna em telas pequenas */
-        align-items: center; /* Centraliza os itens na coluna */
-    }
+#textlogo {
+    color: #fff;
+    font-size: 20px; /* Diminuindo a fonte */
+    font-weight: bold;
+    margin-left: 18px; /* Ajustando a margem */
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
 
-    /* Ajusta o tamanho do texto na versão mobile */
-    nav .right span {
-        font-size: 14px;
-    }
+/* Barra vertical */
+.divider {
+    width: 2px;
+    background-color: #fff;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 700px; /* Ajuste fino da barra vertical */
+    opacity: 0.33;
+}
 
-    nav .left a, nav .center a, nav .right a {
-        margin-bottom: 15px; /* Dá espaçamento entre os itens */
-    }
+/* Localização */
+.location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px; /* Reduzindo o tamanho da fonte */
+    margin-left: auto; /* Mantém a localização à direita da barra */
+    margin-right: 120px; /* Ajustando para alinhar melhor */
+}
+
+.location img {
+    width: 30px; /* Diminuindo o tamanho do ícone de localização */
+    height: auto;
+}
+
+.location-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    font-family: 'Inter', sans-serif;
+}
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 18px; /* Diminuindo o espaçamento entre os ícones */
+}
+
+/* Ícones da direita (agora menores) */
+.nav-icons img {
+    width: 30px; /* Diminuindo o tamanho dos ícones */
+    height: auto;
+    cursor: pointer;
+}
+
+/* Ícone de coração */
+.heart-icon {
+    margin-right: 65px; /* Ajuste fino do ícone */
+}
+
+/* Login */
+.login {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.login img {
+    width: 35px; /* Diminuindo o tamanho do ícone de login */
+    height: auto;
+}
+
+.login span {
+    font-size: 20px; /* Reduzindo a fonte do login */
+    color: rgb(175, 175, 175);
 }
