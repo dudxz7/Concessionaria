@@ -13,7 +13,7 @@ body {
     align-items: center;
     justify-content: center;
     background-color: #c9c9c9;
-    font-family: 'Inter', sans-serif; /* Apliquei a fonte corretamente */
+    font-family: 'Inter', sans-serif;
 }
 
 .container {
@@ -27,13 +27,13 @@ body {
 h2 {
     color: #000000;
     margin-bottom: 20px;
-    font-family: Inter, sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: bold;
 }
 
 .campodoinput {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 .campodoinput input {
@@ -42,11 +42,11 @@ h2 {
     border-radius: 6px;
     font-size: 18px;
     padding: 0 15px;
-    padding-right: 35px; /* Deixa espaço para o ícone */
+    padding-right: 35px;
     border: 2px solid #000000;
     background-color: transparent;
     outline: none;
-    color: #000000;
+    color: #000;
     cursor: pointer;
 }
 
@@ -62,7 +62,7 @@ h2 {
 }
 
 input:focus {
-    border: 2px solid #0004ff;
+    border: 2px solid #2657f2; /* Azul ao focar */
 }
 
 input:focus ~ label,
@@ -73,12 +73,59 @@ input:valid ~ label {
     background-color: #d9d9d9;
 }
 
+/* Estilização do erro */
+.campodoinput.erro input {
+    border: 2px solid #2657f2; /* Azul quando há erro */
+    box-shadow: 0 0 5px rgba(38, 87, 242, 0.8);
+}
+
+.campo-obrigatorio {
+    display: none;
+    font-size: 14px;
+    color: #2657f2;
+    text-align: left;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 3px;
+    font-weight: bold;
+}
+
+/* Ícone de alerta */
+.icone-alerta {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+}
+
+/* Ícone do olho */
+.icone-eye {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    transition: right 0.3s ease;
+}
+
+/* Quando há erro, o olho se move para o lado */
+.campodoinput.erro .icone-eye {
+    right: 40px;
+}
+
+/* Botão */
 .btn {
     width: 100%;
     height: 50px;
     border-radius: 6px;
     border: none;
-    background-color: #003cff;
+    background-color: #1d47c2; /* Azul mais escuro */
     color: white;
     font-size: 18px;
     cursor: pointer;
@@ -87,48 +134,28 @@ input:valid ~ label {
 }
 
 .btn:hover {
-    background-color: #002396;
+    background-color: #163996;
 }
 
-/* Estilo para o texto "Precisando de uma conta?" */
+/* Texto de registro */
 .registro-texto {
-    display: flex; /* Coloca o texto e o link na mesma linha */
-    justify-content: left; /* Alinha à esquerda */
+    display: flex;
+    justify-content: left;
     align-items: center;
     margin-top: 15px;
     font-size: 16px;
     color: #000;
-    font-family: Inter, sans-serif;
 }
 
-/* Estilo do link "Registre-se" */
 .registro-texto a {
-    color: #003cff; /* Cor azul */
+    color: #2657f2;
     font-weight: bold;
-    text-decoration: underline; /* Sublinha o link */
-    margin-left: 5px; /* Adiciona um espacinho entre o texto e o link */
+    text-decoration: underline;
+    margin-left: 5px;
     transition: 0.3s;
 }
 
 .registro-texto a:hover {
-    color: #002396; /* Cor ao passar o mouse */
+    color: #1d47c2;
 }
 
-/* Estilo do ícone de olho no input de senha */
-.campodoinput input[type="password"] {
-    padding-right: 35px; /* Deixa espaço para o ícone */
-}
-
-#eye-icon {
-    position: absolute;
-    right: 10px; /* Ajuste a posição para mais à esquerda */
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    width: 24px;  /* Ajuste o tamanho do ícone */
-    height: 24px; /* Ajuste o tamanho do ícone */
-}
-
-#eye-icon:hover {
-    opacity: 0.7; /* Opacidade do ícone ao passar o mouse */
-}
