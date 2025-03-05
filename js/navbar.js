@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 <div class="divider"></div>
 
-                <div class="location" id="open-location-modal">
+                <div class="location">
                     <img src="img/pin-de-localizacao.png" alt="Ícone de localização">
                     <div class="location-text">
                         <span>Pesquisando ofertas em</span>  
@@ -24,8 +24,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         <img src="img/heart.png" alt="Favoritos" class="heart-icon">
                     </a>
                     <div class="login">
+                    <a href="login.html">
                         <img src="img/usercomcontorno.png" alt="Login">
-                        <span>Entrar</span>
+                    </a>
+                        <a href="login.html"><span>Entrar</span></a>
                     </div>
                 </div>
             </nav>
@@ -34,28 +36,4 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Carrega o conteúdo da navbar
     document.getElementById("navbar").innerHTML = navbarHTML;
-
-    // Lógica para o modal (exibido ao clicar na localização)
-    const locationModal = document.getElementById("location-modal");
-    const overlay = document.getElementById("overlay");
-    const openLocationModal = document.getElementById("open-location-modal");
-    const closeModal = document.getElementById("close-modal");
-
-    // Abre o modal
-    openLocationModal.addEventListener("click", function() {
-        locationModal.style.display = "block";
-        overlay.style.display = "block";
-    });
-
-    // Fecha o modal
-    closeModal.addEventListener("click", function() {
-        locationModal.style.display = "none";
-        overlay.style.display = "none";
-    });
-
-    // Fecha o modal quando clicar no overlay
-    overlay.addEventListener("click", function() {
-        locationModal.style.display = "none";
-        overlay.style.display = "none";
-    });
 });

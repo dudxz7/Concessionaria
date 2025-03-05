@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login BMW</title>
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="icon" href="img/logoofcbmw.png">
+</head>
+<body>
+    
+
+    <div class="login-container">
+    <div class="container">
+        <h2>Digite o seu e-mail e senha</h2>
+        <div class="campodoinput">
+            <input type="email" required spellcheck="false">
+            <label>E-mail</label>
+        </div>
+        <div class="campodoinput">
+            <input type="password" id="senha" required spellcheck="false">
+            <label for="senha">Senha</label>
+            <img src="img/olhofechado.png" alt="Olho fechado" id="eye-icon" onclick="togglePassword()">
+        </div>        
+        
+        <button class="btn">Entrar</button>
+        <div class="registro-texto">
+            <span>Precisando de uma conta?</span>
+            <a href="registro.html">Registre-se</a>
+        </div>
+    </div>
+</div>
+
+<script src="js/eyeicon.js"></script>
+</body>
+</html>
