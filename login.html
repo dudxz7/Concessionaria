@@ -11,23 +11,26 @@
     <div class="login-container">
         <div class="container">
             <h2>Digite o seu e-mail e senha</h2>
-            
-            <div class="campodoinput">
-                <input type="text" id="email" required spellcheck="false" autocomplete="off">
-                <label for="email">E-mail</label>
-                <img src="img/perigo.png" alt="Alerta" class="icone-alerta" id="alertEmail">
-                <span class="campo-obrigatorio">Campo obrigatório</span>
-            </div>
 
-            <div class="campodoinput">
-                <input type="password" id="senha" required spellcheck="false">
-                <label for="senha">Senha</label>
-                <img src="img/olhofechado.png" alt="Olho fechado" class="icone-eye" id="eyeIcon">
-                <img src="img/perigo.png" alt="Alerta" class="icone-alerta" id="alertSenha">
-                <span class="campo-obrigatorio">Campo obrigatório</span>
-            </div>        
+            <!-- Formulário com método POST e ação para login.php -->
+            <form action="php/login.php" method="POST">
+                <div class="campodoinput">
+                    <input type="text" name="email" id="email" required spellcheck="false" autocomplete="off">
+                    <label for="email">E-mail</label>
+                    <img src="img/perigo.png" alt="Alerta" class="icone-alerta" id="alertEmail">
+                    <span class="campo-obrigatorio">Campo obrigatório</span>
+                </div>
 
-            <button class="btn">Entrar</button>
+                <div class="campodoinput">
+                    <input type="password" name="senha" id="senha" required spellcheck="false">
+                    <label for="senha">Senha</label>
+                    <img src="img/olhofechado.png" alt="Olho fechado" class="icone-eye" id="eyeIcon">
+                    <img src="img/perigo.png" alt="Alerta" class="icone-alerta" id="alertSenha">
+                    <span class="campo-obrigatorio">Campo obrigatório</span>
+                </div>
+
+                <button class="btn">Entrar</button>
+            </form>
 
             <div class="registro-texto">
                 <span>Precisando de uma conta?</span>

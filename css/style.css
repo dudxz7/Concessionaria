@@ -1,0 +1,82 @@
+/* Reset de estilos padrões */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo geral do corpo da página */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Estilo do título */
+h1 {
+    color: #033ee2;
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+/* Estilo do subtítulo */
+h2 {
+    color: #555;
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+/* Estilo da tabela de usuários */
+.tabela-usuarios {
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo das células e cabeçalho da tabela */
+.tabela-usuarios th, .tabela-usuarios td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+/* Estilo do cabeçalho */
+.tabela-usuarios th {
+    background-color: #0053cf;
+    color: white;
+    font-weight: bold;
+}
+
+/* Estilo das linhas de dados */
+.tabela-usuarios tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.tabela-usuarios tr:hover {
+    background-color: #e2f7e2;
+}
+
+/* Estilo do link "Sair" */
+a {
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #e73c3c;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 30px;
+    transition: background-color 0.3s ease;
+}
+
+/* Efeito de hover para o link "Sair" */
+a:hover {
+    background-color: #c0392b;
+}
