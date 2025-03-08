@@ -9,7 +9,7 @@ $_SESSION = array();
 session_destroy();
 
 // Adicionar um pequeno delay para a transição antes de redirecionar
-header("Refresh: 2; URL=../index.html");
+header("Refresh: 2; URL=../index.php");
 ?>
 
 <!DOCTYPE html>

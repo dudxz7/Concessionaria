@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verificar se a inserção foi bem-sucedida
     if ($stmt->execute()) {
         echo "Conta criada com sucesso!";
-        header("Location: login.html"); // Redireciona para o login.html
+        header("Location: ../login.html"); // Redireciona para o login.html
         exit();
     } else {
         if ($conn->errno == 1062) { // Código de erro para violação de unicidade

@@ -42,15 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['usuarioEmail'] = $email_db;
             $_SESSION['usuarioAdmin'] = $admin;
 
-            // Depuração: verificar o valor de $admin
-            echo "Admin: " . $admin;
-
             // Redirecionamento para o painel de administração, se for admin
             if ($admin == 1) {
                 header("Location: admin_dashboard.php");
                 exit;
             } else {
-                header("Location: ../index.html");
+                header("Location: ../index.php");  // Aqui redireciona para o index.php, não mais o index.html
                 exit;
             }
         } else {
