@@ -21,8 +21,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
+    // Validar o e-mail
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "E-mail inválido!";
+        exit;
+    }
+
+    // Verificar se os campos não estão vazios
+    if (empty($email) || empty($senha)) {
+        echo "Por favor, preencha todos os campos!";
+        exit;
+    }
+
     // Preparar e executar a consulta SQL para verificar o usuário
-    $sql = "SELECT id, nome_completo, email, senha, admin FROM clientes WHERE email = ?";
+    $sql = "SELECT id, nome_completo, email, senha, admin, estado FROM clientes WHERE email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -30,24 +42,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Verificar se o usuário foi encontrado
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($id, $nome_completo, $email_db, $senha_db, $admin);
+        $stmt->bind_result($id, $nome_completo, $email_db, $senha_db, $admin, $estado);
         $stmt->fetch();
 
         // Verificar a senha
         if (password_verify($senha, $senha_db)) {
+            // Regenerar o ID da sessão para segurança
+            session_regenerate_id(true);
+
             // Login bem-sucedido
             $_SESSION['usuarioLogado'] = true;
             $_SESSION['usuarioId'] = $id;
             $_SESSION['usuarioNome'] = $nome_completo;
             $_SESSION['usuarioEmail'] = $email_db;
             $_SESSION['usuarioAdmin'] = $admin;
+            $_SESSION['usuarioEstado'] = $estado;  // Adicionando estado na sessão
 
             // Redirecionamento para o painel de administração, se for admin
             if ($admin == 1) {
                 header("Location: admin_dashboard.php");
                 exit;
             } else {
-                header("Location: ../index.php");  // Aqui redireciona para o index.php, não mais o index.html
+                header("Location: ../index.php");  // Aqui redireciona para o index.php
                 exit;
             }
         } else {

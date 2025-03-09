@@ -10,6 +10,23 @@ if ($usuarioLogado && isset($_SESSION['usuarioNome'])) {
     $primeiroNome = $nomes[0] ?? "";  // Apenas o primeiro nome
     $nomeUsuario = $primeiroNome;      // Atribui somente o primeiro nome
 }
+
+// Mapeamento das capitais
+$capitais = [
+    "SP" => "São Paulo",
+    "RJ" => "Rio de Janeiro",
+    "BA" => "Salvador",
+    "CE" => "Fortaleza",
+    "MG" => "Belo Horizonte",
+    "PE" => "Recife",
+    "PR" => "Curitiba",
+    "RS" => "Porto Alegre",
+    // Adicione outros estados e capitais conforme necessário
+];
+
+// Definir a capital com base no estado do usuário
+$estado = isset($_SESSION['usuarioEstado']) ? $_SESSION['usuarioEstado'] : "";
+$capital = isset($capitais[$estado]) ? $capitais[$estado] : "Cidade - Estado";
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -38,7 +55,7 @@ if ($usuarioLogado && isset($_SESSION['usuarioNome'])) {
             <img src="img/pin-de-localizacao.png" alt="Ícone de localização">
             <div class="location-text">
                 <span>Pesquisando ofertas em</span>
-                <u><strong id="user-location">XXXX e Região</strong></u>
+                <u><strong id="user-location"><?php echo $capital; ?> e Região</strong></u>
             </div>
         </div>
 
@@ -87,7 +104,7 @@ if ($usuarioLogado && isset($_SESSION['usuarioNome'])) {
     </div>
 </div>
 
-<script src="js/main.js" type="module"></script>
+<script src="js/carrossel.js" type="module"></script>
 
 </body>
 </html>
