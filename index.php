@@ -72,10 +72,10 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] : "Cidade - Estado";
                     <a href="perfil.html"><span><?php echo htmlspecialchars($nomeUsuario); ?></span></a>
                 <?php else: ?>
                     <!-- Se não estiver logado, mostra o link para login -->
-                    <a href="login.php">
+                    <a href="login.html">
                         <img src="img/usercomcontorno.png" alt="Login">
                     </a>
-                    <a href="login.php"><span>Entrar</span></a>
+                    <a href="login.html"><span>Entrar</span></a>
                 <?php endif; ?>
             </div>
         </div>
