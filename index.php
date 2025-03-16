@@ -13,16 +13,35 @@ if ($usuarioLogado && isset($_SESSION['usuarioNome'])) {
 
 // Mapeamento das capitais
 $capitais = [
-    "SP" => "São Paulo",
-    "RJ" => "Rio de Janeiro",
+    "AC" => "Rio Branco",
+    "AL" => "Maceió",
+    "AM" => "Manaus",
+    "AP" => "Macapá",
     "BA" => "Salvador",
     "CE" => "Fortaleza",
+    "DF" => "Brasília",
+    "ES" => "Vitória",
+    "GO" => "Goiânia",
+    "MA" => "São Luís",
     "MG" => "Belo Horizonte",
+    "MS" => "Campo Grande",
+    "MT" => "Cuiabá",
+    "PA" => "Belém",
+    "PB" => "João Pessoa",
     "PE" => "Recife",
+    "PI" => "Teresina",
     "PR" => "Curitiba",
+    "RJ" => "Rio de Janeiro",
+    "RN" => "Natal",
+    "RO" => "Porto Velho",
+    "RR" => "Boa Vista",
     "RS" => "Porto Alegre",
-    // Adicione outros estados e capitais conforme necessário
+    "SC" => "Florianópolis",
+    "SE" => "Aracaju",
+    "SP" => "São Paulo",
+    "TO" => "Palmas",
 ];
+
 
 // Definir a capital com base no estado do usuário
 $estado = isset($_SESSION['usuarioEstado']) ? $_SESSION['usuarioEstado'] : "";

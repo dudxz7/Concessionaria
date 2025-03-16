@@ -146,8 +146,10 @@ label[for="estado"], label[for="cidade"], label[for="senha"] {
 }
 
 /* Cor cinza nos campos com * */
-input[readonly] {
-    color: gray;
+input[readonly], input:disabled {
+    pointer-events: none; /* Desativa o clique ou interação do mouse */
+    background-color: #D8D8D8; /* Cor de fundo para indicar que está desativado */
+    color: gray; /* Cor do texto para indicar desativação */
 }
 
 /* Manter os campos Estado e Cidade com texto preto */
@@ -222,4 +224,86 @@ h2 {
     cursor: pointer;
     width: 32px;
     height: 32px;
+}
+ /* Para os inputs com o * */
+input.com-asterisco[readonly], input.com-asterisco:disabled {
+    pointer-events: none;
+    background-color: #D8D8D8;
+    color: gray;
+}
+
+
+/* Para os inputs de Cidade e Estado */
+input#estado, input#cidade {
+color: black; /* Texto desses campos será preto */
+    }
+
+/* Estilo da seta de voltar */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 100; /* Garante que a seta fique acima dos outros elementos */
+}
+
+.back-button img {
+    width: 30px;  /* Ajuste o tamanho da seta */
+    height: 30px; /* Ajuste o tamanho da seta */
+    cursor: pointer;
+}
+
+/* Estilização da mensagem de sucesso */
+.alert-success {
+    color: #00297b;
+    margin-top: -7px; /* Espaço acima da mensagem */
+    margin-left: 20px;
+    text-align: left;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex; /* Para o ícone e o texto ficarem na mesma linha */
+    align-items: center; /* Alinha o ícone com o texto */
+    animation: brilhoAzul 1.5s infinite alternate; /* Animação de brilho */
+}
+
+/* Adicionando a imagem como ícone */
+.alert-success:before {
+    content: ""; /* Remover o texto */
+    background-image: url("../img/verificaazul.png"); /* Caminho para a imagem */
+    background-size: 30px 30px; /* Ajuste o tamanho da imagem */
+    background-repeat: no-repeat; /* Impede que a imagem se repita */
+    width: 30px; /* Largura do ícone */
+    height: 30px; /* Altura do ícone */
+    margin-right: 10px; /* Espaço entre o ícone e o texto */
+}
+
+/* Animação de brilho com tons de azul */
+@keyframes brilhoAzul {
+    0% {
+        color: #0677e0; /* Azul escuro */
+        text-shadow: 0 0 5px rgba(0, 64, 123, 0.7), 0 0 10px rgba(0, 53, 123, 0.5); /* Brilho azul suave */
+    }
+    50% {
+        color: #2844e6; /* Azul claro */
+        text-shadow: 0 0 15px rgba(3, 77, 187, 0.7), 0 0 30px rgba(8, 51, 168, 0.5); /* Brilho azul mais intenso */
+    }
+    100% {
+        color: #0026ff; /* Azul escuro */
+        text-shadow: 0 0 5px rgba(0, 38, 255, 0.7), 0 0 10px rgba(0, 17, 255, 0.5); /* Brilho azul suave */
+    }
+}
+.salvar-btn {
+    width: 200px;
+    background-color: #0428A3;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 18px;
+    cursor: not-allowed;
+    opacity: 0.5; /* Opacidade inicial */
+    transition: opacity 0.3s ease;
+}
+
+.salvar-btn.enabled {
+    cursor: pointer;
+    opacity: 1; /* Opacidade normal quando habilitado */
 }
