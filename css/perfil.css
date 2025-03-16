@@ -93,7 +93,7 @@ body {
 }
 
 .icon-item img {
-    width: 24px;
+    width: 20px;
 }
 
 .icon-item span {
@@ -145,6 +145,17 @@ label[for="estado"], label[for="cidade"], label[for="senha"] {
     color: black; /* Cor do label preta */
 }
 
+/* Cor cinza nos campos com * */
+input[readonly] {
+    color: gray;
+}
+
+/* Manter os campos Estado e Cidade com texto preto */
+#estado, #cidade {
+    color: black !important;
+}
+
+/* Estilização do título */
 h2 {
     font-size: 28px; /* Aumenta o tamanho do h2 */
     margin-left: 20px; /* Move o h2 para a direita */
@@ -212,4 +223,3 @@ h2 {
     width: 32px;
     height: 32px;
 }
-
