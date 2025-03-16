@@ -69,7 +69,7 @@
                     </div>
                     <div class="input-container">
                         <label for="estado">Estado</label>
-                        <input type="text" id="estado" placeholder="">
+                        <input type="text" id="estado" placeholder="" maxlength="2">
                     </div>
                     <div class="input-container">
                         <label for="cidade">Cidade</label>
@@ -105,6 +105,25 @@
                 eyeIcon.src = "img/olhofechado.png"; // Ícone de olho fechado
             }
         });
+        // Função para bloquear a digitação de números e transformar em maiúsculas
+        function bloquearNumeros(event) {
+        const key = event.key;
+
+        // Impede a digitação de números
+        if (/\d/.test(key)) {
+            event.preventDefault();
+        }
+    }
+
+        // Função para transformar o texto digitado em maiúsculas
+        function transformarMaiusculas(event) {
+        event.target.value = event.target.value.toUpperCase();  // Converte para maiúsculas
+        }
+
+        // Adiciona os eventos nos campos de Estado e Cidade
+        document.getElementById("estado").addEventListener("keydown", bloquearNumeros);
+        document.getElementById("cidade").addEventListener("keydown", bloquearNumeros);  // Bloqueia números
+        document.getElementById("estado").addEventListener("input", transformarMaiusculas);  // Converte para maiúsculas
     </script>
 </body>
 </html>
