@@ -43,10 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="login-container">
         <div class="container">
+            <a href="perfil.php" class="back-button">
+            <img src="img/setaesquerdapreta.png" alt="Voltar">
+            </a>
             <h2>Redefinir Senha</h2>
-
-            
-
             <!-- Formulário para redefinir senha -->
             <form action="" method="POST">
                 <div class="campodoinput">

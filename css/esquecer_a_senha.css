@@ -38,7 +38,7 @@ h2 {
 .campodoinput input {
     width: 350px;
     height: 50px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 18px;
     padding: 0 15px;
     padding-right: 35px;
@@ -167,4 +167,26 @@ input:valid ~ label {
     to {
         left: 100%;
     }
+}
+/* Estilização do botão de voltar */
+.back-button {
+    margin-left: -15px;
+    margin-top: -16px;
+    text-decoration: none;
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    border: none;
+    cursor: pointer;
+}
+
+.back-button img {
+    opacity: 0.87;
+    width: 20px; /* Ajuste o tamanho do ícone conforme necessário */
+    height: 20px;
+    transition: transform 0.3s ease-in-out; /* Efeito de transição */
+}
+
+.back-button:hover img {
+    transform: scale(1.1); /* Efeito de aumentar o tamanho da imagem ao passar o mouse */
 }
