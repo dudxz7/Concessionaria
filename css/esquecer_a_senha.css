@@ -85,6 +85,19 @@ input:valid ~ label {
     font-weight: bold;
 }
 
+/* Estilização da mensagem de sucesso */
+.sucesso {
+    display: block;
+    font-size: 14px;
+    color: #0026fd; /* Verde para sucesso */
+    text-align: left;
+    position: absolute;
+    top: 100%; /* Fica diretamente abaixo do campo de input */
+    left: 0;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
 /* Ícone do olho */
 .icone-eye {
     position: absolute;
@@ -114,8 +127,44 @@ input:valid ~ label {
     cursor: pointer;
     transition: .3s;
     font-weight: bold;
+    position: relative;
+    overflow: hidden;
 }
 
 .btn:hover {
     background-color: #163996;
+}
+.btn::before {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100%;
+    background-image: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0) 30%,
+        rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0) 70%
+    );
+    top: 0;
+    left: -100px;
+    opacity: 0.6;
+    transition: left 0.3s ease-in-out;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+@keyframes shine {
+    0% {
+        left: -100px;
+    }
+
+    60% {
+        left: 100%;
+    }
+
+    to {
+        left: 100%;
+    }
 }

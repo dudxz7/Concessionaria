@@ -4,7 +4,7 @@ include('php/conexao.php');
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['usuarioId'])) {
-    die("Erro: Usuário não autenticado."); // Impede a execução do código se o usuário não estiver logado
+    die("Erro: Usuário não autenticado.");
 }
 
 // Verifica se o formulário foi enviado
@@ -21,7 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare($sql);
 
         if ($stmt->execute([$senhaHash, $idUsuario])) {
-            $sucesso = "Senha atualizada com sucesso!";
+            $_SESSION['sucesso'] = "Senha atualizada com sucesso!";
+            header("Location: " . $_SERVER['PHP_SELF']); // Redireciona para a mesma página para limpar a mensagem após o refresh
+            exit;
         } else {
             $erro = "Erro ao atualizar a senha.";
         }
@@ -43,13 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="container">
             <h2>Redefinir Senha</h2>
 
-            <!-- Mensagens de erro ou sucesso -->
-            <?php if (isset($erro)): ?>
-                <div class="erro"><?php echo $erro; ?></div>
-            <?php endif; ?>
-            <?php if (isset($sucesso)): ?>
-                <div class="sucesso"><?php echo $sucesso; ?></div>
-            <?php endif; ?>
+            
 
             <!-- Formulário para redefinir senha -->
             <form action="" method="POST">
@@ -65,6 +61,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <img src="img/olhofechado.png" alt="Olho fechado" class="icone-eye" id="eyeConfirmarSenha">
                     <!-- Mensagem de erro -->
                     <span id="erroConfirmarSenha" class="campo-obrigatorio">As senhas não coincidem</span>
+                    <!-- Mensagens de erro ou sucesso -->
+                    <?php if (isset($erro)): ?>
+                        <div class="erro"><?php echo $erro; ?></div>
+                    <?php elseif (isset($_SESSION['sucesso'])): ?>
+                    <div class="sucesso" id="sucesso"><?php echo $_SESSION['sucesso']; ?></div>
+                    <?php unset($_SESSION['sucesso']); ?> <!-- Limpa a variável de sessão após mostrar a mensagem -->
+                    <?php endif; ?>
                 </div>
 
                 <!-- Botão só será ativado quando as senhas coincidirem -->
@@ -74,6 +77,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
+    // Referência para a div de sucesso
+    const sucessoDiv = document.getElementById("sucesso");
+
+    // Função para esconder a mensagem de sucesso após 2 segundos
+    if (sucessoDiv) {
+        setTimeout(() => {
+            sucessoDiv.style.display = "none";  // Esconde a div após 2 segundos
+        }, 2000);  // 2000 milissegundos = 2 segundos
+    }
+
     // Referências para os campos de senha e os ícones de olho 
     const senhaInput = document.getElementById("senha");
     const confirmarSenhaInput = document.getElementById("confirmar_senha");
@@ -116,8 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Adiciona evento de clique para os ícones de olho (ambos ativam a mesma função)
     eyeIconSenha.addEventListener("click", togglePassword);
     eyeIconConfirmarSenha.addEventListener("click", togglePassword);
-</script>
-
-
+    </script>
 </body>
 </html>
