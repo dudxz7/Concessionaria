@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #c9c9c9;
+    font-family: 'Inter', sans-serif;
+}
+
+.container {
+    background: #D9D9D9;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+    color: #000000;
+    margin-bottom: 20px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+}
+
+.campodoinput {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.campodoinput input {
+    width: 350px;
+    height: 50px;
+    border-radius: 6px;
+    font-size: 18px;
+    padding: 0 15px;
+    padding-right: 35px;
+    border: 2px solid #000000;
+    background-color: transparent;
+    outline: none;
+    color: #000;
+    cursor: pointer;
+}
+
+.campodoinput label {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #000;
+    font-size: 18px;
+    pointer-events: none;
+    transition: .3s;
+}
+
+input:focus {
+    border: 2px solid #2657f2; /* Azul ao focar */
+}
+
+input:focus ~ label,
+input:valid ~ label {
+    top: 0;
+    font-size: 16px;
+    padding: 0 10px;
+    background-color: #d9d9d9;
+}
+
+/* Estilização do erro */
+.campo-obrigatorio {
+    display: none;
+    font-size: 14px;
+    color: #0026fd; /* Vermelho para erro */
+    text-align: left;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Ícone do olho */
+.icone-eye {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    transition: right 0.3s ease;
+}
+
+/* Ícones de olho para cada input de senha */
+.icone-eye.confirmar-senha {
+    right: 10px;
+}
+
+/* Botão */
+.btn {
+    width: 100%;
+    height: 50px;
+    border-radius: 6px;
+    border: none;
+    background-color: #1d47c2; /* Azul mais escuro */
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: .3s;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background-color: #163996;
+}
