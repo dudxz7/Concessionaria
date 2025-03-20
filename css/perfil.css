@@ -307,3 +307,6 @@ color: black; /* Texto desses campos será preto */
     cursor: pointer;
     opacity: 1; /* Opacidade normal quando habilitado */
 }
+.input-container{
+    cursor: not-allowed;
+}

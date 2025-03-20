@@ -114,11 +114,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (senhaInput.value !== confirmarSenhaInput.value) {
             erroConfirmarSenha.style.display = "block"; // Exibe a mensagem de erro
             btnRedefinir.disabled = true; // Desabilita o botão
-            btnRedefinir.style.opacity = "0.5"; // Define a opacidade para 50%
+            btnRedefinir.style.opacity = "0.5";  // Define a opacidade para 50%
+            btnRedefinir.style.cursor = "not-allowed";
         } else {
             erroConfirmarSenha.style.display = "none"; // Esconde a mensagem de erro
             btnRedefinir.disabled = false; // Habilita o botão
             btnRedefinir.style.opacity = "1"; // Restaura a opacidade para 100%
+            btnRedefinir.style.cursor = "pointer";
         }
     }
 
