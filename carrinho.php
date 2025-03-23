@@ -82,10 +82,10 @@ $capital = $estado && isset($estadosCapitais[$estado]) ? $estadosCapitais[$estad
             </a>
             <div class="login">
                 <?php if ($usuarioLogado): ?>
-                    <a href="perfil.html">
+                    <a href="perfil.php">
                         <img src="img/usercomcontorno.png" alt="Perfil">
                     </a>
-                    <a href="perfil.html"><span><?php echo htmlspecialchars($primeiroNome); ?></span></a>
+                    <a href="perfil.php"><span><?php echo htmlspecialchars($primeiroNome); ?></span></a>
                 <?php else: ?>
                     <a href="login.php">
                         <img src="img/usercomcontorno.png" alt="Login">

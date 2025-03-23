@@ -68,6 +68,7 @@ function exibirUsuarios($conn) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Admin</title>
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../img/admin_colored.png">
 </head>
 <body>
     <h1>Painel de Administração</h1>
