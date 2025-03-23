@@ -18,12 +18,24 @@ header("Refresh: 2; URL=../index.php");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Desconectando...</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/carregando.css">
 </head>
 <body>
     <div class="logout-container">
         <h2>Você foi desconectado com sucesso!</h2>
-        <p>Você será redirecionado para a página de login...</p>
+        <p>Você será redirecionado para a página inicial...</p>
+
+        <!-- Spinner de carregamento -->
+        <div class="dot-spinner">
+            <div class="dot-spinner__dot"></div>
+            <div class="dot-spinner__dot"></div>
+            <div class="dot-spinner__dot"></div>
+            <div class="dot-spinner__dot"></div>
+            <div class="dot-spinner__dot"></div>
+            <div class="dot-spinner__dot"></div>
+            <div class="dot-spinner__dot"></div>
+            <div class="dot-spinner__dot"></div>
+        </div>
     </div>
 </body>
 </html>
