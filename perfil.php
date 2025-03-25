@@ -22,14 +22,14 @@ if ($conn->connect_error) {
 
 // Buscar os dados do usuário
 $id = $_SESSION['usuarioId'];
-$sql = "SELECT nome_completo, email, cpf, rg, cidade, estado, telefone, cnh, cargo FROM clientes WHERE id = ?";
+$sql = "SELECT nome_completo, email, cpf, rg, cidade, estado, telefone, cnh, cargo, endereco FROM clientes WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $stmt->store_result();
 
 if ($stmt->num_rows > 0) {
-    $stmt->bind_result($nome_completo, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $cargo);
+    $stmt->bind_result($nome_completo, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $cargo, $endereco);
     $stmt->fetch();
 } else {
     echo "Erro ao recuperar os dados!";
@@ -40,11 +40,12 @@ if ($stmt->num_rows > 0) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $novoEstado = $_POST['estado'];
     $novaCidade = $_POST['cidade'];
+    $novoEndereco = $_POST['endereco'];
 
     // Atualizar os dados no banco de dados
-    $updateSql = "UPDATE clientes SET estado = ?, cidade = ? WHERE id = ?";
+    $updateSql = "UPDATE clientes SET estado = ?, cidade = ?, endereco = ? WHERE id = ?";
     $updateStmt = $conn->prepare($updateSql);
-    $updateStmt->bind_param("ssi", $novoEstado, $novaCidade, $id);
+    $updateStmt->bind_param("sssi", $novoEstado, $novaCidade, $novoEndereco, $id);
     $updateStmt->execute();
 
     // Atualizando a sessão com os novos dados
@@ -147,6 +148,12 @@ $conn->close();
                             <label for="cidade">Cidade</label>
                             <input type="text" id="cidade" name="cidade" value="<?php echo $cidade; ?>" maxlength="28" required>
                         </div>
+                        <?php if ($cargo == 'Funcionario'): ?>
+                        <div class="input-container">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" id="endereco" name="endereco" value="<?php echo $endereco; ?>" maxlength="100">
+                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -189,7 +196,7 @@ $conn->close();
         
         // Monitorando os campos de estado e cidade para habilitar o botão
         document.addEventListener('DOMContentLoaded', function () {
-            const inputs = document.querySelectorAll('#estado, #cidade');
+            const inputs = document.querySelectorAll('#estado, #cidade, #endereco');
             const salvarBtn = document.querySelector('.salvar-btn');
 
             // Função para verificar se algum campo foi alterado

@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Jeju+Gothic&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&display=swap');
 
 body {
-    font-family: 'Jeju Gothic', Arial, sans-serif;
+    font-family: 'Inter', Arial, sans-serif;
     background-color: #D8D8D8; /* Cor do fundo conforme solicitado */
     margin: 0;
     padding: 0;
@@ -10,9 +10,9 @@ body {
 
 .container {
     display: flex;
-    flex-wrap: wrap; /* Garante que a coluna de inputs não ultrapasse a largura */
-    justify-content: space-between; /* Adiciona espaçamento entre as colunas */
-    gap: 15px; /* Reduz o espaçamento entre as colunas */
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 15px;
 }
 
 .sidebar {
@@ -53,7 +53,7 @@ body {
 .content {
     flex: 1;
     padding: 20px;
-    width: 100%; /* Garantir que ocupe toda a largura */
+    width: 100%;
 }
 
 .footer {
@@ -64,7 +64,6 @@ body {
     margin-top: 20px;
 }
 
-/* Estilização dos ícones com texto ao lado */
 .icons {
     margin-top: 20px;
     display: flex;
@@ -73,11 +72,10 @@ body {
     gap: 10px;
 }
 
-/* Estilo padrão dos itens do menu */
 .icon-item {
     display: flex;
     align-items: center;
-    gap: 10px; /* Espaço entre o ícone e o texto */
+    gap: 10px;
     padding: 10px;
     width: 80%;
     background: rgba(255, 255, 255, 0.1);
@@ -86,10 +84,9 @@ body {
     transition: background 0.3s, filter 0.3s;
 }
 
-/* Quando passar o mouse, apenas o item selecionado fica mais visível */
 .icon-item:hover {
     background: rgba(255, 255, 255, 0.3);
-    filter: brightness(2.5); /* Aumenta o brilho do item */
+    filter: brightness(2.5);
 }
 
 .icon-item img {
@@ -103,18 +100,17 @@ body {
     text-align: left;
 }
 
-/* Estilo do input com o label flutuante */
 .input-container {
     position: relative;
-    font-family: 'Jeju Gothic', Arial, sans-serif;
-    margin-bottom: 25px; /* Aumentei o espaço entre os inputs */
+    font-family: 'Inter', Arial, sans-serif;
+    margin-bottom: 25px;
 }
 
 label {
     position: absolute;
     top: -12px;
     left: 30px;
-    font-size: 16px; /* Aumenta o tamanho do label */
+    font-size: 16px;
     color: gray;
     background: #D8D8D8;
     padding: 0 5px;
@@ -123,55 +119,49 @@ label {
 }
 
 input {
-    width: 480px; /* Aumenta mais a largura dos inputs */
-    padding: 18px; /* Aumenta o padding vertical */
+    width: 480px;
+    padding: 18px;
     border: 1px solid gray;
     border-radius: 20px;
     outline: none;
-    font-size: 18px; /* Aumenta o tamanho da fonte */
+    font-size: 18px;
     text-align: left;
     background-color: #d8d8d8;
     margin-top: 10px;
     margin-left: 18px;
 }
 
-/* Para os inputs específicos de Estado, Cidade e Senha */
-input#estado, input#cidade, input#senha {
-    border: 1px solid black; /* Borda preta */
+input#estado, input#cidade, input#endereco {
+    border: 1px solid black;
 }
 
-/* Para os labels desses inputs */
-label[for="estado"], label[for="cidade"], label[for="senha"] {
-    color: black; /* Cor do label preta */
+label[for="estado"], label[for="cidade"], label[for="endereco"] {
+    color: black;
 }
 
-/* Cor cinza nos campos com * */
 input[readonly], input:disabled {
-    pointer-events: none; /* Desativa o clique ou interação do mouse */
-    background-color: #D8D8D8; /* Cor de fundo para indicar que está desativado */
-    color: gray; /* Cor do texto para indicar desativação */
+    pointer-events: none;
+    background-color: #D8D8D8;
+    color: gray;
 }
 
-/* Manter os campos Estado e Cidade com texto preto */
 #estado, #cidade {
     color: black !important;
 }
 
-/* Estilização do título */
 h2 {
-    font-size: 28px; /* Aumenta o tamanho do h2 */
-    margin-left: 20px; /* Move o h2 para a direita */
+    font-size: 28px;
+    margin-left: 20px;
 }
 
 #descricao {
-    margin-top: -16px;  /* Aproxima o p do h2 */
-    margin-left: 20px; /* Deixa o p alinhado com o h2 */
+    margin-top: -16px;
+    margin-left: 20px;
     color: #222;
     opacity: 0.66;
-    font-size: 18px; /* Aumenta o tamanho do p */
+    font-size: 18px;
 }
 
-/* Adicionando uma grade para os inputs */
 .form-grid {
     display: flex;
     gap: 15px;
@@ -181,8 +171,8 @@ h2 {
 .left-column, .right-column {
     display: flex;
     flex-direction: column;
-    gap: 25px; /* Aumenta o espaço entre os campos */
-    width: 100%; /* Faz as colunas ocuparem toda a largura */
+    gap: 25px;
+    width: 100%;
 }
 
 .left-column {
@@ -194,28 +184,25 @@ h2 {
     margin-left: 20px;
 }
 
-/* Estilização do botão Salvar alterações */
 .salvar-btn {
-    width: 200px;  /* Tamanho do botão */
+    width: 200px;
     padding: 18px;
-    background-color: #0428A3; /* Cor azul */
-    color: white; /* Cor do texto branco */
+    background-color: #0428A3;
+    color: white;
     border: none;
-    border-radius: 200px; /* Mais arredondado */
+    border-radius: 200px;
     font-size: 18px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-/* Alinhar o botão à direita */
 .button-container {
     display: flex;
-    justify-content: flex-end; /* Coloca o botão à direita */
-    margin-top: -70px; /* Ajusta o espaço acima do botão */
-    margin-right: 76px; /* Ajuste para dar um espaço à direita */
+    justify-content: flex-end;
+    margin-top: -70px;
+    margin-right: 76px;
 }
 
-/* Estilo do ícone de olho */
 .icone-eye {
     position: absolute;
     top: 40px;
@@ -225,72 +212,63 @@ h2 {
     width: 32px;
     height: 32px;
 }
- /* Para os inputs com o * */
+
 input.com-asterisco[readonly], input.com-asterisco:disabled {
     pointer-events: none;
     background-color: #D8D8D8;
     color: gray;
 }
 
-
-/* Para os inputs de Cidade e Estado */
-input#estado, input#cidade {
-color: black; /* Texto desses campos será preto */
-    }
-
-/* Estilo da seta de voltar */
 .back-button {
     position: absolute;
     top: 20px;
     left: 20px;
-    z-index: 100; /* Garante que a seta fique acima dos outros elementos */
+    z-index: 100;
 }
 
 .back-button img {
-    width: 30px;  /* Ajuste o tamanho da seta */
-    height: 30px; /* Ajuste o tamanho da seta */
+    width: 30px;
+    height: 30px;
     cursor: pointer;
 }
 
-/* Estilização da mensagem de sucesso */
 .alert-success {
     color: #00297b;
-    margin-top: -7px; /* Espaço acima da mensagem */
+    margin-top: -7px;
     margin-left: 20px;
     text-align: left;
     border-radius: 5px;
     padding: 10px;
-    display: flex; /* Para o ícone e o texto ficarem na mesma linha */
-    align-items: center; /* Alinha o ícone com o texto */
-    animation: brilhoAzul 1.5s infinite alternate; /* Animação de brilho */
+    display: flex;
+    align-items: center;
+    animation: brilhoAzul 1.5s infinite alternate;
 }
 
-/* Adicionando a imagem como ícone */
 .alert-success:before {
-    content: ""; /* Remover o texto */
-    background-image: url("../img/verificaazul.png"); /* Caminho para a imagem */
-    background-size: 30px 30px; /* Ajuste o tamanho da imagem */
-    background-repeat: no-repeat; /* Impede que a imagem se repita */
-    width: 30px; /* Largura do ícone */
-    height: 30px; /* Altura do ícone */
-    margin-right: 10px; /* Espaço entre o ícone e o texto */
+    content: "";
+    background-image: url("../img/verificaazul.png");
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
 }
 
-/* Animação de brilho com tons de azul */
 @keyframes brilhoAzul {
     0% {
-        color: #0677e0; /* Azul escuro */
-        text-shadow: 0 0 5px rgba(0, 64, 123, 0.7), 0 0 10px rgba(0, 53, 123, 0.5); /* Brilho azul suave */
+        color: #0677e0;
+        text-shadow: 0 0 5px rgba(0, 64, 123, 0.7), 0 0 10px rgba(0, 53, 123, 0.5);
     }
     50% {
-        color: #2844e6; /* Azul claro */
-        text-shadow: 0 0 15px rgba(3, 77, 187, 0.7), 0 0 30px rgba(8, 51, 168, 0.5); /* Brilho azul mais intenso */
+        color: #2844e6;
+        text-shadow: 0 0 15px rgba(3, 77, 187, 0.7), 0 0 30px rgba(8, 51, 168, 0.5);
     }
     100% {
-        color: #0026ff; /* Azul escuro */
-        text-shadow: 0 0 5px rgba(0, 38, 255, 0.7), 0 0 10px rgba(0, 17, 255, 0.5); /* Brilho azul suave */
+        color: #0026ff;
+        text-shadow: 0 0 5px rgba(0, 38, 255, 0.7), 0 0 10px rgba(0, 17, 255, 0.5);
     }
 }
+
 .salvar-btn {
     width: 200px;
     background-color: #0428A3;
@@ -299,14 +277,15 @@ color: black; /* Texto desses campos será preto */
     border-radius: 30px;
     padding: 18px;
     cursor: not-allowed;
-    opacity: 0.5; /* Opacidade inicial */
+    opacity: 0.5;
     transition: opacity 0.3s ease;
 }
 
 .salvar-btn.enabled {
     cursor: pointer;
-    opacity: 1; /* Opacidade normal quando habilitado */
+    opacity: 1;
 }
-.input-container{
+
+.input-container {
     cursor: not-allowed;
 }
