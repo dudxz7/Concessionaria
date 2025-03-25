@@ -87,7 +87,7 @@ $conn->close();
         <div class="content">
             <h2>Consulta de Clientes</h2>
             <form method="GET" action="">
-                <input type="text" name="search" placeholder="Buscar por nome ou email..." value="<?php echo htmlspecialchars($filtro); ?>">
+                <input type="text" name="search" class="input" placeholder="Buscar por nome ou email..." value="<?php echo htmlspecialchars($filtro); ?>">
                 <button type="submit">Buscar</button>
             </form>
 

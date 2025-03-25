@@ -139,14 +139,14 @@ input[type="text"] {
     flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px 0 0 5px;
+    border-radius: 8px 0 0 8px;
     outline: none;
 }
 
 button {
     padding: 10px 15px;
     border: none;
-    background-color: #2980B9;
+    background-color: #2f4eda;
     color: white;
     cursor: pointer;
     border-radius: 0 5px 5px 0;
@@ -154,5 +154,8 @@ button {
 }
 
 button:hover {
-    background-color: #1A5276;
+    background-color: #2f4eda;
+}
+.input:focus {
+    border: 2px solid #2f4eda;
 }
