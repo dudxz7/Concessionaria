@@ -97,15 +97,11 @@ $conn->close();
                     <img src="img/lupa.png" alt="Consultar clientes">
                     <span>Consultar Clientes</span>
                 </div>
-                <?php endif; ?>
-                <?php if ($cargo == 'Funcionario' ): ?>
                 <div class="icon-item" onclick="window.location.href='php/consultar_veiculos.php'">
                     <img src="img/carro_de_frente.png" alt="Consultar Veículos">
                     <span>Consultar veículos</span>
                 </div>
-                <?php endif; ?>
-                <?php if ($cargo == 'Funcionario' ): ?>
-                <div class="icon-item" onclick="window.location.href='php/consultar_veiculos.php'">
+                <div class="icon-item" onclick="window.location.href='php/consultar_promocoes.php'">
                     <img src="img/promocoes.png" alt="Consultar promoções">
                     <span>Consultar promoções</span>
                 </div>

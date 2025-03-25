@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background-color: #D8D8D8; /* Cor do fundo conforme solicitado */
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Impede a rolagem horizontal */
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 320px;
+    height: 97.7vh;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.sidebar video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.profile-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: black;
+    border: 3px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: bold;
+    color: white;
+    margin: 20px auto;
+}
+
+.icons {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    width: 80%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, filter 0.3s;
+}
+
+.icon-item:hover {
+    background: rgba(255, 255, 255, 0.3);
+    filter: brightness(2.5);
+}
+
+.icon-item img {
+    width: 20px;
+}
+
+.icon-item span {
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+}
+/* Ajustando a div .content */
+.content {
+    flex: 1;
+    max-width: 900px; /* Define um limite de largura */
+    margin: 20px auto; /* Centraliza horizontalmente */
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilização da tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #2C3E50;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #d0d0d0;
+    transition: 0.3s;
+}
+
+/* Caixa de busca */
+form {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #2980B9;
+    color: white;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #1A5276;
+}

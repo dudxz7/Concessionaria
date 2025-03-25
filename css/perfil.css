@@ -17,7 +17,7 @@ body {
 
 .sidebar {
     width: 320px;
-    height: 100vh;
+    height: 97.6vh;
     position: relative;
     overflow: hidden;
     color: white;
@@ -275,7 +275,7 @@ input.com-asterisco[readonly], input.com-asterisco:disabled {
     color: white;
     border: none;
     border-radius: 30px;
-    padding: 18px;
+    padding: 16px;
     cursor: not-allowed;
     opacity: 0.5;
     transition: opacity 0.3s ease;
