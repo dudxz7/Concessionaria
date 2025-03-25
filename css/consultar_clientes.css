@@ -10,9 +10,6 @@ body {
 
 .container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 15px;
 }
 
 /* Sidebar */
@@ -87,10 +84,11 @@ body {
     text-align: left;
 }
 /* Ajustando a div .content */
+/* Ajuste para a tabela ocupar 100% da tela */
 .content {
     flex: 1;
-    max-width: 900px; /* Define um limite de largura */
-    margin: 20px auto; /* Centraliza horizontalmente */
+    width: 100%; /* Garante que o conteúdo ocupe 100% da largura */
+    margin: 0 auto; /* Centraliza o conteúdo, mas sem margem lateral */
     padding: 20px;
     background: white;
     border-radius: 10px;
@@ -99,7 +97,7 @@ body {
 
 /* Estilização da tabela */
 table {
-    width: 100%;
+    width: 100%; /* Garante que a tabela ocupe 100% da largura */
     border-collapse: collapse;
     background: white;
     border-radius: 8px;
@@ -114,7 +112,7 @@ th, td {
 }
 
 th {
-    background-color: #2C3E50;
+    background-color: #0d2f8f;
     color: white;
     text-transform: uppercase;
     font-weight: bold;
@@ -137,14 +135,14 @@ form {
 
 input[type="text"] {
     flex: 1;
-    padding: 10px;
+    padding: 14px;
     border: 1px solid #ccc;
     border-radius: 8px 0 0 8px;
     outline: none;
 }
 
 button {
-    padding: 10px 15px;
+    padding: 8px 22px;
     border: none;
     background-color: #2f4eda;
     color: white;
@@ -158,4 +156,87 @@ button:hover {
 }
 .input:focus {
     border: 2px solid #2f4eda;
+}
+/* O botão (a imagem) */
+.btn-editar {
+    width: 25px; /* Tamanho da imagem do botão */
+    height: 25px; /* Tamanho da imagem do botão */
+    opacity: 0.7;
+}
+/* Ajuste para posicionar o botão no canto superior direito */
+.btn-novo-cliente {
+    position: absolute; /* Para posicionar em relação ao elemento pai */
+    top: 20px; /* Distância do topo da tela */
+    right: 20px; /* Distância da borda direita */
+    background-color: #2f4eda; /* Cor do botão */
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center; /* Alinha a imagem e o texto */
+    text-decoration: none; /* Remove o underline do link */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-novo-cliente:hover {
+    background-color: #1d3e8f; /* Alteração na cor do botão ao passar o mouse */
+}
+
+/* Ajuste para a imagem do botão */
+.img-btn {
+    width: 20px; /* Tamanho da imagem */
+    height: 20px; /* Tamanho da imagem */
+    margin-right: 8px; /* Espaço entre a imagem e o texto */
+}
+.paginacao {
+    margin-top: 20px; /* Aumenta o espaço entre a tabela e a paginação */
+    text-align: left;
+}
+.seta-img {
+    width: 20px;  /* Ajuste o tamanho da seta */
+    height: 20px; /* Ajuste o tamanho da seta */
+    vertical-align: middle; /* Para alinhar a seta com o texto */
+    transition: transform 0.3s ease; /* Para transição suave ao passar o mouse */
+    opacity: 0.7;
+}
+
+.seta-img:hover {
+    transform: scale(1.2); /* Aumenta o tamanho da seta ao passar o mouse */
+}
+/* Adicionando animação ao título */
+.btn-shine {
+    position: relative;
+    display: inline-block;
+    padding: 12px 10px;
+    color: #000000;
+    background: linear-gradient(to right, #000000 0%, #132aac 10%, #000000 20%);
+    background-position: 0;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 3s infinite linear;
+    animation-fill-mode: forwards;
+    font-weight: 600;
+    font-size: 22   px;  /* Ajuste o tamanho da fonte conforme necessário */
+    text-decoration: none;
+    white-space: nowrap;
+    font-family: "Poppins", sans-serif;
+}
+
+  /* Keyframes para a animação shine */
+@keyframes shine {
+    0% {
+    background-position: 0;
+    }
+    60% {
+    background-position: 180px;
+    }
+    100% {
+    background-position: 180px;
+    }
+}
+
+.icone-lupa {
+    width: 20px; /* Ajuste o tamanho conforme necessário */
+    height: 20px; /* Ajuste o tamanho conforme necessário */
 }
