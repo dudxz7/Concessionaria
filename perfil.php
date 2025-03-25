@@ -22,14 +22,14 @@ if ($conn->connect_error) {
 
 // Buscar os dados do usuário
 $id = $_SESSION['usuarioId'];
-$sql = "SELECT nome_completo, email, cpf, rg, cidade, estado, telefone, cnh, cargo, endereco FROM clientes WHERE id = ?";
+$sql = "SELECT nome_completo, email, cpf, rg, cidade, estado, telefone, cnh, cargo, endereco, pis FROM clientes WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $stmt->store_result();
 
 if ($stmt->num_rows > 0) {
-    $stmt->bind_result($nome_completo, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $cargo, $endereco);
+    $stmt->bind_result($nome_completo, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $cargo, $endereco, $pis);
     $stmt->fetch();
 } else {
     echo "Erro ao recuperar os dados!";
@@ -140,6 +140,12 @@ $conn->close();
                             <label for="cargo">Cargo*</label>
                             <input type="text" id="cargo" value="<?php echo $cargo; ?>" readonly class="com-asterisco">
                         </div>
+                        <?php if ($cargo == 'Funcionario'): ?>
+                        <div class="input-container">
+                            <label for="pis">Pis*</label>
+                            <input type="text" id="pis" name="pis" value="<?php echo $pis; ?>" readonly class="com-asterisco">
+                        </div>
+                        <?php endif; ?>
                         <div class="input-container">
                             <label for="estado">Estado</label>
                             <input type="text" id="estado" name="estado" value="<?php echo $estado; ?>" maxlength="2" required>
