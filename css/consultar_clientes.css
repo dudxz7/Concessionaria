@@ -217,7 +217,7 @@ button:hover {
     animation: shine 3s infinite linear;
     animation-fill-mode: forwards;
     font-weight: 600;
-    font-size: 22   px;  /* Ajuste o tamanho da fonte conforme necessário */
+    font-size: 22px;  /* Ajuste o tamanho da fonte conforme necessário */
     text-decoration: none;
     white-space: nowrap;
     font-family: "Poppins", sans-serif;
