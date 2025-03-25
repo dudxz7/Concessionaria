@@ -77,7 +77,7 @@ $conn->close();
     <div class="container">
         <div class="sidebar">
             <video autoplay loop muted>
-                <source src="img/particulaazul.mp4" type="video/mp4">
+                <source src="videos/overlay_azul.mp4" type="video/mp4">
                 Seu navegador não suporta vídeos.
             </video>
             <div class="profile-icon"><?php echo strtoupper(substr($nome_completo, 0, 1)); ?></div>
@@ -88,10 +88,28 @@ $conn->close();
                     <img src="img/usersembarra.png" alt="Minha Conta">
                     <span>Minha conta</span>
                 </div>
-                <div class="icon-item" onclick="window.location.href='esquecer_senha.php'">
+                <div class="icon-item" onclick="window.location.href='php/esquecer_senha.php'">
                     <img src="img/ajudando.png" alt="Esqueceu a Senha">
                     <span>Esqueceu a Senha</span>
                 </div>
+                <?php if ($cargo == 'Funcionario' ): ?>
+                <div class="icon-item" onclick="window.location.href='php/consultar_clientes.php'">
+                    <img src="img/lupa.png" alt="Consultar clientes">
+                    <span>Consultar Clientes</span>
+                </div>
+                <?php endif; ?>
+                <?php if ($cargo == 'Funcionario' ): ?>
+                <div class="icon-item" onclick="window.location.href='php/consultar_veiculos.php'">
+                    <img src="img/carro_de_frente.png" alt="Consultar Veículos">
+                    <span>Consultar veículos</span>
+                </div>
+                <?php endif; ?>
+                <?php if ($cargo == 'Funcionario' ): ?>
+                <div class="icon-item" onclick="window.location.href='php/consultar_veiculos.php'">
+                    <img src="img/promocoes.png" alt="Consultar promoções">
+                    <span>Consultar promoções</span>
+                </div>
+                <?php endif; ?>
                 <div class="icon-item" onclick="window.location.href='php/logout.php'">
                     <img src="img/sairr.png" alt="Sair">
                     <span>Sair</span>
