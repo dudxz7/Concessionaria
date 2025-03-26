@@ -77,6 +77,10 @@ $conn->close();
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
+            <!-- Imagem da seta para voltar -->
+            <a href="../perfil.php" class="back-button">
+                <img src="../img/seta-esquerdabranca.png" alt="Voltar">
+            </a>
             <video autoplay loop muted>
                 <source src="../videos/overlay_azul.mp4" type="video/mp4">
                 Seu navegador não suporta vídeos.
