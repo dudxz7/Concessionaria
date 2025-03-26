@@ -25,39 +25,59 @@ $clientes_por_pagina = 10;
 $pagina_atual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_atual - 1) * $clientes_por_pagina;
 
-// Filtragem por busca
-$filtro = "";
-$param = "%";
-if (isset($_GET['search']) && !empty($_GET['search'])) {
-    $filtro = $_GET['search'];
+// Verificar qual letra foi selecionada
+$letra_filtro = isset($_GET['letra']) ? $_GET['letra'] : '';
+
+// Definir o filtro de pesquisa se existir
+$filtro = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Se houver um filtro por letra, incluir isso na consulta
+if ($letra_filtro) {
     $sql = "SELECT id, nome_completo, email, telefone, registrado_em FROM clientes 
-            WHERE nome_completo LIKE ? OR email LIKE ? 
+            WHERE nome_completo LIKE ? 
             LIMIT ?, ?";
     $stmt = $conn->prepare($sql);
-    $param = "%$filtro%";
-    $stmt->bind_param("ssii", $param, $param, $offset, $clientes_por_pagina);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    // Contar total de registros filtrados
-    $sql_total = "SELECT COUNT(*) as total FROM clientes WHERE nome_completo LIKE ? OR email LIKE ?";
-    $stmt_total = $conn->prepare($sql_total);
-    $stmt_total->bind_param("ss", $param, $param);
-    $stmt_total->execute();
-    $total_result = $stmt_total->get_result()->fetch_assoc();
-    $total_clientes = $total_result['total'];
+    $param = "$letra_filtro%";  // Filtrando pelo início do nome com a letra escolhida
+    $stmt->bind_param("sii", $param, $offset, $clientes_por_pagina);
 } else {
-    // Consulta geral sem filtro
-    $sql = "SELECT id, nome_completo, email, telefone, registrado_em FROM clientes LIMIT ?, ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $offset, $clientes_por_pagina);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    // Contar total de clientes
-    $sql_total = "SELECT COUNT(*) as total FROM clientes";
-    $total_clientes = $conn->query($sql_total)->fetch_assoc()['total'];
+    // Consulta sem filtro de letra
+    if ($filtro) {
+        $sql = "SELECT id, nome_completo, email, telefone, registrado_em FROM clientes 
+                WHERE nome_completo LIKE ? OR email LIKE ? 
+                LIMIT ?, ?";
+        $stmt = $conn->prepare($sql);
+        $param = "%$filtro%";  // Filtro de pesquisa no nome ou email
+        $stmt->bind_param("ssii", $param, $param, $offset, $clientes_por_pagina);
+    } else {
+        $sql = "SELECT id, nome_completo, email, telefone, registrado_em FROM clientes 
+                LIMIT ?, ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $offset, $clientes_por_pagina);
+    }
 }
+
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Contar total de clientes
+if ($letra_filtro) {
+    $sql_total = "SELECT COUNT(*) as total FROM clientes WHERE nome_completo LIKE ?";
+    $stmt_total = $conn->prepare($sql_total);
+    $stmt_total->bind_param("s", $param);
+} else {
+    if ($filtro) {
+        $sql_total = "SELECT COUNT(*) as total FROM clientes WHERE nome_completo LIKE ? OR email LIKE ?";
+        $stmt_total = $conn->prepare($sql_total);
+        $stmt_total->bind_param("ss", $param, $param);
+    } else {
+        $sql_total = "SELECT COUNT(*) as total FROM clientes";
+        $stmt_total = $conn->prepare($sql_total);
+    }
+}
+
+$stmt_total->execute();
+$total_result = $stmt_total->get_result()->fetch_assoc();
+$total_clientes = $total_result['total'];
 
 // Calcular o total de páginas
 $total_paginas = ceil($total_clientes / $clientes_por_pagina);
@@ -128,9 +148,23 @@ $conn->close();
             <form method="GET" action="">
                 <input type="text" name="search" class="input" placeholder="Buscar por nome ou email..." value="<?php echo htmlspecialchars($filtro); ?>">
                 <button type="submit">
-                <img src="../img/lupa.png" alt="Buscar" class="icone-lupa">
+                    <img src="../img/lupa.png" alt="Buscar" class="icone-lupa">
                 </button>
             </form>
+
+            <div class="letras-filtro">
+            <?php
+                // Verificar qual letra foi selecionada
+                $letra_selecionada = isset($_GET['letra']) ? $_GET['letra'] : '';
+
+                // Exibindo as letras de A a Z para o filtro
+                foreach (range('A', 'Z') as $letra) {
+                // Adicionar a classe 'selected' se a letra for a selecionada
+                $class = ($letra == $letra_selecionada) ? 'class="selected"' : '';
+                echo "<a href='?letra=$letra' $class>$letra</a> ";
+                }
+            ?>
+</div>
 
             <table>
                 <thead>
@@ -167,13 +201,13 @@ $conn->close();
                 <span>Página <?php echo $pagina_atual; ?> de <?php echo $total_paginas; ?></span>
                 <!-- Botão Anterior -->
                 <?php if ($pagina_atual > 1): ?>
-                    <a href="?pagina=<?php echo $pagina_atual - 1; ?>&search=<?php echo urlencode($filtro); ?>">
+                    <a href="?pagina=<?php echo $pagina_atual - 1; ?>&search=<?php echo urlencode($filtro); ?>&letra=<?php echo urlencode($letra_filtro); ?>">
                     <img src="../img/setinha-esquerda.png" alt="Anterior" class="seta-img">
                     </a>
                 <?php endif; ?>
                 <!-- Botão Próximo -->
                 <?php if ($pagina_atual < $total_paginas): ?>
-                    <a href="?pagina=<?php echo $pagina_atual + 1; ?>&search=<?php echo urlencode($filtro); ?>">
+                    <a href="?pagina=<?php echo $pagina_atual + 1; ?>&search=<?php echo urlencode($filtro); ?>&letra=<?php echo urlencode($letra_filtro); ?>">
                     <img src="../img/setinha.png" alt="Próximo" class="seta-img">
                     </a>
                 <?php endif; ?>

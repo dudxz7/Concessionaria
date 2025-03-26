@@ -253,3 +253,33 @@ button:hover {
     height: 30px;
     cursor: pointer;
 }
+.letras-filtro {
+    text-align: center; /* Centraliza as letras */
+    margin: 20px 0; /* Espaçamento em cima e embaixo */
+}
+
+.letras-filtro a {
+    display: inline-block; /* Mantém as letras na mesma linha */
+    padding: 1.3px 10px; /* Menos padding para deixar as letras menores */
+    margin: 0 4px; /* Menor espaço entre as letras */
+    text-decoration: none; /* Remove o sublinhado */
+    color: white; /* Cor do texto */
+    background-color: #2f4eda; /* Cor de fundo azul */
+    border-radius: 3px; /* Cantos mais arredondados */
+    font-weight: bold; /* Negrito nas letras */
+    font-size: 14px; /* Tamanho da fonte ajustado */
+    transition: background-color 0.3s; /* Efeito ao passar o mouse */
+}
+
+.letras-filtro a:hover {
+    background-color: #004085; /* Cor de fundo azul mais escuro quando o mouse passar */
+}
+
+.letras-filtro a:active {
+    background-color: #003366; /* Cor de fundo azul ainda mais escuro quando clicado */
+}
+
+.letras-filtro a.selected {
+    background-color: #0d2f8f; /* Cor de fundo azul escuro quando a letra for selecionada */
+}
+
