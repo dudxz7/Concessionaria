@@ -18,6 +18,28 @@ if ($conn->connect_error) {
     die("Falha na conexão: " . $conn->connect_error);
 }
 
+// Buscar o cargo do usuário logado
+$usuario_id = $_SESSION['usuarioId'];  // Usando o ID da sessão para buscar os dados do usuário
+$sql = "SELECT cargo FROM clientes WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $usuario_id);
+$stmt->execute();
+
+// Bind do resultado
+$stmt->bind_result($cargo_usuario);
+$stmt->fetch(); // Isso vai popular a variável $cargo_usuario
+
+// Liberar o resultado da primeira consulta
+$stmt->free_result(); 
+
+// Verificar se o cargo é diferente de Funcionario, Gerente ou Admin
+if (!in_array($cargo_usuario, ['Funcionario', 'Gerente', 'Admin'])) {
+    // Se não for um desses cargos, exibe a mensagem de acesso negado
+    echo "<h2>Acesso Negado</h2>";
+    echo "<p>Você não tem permissão para acessar esta página.</p>";
+    exit;
+}
+
 // Definir a quantidade de clientes por página
 $clientes_por_pagina = 10;
 
@@ -97,7 +119,6 @@ $conn->close();
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <!-- Imagem da seta para voltar -->
             <a href="../perfil.php" class="back-button">
                 <img src="../img/seta-esquerdabranca.png" alt="Voltar">
             </a>
@@ -139,7 +160,7 @@ $conn->close();
         <!-- Conteúdo -->
         <div class="content">
             <h2 class="btn-shine">Consulta de Clientes</h2>
-            
+
             <a href="../registro.html" class="btn-novo-cliente">
                 <img src="../img/adicionar-usuario.png" alt="Cadastrar Cliente" class="img-btn">
                 Cadastrar Cliente Novo
@@ -154,17 +175,14 @@ $conn->close();
 
             <div class="letras-filtro">
             <?php
-                // Verificar qual letra foi selecionada
-                $letra_selecionada = isset($_GET['letra']) ? $_GET['letra'] : '';
-
-                // Exibindo as letras de A a Z para o filtro
+                // Exibição das letras de A a Z
                 foreach (range('A', 'Z') as $letra) {
-                // Adicionar a classe 'selected' se a letra for a selecionada
-                $class = ($letra == $letra_selecionada) ? 'class="selected"' : '';
-                echo "<a href='?letra=$letra' $class>$letra</a> ";
+                    // Adicionar a classe 'selected' se a letra for a selecionada
+                    $class = ($letra == $letra_filtro) ? 'class="selected"' : '';
+                    echo "<a href='?letra=$letra' $class>$letra</a> ";
                 }
             ?>
-</div>
+            </div>
 
             <table>
                 <thead>
@@ -197,18 +215,15 @@ $conn->close();
 
             <!-- Paginação -->
             <div class="paginacao">
-                <!-- Exibição da Página Atual -->
                 <span>Página <?php echo $pagina_atual; ?> de <?php echo $total_paginas; ?></span>
-                <!-- Botão Anterior -->
                 <?php if ($pagina_atual > 1): ?>
                     <a href="?pagina=<?php echo $pagina_atual - 1; ?>&search=<?php echo urlencode($filtro); ?>&letra=<?php echo urlencode($letra_filtro); ?>">
-                    <img src="../img/setinha-esquerda.png" alt="Anterior" class="seta-img">
+                        <img src="../img/setinha-esquerda.png" alt="Anterior" class="seta-img">
                     </a>
                 <?php endif; ?>
-                <!-- Botão Próximo -->
                 <?php if ($pagina_atual < $total_paginas): ?>
                     <a href="?pagina=<?php echo $pagina_atual + 1; ?>&search=<?php echo urlencode($filtro); ?>&letra=<?php echo urlencode($letra_filtro); ?>">
-                    <img src="../img/setinha.png" alt="Próximo" class="seta-img">
+                        <img src="../img/setinha.png" alt="Próximo" class="seta-img">
                     </a>
                 <?php endif; ?>
             </div>
