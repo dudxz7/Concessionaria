@@ -12,6 +12,7 @@ body {
 }
 
 .container {
+    position: relative;
     background: #D9D9D9;
     padding: 20px;
     border-radius: 15px;
@@ -75,14 +76,14 @@ h2 {
 }
 
 .btn {
-    font-family: Inter;
+    font-family: 'Inter', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
     width: 100%;
     padding: 12px;
-    background: #2657F2;  /* Cor do botão ajustada para #2657F2 */
+    background: #2657F2;  /* Cor do botão ajustada */
     color: #fff;
     border: none;
     border-radius: 20px;
@@ -90,6 +91,9 @@ h2 {
     font-weight: bold;  /* Texto em negrito */
     cursor: pointer;
     margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease-in-out;
 }
 
 .btn img {
@@ -100,9 +104,54 @@ h2 {
 .btn:hover {
     background: #1e4dbf;  /* Cor de fundo mais escura para o hover */
 }
+
+/* Efeito de brilho */
+.btn::before {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100%;
+    background-image: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0) 30%,
+        rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0) 70%
+    );
+    top: 0;
+    left: -100px;
+    opacity: 0.6;
+    transition: left 0.3s ease-in-out;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
 #error-message {
-    font-family: 'Inter', sans-serif; /* Fonte Inter */
-    font-size: 14px; /* Tamanho de fonte menor */
-    color: #2657F2; /* Cor azul */
-    margin-top: 5px; /* Adiciona um pequeno espaçamento acima da mensagem */
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    display: none; 
+}
+#error-message.erro {
+    color: red;
+}
+#error-message.sucesso {
+    color: #2657f2;
+}
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+}
+.back-button img {
+    width: 27px; /* Ajuste conforme necessário */
+    height: auto;
+    transition: transform 0.2s ease-in-out;
+}
+
+.back-button:hover img {
+    transform: scale(1.1); /* Efeito ao passar o mouse */
 }
