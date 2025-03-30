@@ -56,14 +56,6 @@ body {
     width: 100%;
 }
 
-.footer {
-    background-color: #222;
-    color: white;
-    text-align: center;
-    padding: 20px;
-    margin-top: 20px;
-}
-
 .icons {
     margin-top: 20px;
     display: flex;

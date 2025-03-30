@@ -92,7 +92,7 @@ $conn->close();
                     <img src="img/ajudando.png" alt="Esqueceu a Senha">
                     <span>Esqueceu a Senha</span>
                 </div>
-                <?php if ($cargo == 'Funcionario' ): ?>
+                <?php if ($cargo !== 'Cliente' ): ?>
                 <div class="icon-item" onclick="window.location.href='php/consultar_clientes.php'">
                     <img src="img/lupa.png" alt="Consultar clientes">
                     <span>Consultar Clientes</span>
@@ -154,7 +154,7 @@ $conn->close();
                             <label for="cargo">Cargo*</label>
                             <input type="text" id="cargo" value="<?php echo $cargo; ?>" readonly class="com-asterisco">
                         </div>
-                        <?php if ($cargo == 'Funcionario'): ?>
+                        <?php if ($cargo !== 'Cliente'): ?>
                         <div class="input-container">
                             <label for="pis">Pis*</label>
                             <input type="text" id="pis" name="pis" value="<?php echo $pis; ?>" readonly class="com-asterisco">
@@ -168,7 +168,7 @@ $conn->close();
                             <label for="cidade">Cidade</label>
                             <input type="text" id="cidade" name="cidade" value="<?php echo $cidade; ?>" maxlength="28" required>
                         </div>
-                        <?php if ($cargo == 'Funcionario'): ?>
+                        <?php if ($cargo !== 'Cliente'): ?>
                         <div class="input-container">
                             <label for="endereco">Endereço</label>
                             <input type="text" id="endereco" name="endereco" value="<?php echo $endereco; ?>" maxlength="100">
