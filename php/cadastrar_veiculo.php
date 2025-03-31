@@ -80,87 +80,8 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Veículo</title>
     <link rel="stylesheet" href="../css/registro.css">
+    <link rel="stylesheet" href="../css/checkbox-cor-veiculos.css">
     <link rel="icon" href="../img/logoofcbmw.png">
-    <style>
-.checkbox-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 69px;
-    margin-top: 10px;
-}
-
-.checkbox-field {
-    display: flex;
-    align-items: center; /* Alinha verticalmente no centro */
-    justify-content: center; /* Alinha horizontalmente no centro */
-    cursor: pointer;
-    position: relative; /* Necessário para o posicionamento do checkmark */
-}
-
-.checkbox-field input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-}
-
-.checkmark {
-    width: 20px;
-    height: 20px;
-    background-color: rgba(16, 16, 16, 0.5);
-    border-radius: 4px;
-    box-shadow: 0px 0px 0px 2px rgb(255, 84, 0);
-    transition: all 0.2s ease-in-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    position: relative;
-}
-
-.checkbox-field input:checked ~ .checkmark {
-    background-color: rgba(245, 24, 24, 0.5);
-}
-
-.checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-    left: 0.45em; /* Ajuste fino para centralizar */
-    top: 0.25em;  /* Ajuste fino para centralizar */
-    width: 0.25em;
-    height: 0.5em;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-    left: 50%; /* Centraliza horizontalmente */
-    top: 50%;  /* Centraliza verticalmente */
-    transform: translate(-50%, -50%) rotate(45deg); /* Ajusta o ícone no centro */
-}
-
-.checkbox-field input:checked ~ .checkmark:after {
-    display: block;
-}
-    .checkbox-field:nth-child(1) .checkmark span {
-        margin-left: 94px;
-    }
-    .checkbox-field:nth-child(2) .checkmark span {
-        margin-left: 94px;
-    }
-    .checkbox-field:nth-child(3) .checkmark span {
-        margin-left: 94px;
-    }
-    .checkbox-field:nth-child(4) .checkmark span {
-        margin-left: 94px;
-    }
-    .checkbox-field:nth-child(5) .checkmark span {
-        margin-left: 94px;
-    }
-    .checkbox-field:nth-child(6) .checkmark span {
-        margin-left: 110px;
-    }
-    </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mask-plugin/1.14.16/jquery.mask.min.js"></script>
 </head>
@@ -231,39 +152,27 @@ $conn->close();
                 <div class="checkbox-group">
                     <label class="checkbox-field">
                         <input type="checkbox" name="cor[]" value="Preto">
-                        <div class="checkmark"> 
-                            <span>Preto</span>
-                        </div> 
+                        <div class="checkmark"></div> 
                     </label>
                     <label class="checkbox-field">
                         <input type="checkbox" name="cor[]" value="Branco">
-                        <div class="checkmark">
-                            <span>Branco</span>
-                        </div> 
+                        <div class="checkmark"></div> 
                     </label>
                     <label class="checkbox-field">
                         <input type="checkbox" name="cor[]" value="Azul">
-                        <div class="checkmark">
-                            <span>Azul</span>
-                        </div> 
+                        <div class="checkmark"></div> 
                     </label>
                     <label class="checkbox-field">
                         <input type="checkbox" name="cor[]" value="Prata">
-                        <div class="checkmark">
-                            <span>Prata</span>
-                        </div> 
+                        <div class="checkmark"></div> 
                     </label>
                     <label class="checkbox-field">
                         <input type="checkbox" name="cor[]" value="Verde">
-                        <div class="checkmark">
-                            <span>Verde</span>
-                        </div> 
+                        <div class="checkmark"></div> 
                     </label>
                     <label class="checkbox-field">
                         <input type="checkbox" name="cor[]" value="Vermelho">
-                        <div class="checkmark">
-                            <span>Vermelho</span>
-                        </div> 
+                        <div class="checkmark"></div> 
                     </label>
                 </div>
             </div>
