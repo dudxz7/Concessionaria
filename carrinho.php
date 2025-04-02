@@ -97,8 +97,11 @@ $capital = $estado && isset($estadosCapitais[$estado]) ? $estadosCapitais[$estad
     </nav>
 </header>
 
-<h1>Bem-vindo ao Carrinho</h1>
-<p>Aqui vão os detalhes do seu carrinho de compras.</p>
+<div class="content">
+    <h1>Bem-vindo ao Carrinho</h1>
+    <p>Aqui vão os detalhes do seu carrinho de compras.</p>
+</div>
+
 
 </body>
 </html>
