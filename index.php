@@ -54,6 +54,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] : "Cidade - Estado";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BMW Concessionária</title>
     <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/liquid-button.css">
     <link rel="icon" href="img/logoofcbmw.png">
 </head>
 <body>
@@ -100,8 +101,30 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] : "Cidade - Estado";
             </nav>
         </header>
         <div class="hero-content">
-            <h1>Bem-vindo ao nosso site!</h1>
-            <p>Explore nossas ofertas e veja os carros disponíveis!</p>
+            <!-- pção 1 (Exclusividade e sofisticação)
+            h1: O auge da engenharia alemã, feito para você.
+            p: Experimente o equilíbrio perfeito entre luxo, potência e inovação. Seu BMW espera por você.
+
+            Opção 2 (Potência e sofisticação)
+            h1: Dirija a excelência. Viva a BMW.
+            p: Uma experiência de condução sem igual, onde desempenho encontra sofisticação. Descubra o seu próximo BMW.
+
+            Opção 3 (Foco em conforto e tecnologia)
+            h1: A perfeição sobre rodas.
+            p: Cada detalhe pensado para oferecer luxo, conforto e inovação. Explore a linha BMW.
+
+-->
+            <h1>O auge da engenharia alemã, feito para você.</h1>
+            <p>Experimente o equilíbrio perfeito entre luxo, potência e inovação. Seu BMW espera por você.</p>
+            <div class="botoes-container">
+            <div class="containerBotoes">
+                <button class="botaoSuperior">COMEÇAR AGORA</button>
+                <button class="botaoInferior">COMEÇAR AGORA</button>
+            </div>
+            <div class="buttonSaibaMais">
+                <button class="saibaMais">Saiba mais</button>
+            </div>
+            </div>
         </div>
     </div>
 
@@ -114,5 +137,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] : "Cidade - Estado";
     </div>
     
     <script src="js/trocar-bg-index.js"></script>
+    <script src="js/liquid-button.js"></script>
+
 </body>
 </html>
