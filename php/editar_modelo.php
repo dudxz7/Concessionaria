@@ -68,7 +68,7 @@ $coresSelecionadas = explode(',', $modelo['cor']);
         <div class="input-group">
             <label>Modelo</label>
             <div class="input-wrapper">
-                <input type="text" name="modelo" required value="<?php echo htmlspecialchars($modelo['modelo']); ?>">
+                <input type="text" id="modelo" name="modelo" required value="<?php echo htmlspecialchars($modelo['modelo']); ?>">
                 <img src="../img/carro.png" alt="Ícone modelo">
             </div>
         </div>
@@ -128,15 +128,59 @@ $coresSelecionadas = explode(',', $modelo['cor']);
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const precoInput = document.getElementById("preco");
+document.addEventListener("DOMContentLoaded", function () {
+    const precoInput = document.getElementById("preco");
+    const modeloInput = document.getElementById("modelo");
+    const anoInput = document.getElementById("ano");
+    const checkboxes = document.querySelectorAll('input[type="checkbox"][name="cor[]"]');
+    const botao = document.querySelector(".btn");
 
-        precoInput.addEventListener("input", function () {
-            let valor = precoInput.value.replace(/\D/g, "");
-            valor = (parseInt(valor, 10) / 100).toFixed(2);
-            precoInput.value = valor.replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        });
+    // Desativa o botão no início
+    botao.disabled = true;
+    botao.style.opacity = "0.5";
+    botao.style.cursor = "not-allowed";
+
+    // Armazena os valores originais
+    const valorOriginal = {
+        modelo: modeloInput.value,
+        ano: anoInput.value,
+        preco: precoInput.value,
+        cores: Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value).sort().join(',')
+    };
+
+    function verificarAlteracoes() {
+        const modeloAlterado = modeloInput.value !== valorOriginal.modelo;
+        const anoAlterado = anoInput.value !== valorOriginal.ano;
+        const precoAlterado = precoInput.value !== valorOriginal.preco;
+        const coresSelecionadas = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value).sort().join(',');
+        const coresAlteradas = coresSelecionadas !== valorOriginal.cores;
+
+        if (modeloAlterado || anoAlterado || precoAlterado || coresAlteradas) {
+            botao.disabled = false;
+            botao.style.opacity = "1";
+            botao.style.cursor = "pointer";
+        } else {
+            botao.disabled = true;
+            botao.style.opacity = "0.5";
+            botao.style.cursor = "not-allowed";
+        }
+    }
+
+    // Formatação do campo preço
+    precoInput.addEventListener("input", function () {
+        let valor = precoInput.value.replace(/\D/g, "");
+        valor = (parseInt(valor, 10) / 100).toFixed(2);
+        precoInput.value = valor.replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        verificarAlteracoes();
     });
+
+    modeloInput.addEventListener("input", verificarAlteracoes);
+    anoInput.addEventListener("input", verificarAlteracoes);
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener("change", verificarAlteracoes);
+    });
+});
 </script>
 </body>
 </html>
