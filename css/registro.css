@@ -155,3 +155,16 @@ h2 {
 .back-button:hover img {
     transform: scale(1.1); /* Efeito ao passar o mouse */
 }
+select {
+    width: 100%;
+    padding: 13px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    background-color: #f2f2f2;
+    font-size: 16px;
+    color: #333;
+    appearance: none; /* remove o estilo padrão do sistema */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
