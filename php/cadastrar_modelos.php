@@ -4,33 +4,46 @@ $mensagem = '';
 $mensagem_tipo = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    include_once '../php/conexao.php'; // <-- Certifique-se de que esse caminho está certo
+    include_once '../php/conexao.php'; // <-- Verifique se o caminho está correto
 
     $modelo = trim($_POST['modelo']);
     $fabricante = trim($_POST['fabricante']);
     $ano = intval($_POST['ano']);
-    $preco = str_replace(['.', ','], ['', '.'], $_POST['preco']); // Converte para decimal no padrão do banco
+    $preco = str_replace(['.', ','], ['', '.'], $_POST['preco']); // Converte para decimal
 
-    // Verifica se pelo menos uma cor foi selecionada
     if (!isset($_POST['cor']) || empty($_POST['cor'])) {
         $mensagem = "Selecione pelo menos uma cor.";
         $mensagem_tipo = "erro";
     } else {
-        $cores = implode(',', $_POST['cor']); // Junta as cores em uma string separada por vírgula
+        $cores = implode(',', $_POST['cor']);
 
         try {
-            $stmt = $conn->prepare("INSERT INTO modelos (modelo, fabricante, cor, ano, preco) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssii", $modelo, $fabricante, $cores, $ano, $preco);
+            // Verifica se já existe um modelo com o mesmo nome
+            $check_stmt = $conn->prepare("SELECT id FROM modelos WHERE modelo = ?");
+            $check_stmt->bind_param("s", $modelo);
+            $check_stmt->execute();
+            $check_stmt->store_result();
 
-            if ($stmt->execute()) {
-                $mensagem = "Modelo cadastrado com sucesso!";
-                $mensagem_tipo = "sucesso";
-            } else {
-                $mensagem = "Erro ao cadastrar modelo.";
+            if ($check_stmt->num_rows > 0) {
+                $mensagem = "Já existe um modelo com esse nome.";
                 $mensagem_tipo = "erro";
-            }
+                $check_stmt->close();
+            } else {
+                $check_stmt->close();
 
-            $stmt->close();
+                $stmt = $conn->prepare("INSERT INTO modelos (modelo, fabricante, cor, ano, preco) VALUES (?, ?, ?, ?, ?)");
+                $stmt->bind_param("sssii", $modelo, $fabricante, $cores, $ano, $preco);
+
+                if ($stmt->execute()) {
+                    $mensagem = "Modelo cadastrado com sucesso!";
+                    $mensagem_tipo = "sucesso";
+                } else {
+                    $mensagem = "Erro ao cadastrar modelo.";
+                    $mensagem_tipo = "erro";
+                }
+
+                $stmt->close();
+            }
         } catch (Exception $e) {
             $mensagem = "Erro no banco de dados: " . $e->getMessage();
             $mensagem_tipo = "erro";
@@ -128,6 +141,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const precoInput = document.getElementById("preco");
+            const anoInput = document.getElementById("ano");
+
+            anoInput.addEventListener("input", function () {
+                this.value = this.value.replace(/\D/g, "");
+            });
 
             precoInput.addEventListener("input", function () {
                 let valor = precoInput.value.replace(/\D/g, "");

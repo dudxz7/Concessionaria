@@ -65,6 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($sucesso) {
         $mensagem = "Todos os veículos foram cadastrados com sucesso!";
         $mensagem_tipo = "sucesso";
+        echo "<script>window.location.href = 'consultar_veiculos.php';</script>";
     } else {
         $mensagem = "Ocorreu um erro ao cadastrar os veículos.";
         $mensagem_tipo = "erro";
@@ -95,7 +96,7 @@ $conn->close();
             <div class="input-group">
                 <label>Modelo</label>
                 <div class="input-wrapper">
-                    <select name="modelo_id" required>
+                    <select name="modelo_id" id="modelo_id" required>
                         <option value="">Selecione um modelo</option>
                         <?php while ($modelo = $modelos_result->fetch_assoc()) { ?>
                             <option value="<?= $modelo['id'] ?>">
@@ -111,7 +112,7 @@ $conn->close();
             <div class="input-group">
                 <label>Quantidade em Estoque</label>
                 <div class="input-wrapper">
-                    <input type="number" name="estoque" required min="1">
+                    <input type="number" id="estoque_id" name="estoque" required min="1">
                     <img src="../img/estoque.png" alt="Ícone estoque">
                 </div>
             </div>
@@ -127,5 +128,41 @@ $conn->close();
             </button>
         </form>
     </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const selectInput = document.getElementById("modelo_id");
+    const estoqueInput = document.getElementById("estoque_id");
+    const botao = document.querySelector(".btn");
+
+    // Desativa o botão no início
+    botao.disabled = true;
+    botao.style.opacity = "0.5";
+    botao.style.cursor = "not-allowed";
+
+    // Armazena os valores originais
+    const valorOriginal = {
+        select: selectInput.value,
+        estoque: estoqueInput.value
+    };
+
+    function verificarAlteracoes() {
+        const selectAlterado = selectInput.value !== valorOriginal.select;
+        const estoqueAlterado = estoqueInput.value !== valorOriginal.estoque;
+
+        if (selectAlterado && estoqueAlterado) {
+            botao.disabled = false;
+            botao.style.opacity = "1";
+            botao.style.cursor = "pointer";
+        } else {
+            botao.disabled = true;
+            botao.style.opacity = "0.5";
+            botao.style.cursor = "not-allowed";
+        }
+    }
+
+    selectInput.addEventListener("input", verificarAlteracoes);
+    estoqueInput.addEventListener("input", verificarAlteracoes);
+});
+    </script>
 </body>
 </html>

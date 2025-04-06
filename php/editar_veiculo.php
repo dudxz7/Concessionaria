@@ -40,9 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $veiculo) {
     $stmt->bind_param("ii", $novo_modelo_id, $id);
 
     if ($stmt->execute()) {
-        $mensagem = "Modelo do veículo atualizado com sucesso!";
-        $mensagem_tipo = "success";
-        $veiculo['modelo_id'] = $novo_modelo_id;
+        // Redireciona após sucesso
+        header("Location: consultar_veiculos.php");
+        exit;
     } else {
         $mensagem = "Erro ao atualizar o modelo!";
         $mensagem_tipo = "error";
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $veiculo) {
             <div class="input-group">
                 <label for="modelo_id">Modelo</label>
                 <div class="input-wrapper">
-                    <select name="modelo_id" required>
+                    <select name="modelo_id" id="modelo_id" required>
                         <?php if ($modelos_result && $modelos_result->num_rows > 0): ?>
                             <?php while ($modelo = $modelos_result->fetch_assoc()) { ?>
                                 <option value="<?php echo $modelo['id']; ?>" <?php if ($modelo['id'] == $veiculo['modelo_id']) echo 'selected'; ?>>
@@ -102,5 +102,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $veiculo) {
             </div>
         <?php endif; ?>
     </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectInput = document.getElementById("modelo_id");
+        const botao = document.querySelector(".btn");
+
+        // Desativa o botão no início
+        botao.disabled = true;
+        botao.style.opacity = "0.5";
+        botao.style.cursor = "not-allowed";
+
+        // Armazena o valor original
+        const valorOriginal = {
+            select: selectInput.value
+        };
+
+        function verificarAlteracoes() {
+            const selectAlterado = selectInput.value !== valorOriginal.select;
+
+            if (selectAlterado) {
+                botao.disabled = false;
+                botao.style.opacity = "1";
+                botao.style.cursor = "pointer";
+            } else {
+                botao.disabled = true;
+                botao.style.opacity = "0.5";
+                botao.style.cursor = "not-allowed";
+            }
+        }
+
+        selectInput.addEventListener("input", verificarAlteracoes);
+    });
+</script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Verificar se o usuário está logado
+// Verifica se o usuário está logado
 if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioLogado'] !== true) {
     header("Location: ../login.html");
     exit;
@@ -25,10 +25,12 @@ $stmt->free_result();
 
 $isFuncionario = ($cargo_usuario == 'Funcionario');
 
+// Paginação
 $veiculos_por_pagina = 10;
 $pagina_atual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_atual - 1) * $veiculos_por_pagina;
 
+// Filtros
 $filtro = isset($_GET['search']) ? $_GET['search'] : '';
 $letra_filtro = isset($_GET['letra']) ? $_GET['letra'] : '';
 
@@ -37,6 +39,7 @@ if ($filtro) {
             FROM veiculos 
             JOIN modelos ON veiculos.modelo_id = modelos.id 
             WHERE modelos.modelo LIKE ? OR veiculos.numero_chassi LIKE ?
+            ORDER BY veiculos.id ASC
             LIMIT ?, ?";
     $stmt = $conn->prepare($sql);
     $param = "%$filtro%";
@@ -46,6 +49,7 @@ if ($filtro) {
             FROM veiculos 
             JOIN modelos ON veiculos.modelo_id = modelos.id 
             WHERE modelos.modelo LIKE ?
+            ORDER BY veiculos.id ASC
             LIMIT ?, ?";
     $stmt = $conn->prepare($sql);
     $param = "$letra_filtro%";
@@ -54,6 +58,7 @@ if ($filtro) {
     $sql = "SELECT veiculos.id, modelos.modelo, modelos.fabricante, modelos.ano, modelos.preco, veiculos.numero_chassi 
             FROM veiculos 
             JOIN modelos ON veiculos.modelo_id = modelos.id 
+            ORDER BY veiculos.id ASC
             LIMIT ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ii", $offset, $veiculos_por_pagina);
@@ -61,13 +66,33 @@ if ($filtro) {
 
 $stmt->execute();
 $result = $stmt->get_result();
+$stmt->close();
 
-// Total de veículos
-$sql_total = "SELECT COUNT(*) as total FROM veiculos";
-$total_result = $conn->query($sql_total)->fetch_assoc();
+// Consulta total para paginação
+if ($filtro) {
+    $sql_total = "SELECT COUNT(*) as total 
+                  FROM veiculos 
+                  JOIN modelos ON veiculos.modelo_id = modelos.id 
+                  WHERE modelos.modelo LIKE ? OR veiculos.numero_chassi LIKE ?";
+    $stmt_total = $conn->prepare($sql_total);
+    $stmt_total->bind_param("ss", $param, $param);
+} elseif ($letra_filtro) {
+    $sql_total = "SELECT COUNT(*) as total 
+                  FROM veiculos 
+                  JOIN modelos ON veiculos.modelo_id = modelos.id 
+                  WHERE modelos.modelo LIKE ?";
+    $stmt_total = $conn->prepare($sql_total);
+    $stmt_total->bind_param("s", $param);
+} else {
+    $sql_total = "SELECT COUNT(*) as total FROM veiculos";
+    $stmt_total = $conn->prepare($sql_total);
+}
+$stmt_total->execute();
+$total_result = $stmt_total->get_result()->fetch_assoc();
 $total_veiculos = $total_result['total'];
-$total_paginas = ceil($total_veiculos / $veiculos_por_pagina);
+$stmt_total->close();
 
+$total_paginas = ceil($total_veiculos / $veiculos_por_pagina);
 $conn->close();
 ?>
 
@@ -90,13 +115,27 @@ $conn->close();
             <p><strong><?php echo htmlspecialchars($_SESSION['usuarioNome']); ?></strong></p>
             <p><?php echo htmlspecialchars($_SESSION['usuarioEmail']); ?></p>
             <div class="icons">
-                <div class="icon-item" onclick="window.location.href='../perfil.php'"><img src="../img/usersembarra.png"><span>Minha conta</span></div>
-                <div class="icon-item" onclick="window.location.href='esquecer_senha.php'"><img src="../img/ajudando.png"><span>Esqueceu a Senha</span></div>
-                <div class="icon-item" onclick="window.location.href='consultar_clientes.php'"><img src="../img/lupa.png"><span>Consultar Clientes</span></div>
-                <div class="icon-item" onclick="window.location.href='consultar_modelos.php'"><img src="../img/referencia.png"><span>Consultar Modelos</span></div>
-                <div class="icon-item" onclick="window.location.href='consultar_veiculos.php'"><img src="../img/carro_de_frente.png"><span>Consultar Veículos</span></div>
-                <div class="icon-item" onclick="window.location.href='consultar_promocoes.php'"><img src="../img/promocoes.png"><span>Consultar Promoções</span></div>
-                <div class="icon-item" onclick="window.location.href='logout.php'"><img src="../img/sairr.png"><span>Sair</span></div>
+                <div class="icon-item" onclick="window.location.href='../perfil.php'">
+                    <img src="../img/usersembarra.png" alt="Minha Conta"><span>Minha conta</span>
+                </div>
+                <div class="icon-item" onclick="window.location.href='esquecer_senha.php'">
+                    <img src="../img/ajudando.png" alt="Esqueceu a Senha"><span>Esqueceu a Senha</span>
+                </div>
+                <div class="icon-item" onclick="window.location.href='consultar_clientes.php'">
+                    <img src="../img/lupa.png" alt="Consultar Clientes"><span>Consultar Clientes</span>
+                </div>
+                <div class="icon-item" onclick="window.location.href='consultar_modelos.php'">
+                    <img src="../img/referencia.png" alt="Consultar Modelos"><span>Consultar Modelos</span>
+                </div>
+                <div class="icon-item" onclick="window.location.href='consultar_veiculos.php'">
+                    <img src="../img/carro_de_frente.png" alt="Consultar Veículos"><span>Consultar Veículos</span>
+                </div>
+                <div class="icon-item" onclick="window.location.href='consultar_promocoes.php'">
+                    <img src="../img/promocoes.png" alt="Consultar Promoções"><span>Consultar Promoções</span>
+                </div>
+                <div class="icon-item" onclick="window.location.href='logout.php'">
+                    <img src="../img/sairr.png" alt="Sair"><span>Sair</span>
+                </div>
             </div>
         </div>
 
@@ -117,7 +156,9 @@ $conn->close();
 
             <div class="letras-filtro">
                 <?php foreach (range('A', 'Z') as $letra): ?>
-                    <a href="?letra=<?php echo $letra; ?>" <?php echo ($letra == $letra_filtro) ? 'class="selected"' : ''; ?>><?php echo $letra; ?></a>
+                    <a href="?letra=<?php echo $letra; ?>" <?php echo ($letra == $letra_filtro) ? 'class="selected"' : ''; ?>>
+                        <?php echo $letra; ?>
+                    </a>
                 <?php endforeach; ?>
             </div>
 
