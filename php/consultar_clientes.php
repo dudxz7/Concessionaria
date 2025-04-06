@@ -139,6 +139,10 @@ $conn->close();
                     <img src="../img/lupa.png" alt="Consultar clientes">
                     <span>Consultar Clientes</span>
                 </div>
+                <div class="icon-item" onclick="window.location.href='consultar_modelos.php'">
+                    <img src="../img/referencia.png" alt="Consultar Modelos">
+                    <span>Consultar modelos</span>
+                </div>
                 <div class="icon-item" onclick="window.location.href='consultar_veiculos.php'">
                     <img src="../img/carro_de_frente.png" alt="Consultar Veículos">
                     <span>Consultar veículos</span>

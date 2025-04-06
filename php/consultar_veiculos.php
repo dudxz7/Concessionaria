@@ -93,6 +93,7 @@ $conn->close();
                 <div class="icon-item" onclick="window.location.href='../perfil.php'"><img src="../img/usersembarra.png"><span>Minha conta</span></div>
                 <div class="icon-item" onclick="window.location.href='esquecer_senha.php'"><img src="../img/ajudando.png"><span>Esqueceu a Senha</span></div>
                 <div class="icon-item" onclick="window.location.href='consultar_clientes.php'"><img src="../img/lupa.png"><span>Consultar Clientes</span></div>
+                <div class="icon-item" onclick="window.location.href='consultar_modelos.php'"><img src="../img/referencia.png"><span>Consultar Modelos</span></div>
                 <div class="icon-item" onclick="window.location.href='consultar_veiculos.php'"><img src="../img/carro_de_frente.png"><span>Consultar Veículos</span></div>
                 <div class="icon-item" onclick="window.location.href='consultar_promocoes.php'"><img src="../img/promocoes.png"><span>Consultar Promoções</span></div>
                 <div class="icon-item" onclick="window.location.href='logout.php'"><img src="../img/sairr.png"><span>Sair</span></div>

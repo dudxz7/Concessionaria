@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="container">
-        <a href="../perfil.php" class="back-button">
+        <a href="consultar_modelos.php" class="back-button">
             <img src="../img/seta-esquerda24.png" alt="Voltar">
         </a> 
         <h2>Cadastrar Modelo</h2>
