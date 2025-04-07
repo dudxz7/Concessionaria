@@ -57,16 +57,11 @@ $email = $_SESSION['email'] ?? 'admin@gmail.com';
         </div>
 
         <div class="content">
-            <a href="admin_dashboard.php" class="back-button">
-                <img src="../img/seta-esquerdabranca.png" alt="Voltar">
-            </a>
-
             <div class="section">
                 <h2>Clientes</h2>
                 <div class="buttons">
-                    <div class="button-item"><a href="cadastrar_clientes.php">Cadastrar Cliente</a></div>
+                    <div class="button-item"><a href="../registro.html">Cadastrar Cliente</a></div>
                     <div class="button-item"><a href="consultar_clientes.php">Consultar Cliente</a></div>
-                    <div class="button-item"><a href="alterar_clientes.php">Alterar Cliente</a></div>
                 </div>
             </div>
 

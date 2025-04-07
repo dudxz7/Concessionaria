@@ -1,20 +1,20 @@
 <?php
 // Conexão com o banco de dados
-$host = "localhost"; // Seu servidor MySQL
-$user = "root"; // Usuário do MySQL
-$pass = ""; // Senha do MySQL
-$db = "sistema_bmw"; // Nome do banco de dados
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db = "sistema_bmw";
 
 $conn = new mysqli($host, $user, $pass, $db);
 
-// Verificar se a conexão foi bem-sucedida
+// Verifica conexão
 if ($conn->connect_error) {
     die("Falha na conexão: " . $conn->connect_error);
 }
 
-// Verificar se o formulário foi enviado
+// Se o formulário foi enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Coletar os dados do formulário
+    // Dados do formulário
     $nome = $_POST['nome'];
     $email = $_POST['email'];
     $cpf = $_POST['cpf'];
@@ -25,60 +25,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $cnh = $_POST['cnh'];
     $senha = $_POST['senha'];
     $confirma_senha = $_POST['confirma_senha'];
+    $cargo = $_POST['cargo'];
 
-    // Verificar se as senhas coincidem
+    // Campos extras (só existem se for funcionário ou gerente)
+    $pis = !empty($_POST['pis']) ? $_POST['pis'] : null;
+    $endereco = !empty($_POST['endereco']) ? $_POST['endereco'] : null;
+
+    // Verifica se as senhas coincidem
     if ($senha !== $confirma_senha) {
         echo "As senhas não coincidem!";
         exit;
     }
 
-    // Verificar se o e-mail já existe
+    // Verifica se o e-mail já existe
     $sql = "SELECT * FROM clientes WHERE email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->store_result();
-
     if ($stmt->num_rows > 0) {
-        echo "Erro: E-mail já cadastrado. Tente com outro e-mail.";
+        echo "Erro: E-mail já cadastrado.";
         exit;
     }
 
-    // Verificar se o CPF já existe
+    // Verifica se o CPF já existe
     $sql = "SELECT * FROM clientes WHERE cpf = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $cpf);
     $stmt->execute();
     $stmt->store_result();
-
     if ($stmt->num_rows > 0) {
-        echo "Erro: CPF já cadastrado. Tente novamente com um CPF diferente.";
+        echo "Erro: CPF já cadastrado.";
         exit;
     }
 
-    // Criptografar a senha
+    // Criptografa a senha
     $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
-    // Preparar e executar a consulta SQL para inserir os dados
-    $sql = "INSERT INTO clientes (nome_completo, email, cpf, rg, cidade, estado, telefone, cnh, senha) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    // Insere no banco
+    $sql = "INSERT INTO clientes (nome_completo, email, cpf, rg, cidade, estado, telefone, cnh, senha, cargo, pis, endereco) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssssss", $nome, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $senha_hash);
+    $stmt->bind_param("ssssssssssss", $nome, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $senha_hash, $cargo, $pis, $endereco);
 
-    // Verificar se a inserção foi bem-sucedida
     if ($stmt->execute()) {
         echo "Conta criada com sucesso!";
-        header("Location: ../login.html"); // Redireciona para o login.html
+        header("Location: ../index.php");
         exit();
     } else {
-        if ($conn->errno == 1062) { // Código de erro para violação de unicidade
-            echo "Erro: CPF, RG, Telefone ou CNH já existem. Tente novamente com dados diferentes.";
+        if ($conn->errno == 1062) {
+            echo "Erro: CPF, RG, Telefone ou CNH já existem.";
         } else {
             echo "Erro ao criar a conta: " . $conn->error;
         }
     }
 
-    // Fechar a conexão
     $stmt->close();
 }
 

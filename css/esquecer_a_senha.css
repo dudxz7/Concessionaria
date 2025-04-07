@@ -188,5 +188,5 @@ input:valid ~ label {
 }
 
 .back-button:hover img {
-    transform: scale(1.1); /* Efeito de aumentar o tamanho da imagem ao passar o mouse */
+    transform: scale(1.7); /* Efeito de aumentar o tamanho da imagem ao passar o mouse */
 }

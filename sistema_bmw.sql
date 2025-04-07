@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 31/03/2025 às 08:14
+-- Tempo de geração: 07/04/2025 às 06:15
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -53,7 +53,7 @@ INSERT INTO `clientes` (`id`, `nome_completo`, `email`, `cpf`, `telefone`, `rg`,
 (1, 'a', 'a@gmail.com', '111.111.111-11', '(11) 11111-1122', '1111111111-1', 'XIQUE XIQUE ', 'SP', '11111111111', '$2y$10$io0pIXUD0YCmXCLRKY745O5EnMW6zS8LoSKllppvsAN/7DhGFPqZ6', 0, 'Funcionario', 'Rua Fulano de Tal, numero 11', '00000000001', '2025-03-25 14:57:44'),
 (3, 'dudu', 'teste@gmail.com', '111.111.111-12', '(11) 11111-1112', '1111111111-2', 'FORTALEZA', 'CE', '11111111112', '$2y$10$wm95eVC6ziG0vUNZn2UEz.nSFqbmjXngSdtXT/sqC8EHNlGW4Xm8C', 0, 'Cliente', '', NULL, '2025-03-25 14:57:44'),
 (5, 'ana', 'analinda@gmail.com', '111.111.111-13', '(11) 11111-1113', '1111111111-3', 'SAO PAULO', 'SP', '11111111113', '$2y$10$u0m/mLqzNLsVbYLFcNEJCOdcbIVEPIr8bkWlqP0jnyHQYkAC.hBS6', 0, 'Cliente', '', NULL, '2025-03-25 14:57:44'),
-(8, 'Administrador', 'admin@gmail.com', '12345678910', '999999999', '111234567', 'Fortal', 'CE', '222123456', '$2y$10$eV7GUqyZLS99FprwuKqK0.qbA8xwGlZtyjHm9Wfv/J95cKCbwGRoW', 1, 'Admin', '', NULL, '2025-03-25 14:57:44'),
+(8, 'Administrador', 'admin@gmail.com', '12345678910', '999999999', '111234567', 'Fortal', 'CE', '222123456', '$2y$10$fjmwvZiAFB3Fl95KWYKPkufmIlXQDJjMpRXuKtCTED9Txp0R3lWuy', 1, 'Admin', '', NULL, '2025-03-25 14:57:44'),
 (10, 'Isabelly', 'mcqwwr@gmail.com', '111.111.111-14', '(11) 11111-1114', '1111111111-4', 'FORTALEZA', 'CE', '11111111114', '$2y$10$.XzfcmcxeXy64iSFw4psS.jTOt5u.3JRyiPPNs2hoJ3f85GxNeznG', 0, 'Cliente', '', NULL, '2025-03-25 14:57:44'),
 (11, 'Tati Zaqui', 'tati@gmail.com', '111.111.111-15', '(11) 11111-1115', '1111111111-5', 'FORTALEZA', 'CE', '11111111115', '$2y$10$80Gs.agwOSvLU0vIQYM/LOs64/3SmkZI8bhgjohCtqdslZepA9zWm', 0, 'Cliente', '', NULL, '2025-03-25 14:57:44'),
 (12, 'dudu ', 'd@gmail.com', '111.111.111-16', '(11) 11111-1116', '1111111111-6', 'PINDAMONHAGABAA', 'AC', '11111111116', '$2y$10$zldDKpzpBKpBXyTcG1cyEu2mk9TAd3DN7Tk4PxxQw2h0c2skTvCzO', 0, 'Cliente', '', NULL, '2025-03-25 14:57:44'),
@@ -72,7 +72,7 @@ INSERT INTO `clientes` (`id`, `nome_completo`, `email`, `cpf`, `telefone`, `rg`,
 CREATE TABLE `estoque` (
   `id` int(11) NOT NULL,
   `veiculo_id` int(11) NOT NULL,
-  `quantidade` int(11) NOT NULL DEFAULT 0
+  `quantidade` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -80,9 +80,18 @@ CREATE TABLE `estoque` (
 --
 
 INSERT INTO `estoque` (`id`, `veiculo_id`, `quantidade`) VALUES
-(1, 1, 3),
-(2, 2, 5),
-(3, 3, 2);
+(1, 2, 1),
+(2, 3, 1),
+(3, 4, 1),
+(4, 5, 1),
+(5, 6, 1),
+(6, 7, 1),
+(7, 8, 1),
+(8, 9, 1),
+(9, 10, 1),
+(10, 11, 1),
+(11, 12, 1),
+(12, 13, 1);
 
 -- --------------------------------------------------------
 
@@ -113,16 +122,37 @@ INSERT INTO `funcionarios` (`id`, `nome_completo`, `email`, `cpf`, `rg`, `telefo
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `modelos`
+--
+
+CREATE TABLE `modelos` (
+  `id` int(11) NOT NULL,
+  `modelo` varchar(255) NOT NULL,
+  `fabricante` varchar(255) NOT NULL,
+  `cor` varchar(50) NOT NULL,
+  `ano` int(11) NOT NULL,
+  `preco` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `modelos`
+--
+
+INSERT INTO `modelos` (`id`, `modelo`, `fabricante`, `cor`, `ano`, `preco`) VALUES
+(1, 'BMW 118i', 'BMW', 'Azul,Prata', 2024, 320950.00),
+(2, 'BMW 218i', 'BMW', 'Preto', 2024, 320950.00),
+(3, 'BMW 320i', 'BMW', 'Branco,Azul,Prata', 2025, 412950.00),
+(4, 'BMW 330e', 'BMW', 'Azul', 2025, 454950.00);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `veiculos`
 --
 
 CREATE TABLE `veiculos` (
   `id` int(11) NOT NULL,
-  `modelo` varchar(255) NOT NULL,
-  `fabricante` varchar(255) NOT NULL,
-  `cor` text NOT NULL,
-  `ano` int(11) NOT NULL,
-  `preco` decimal(10,2) NOT NULL,
+  `modelo_id` int(11) NOT NULL,
   `numero_chassi` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -130,10 +160,20 @@ CREATE TABLE `veiculos` (
 -- Despejando dados para a tabela `veiculos`
 --
 
-INSERT INTO `veiculos` (`id`, `modelo`, `fabricante`, `cor`, `ano`, `preco`, `numero_chassi`) VALUES
-(1, 'BMW 118i', 'BMW', '', 2024, 320950.00, 'BMW00000000000001'),
-(2, 'BMW 320i', 'BMW', 'Preto, Branco, Azul, Prata', 2025, 412950.00, 'BMW00000000000002'),
-(3, 'BMW 218i ', 'BMW', 'Preto, Prata', 2024, 320950.00, 'BMW00000000000003');
+INSERT INTO `veiculos` (`id`, `modelo_id`, `numero_chassi`) VALUES
+(1, 2, 'BMW00000000000001'),
+(2, 2, 'BMW00000000000002'),
+(3, 3, 'BMW00000000000003'),
+(4, 2, 'BMW00000000000004'),
+(5, 2, 'BMW00000000000005'),
+(6, 3, 'BMW00000000000006'),
+(7, 3, 'BMW00000000000007'),
+(8, 3, 'BMW00000000000008'),
+(9, 4, 'BMW00000000000009'),
+(10, 4, 'BMW00000000000010'),
+(11, 1, 'BMW00000000000011'),
+(12, 4, 'BMW00000000000012'),
+(13, 4, 'BMW00000000000013');
 
 --
 -- Índices para tabelas despejadas
@@ -166,11 +206,18 @@ ALTER TABLE `funcionarios`
   ADD UNIQUE KEY `pis` (`pis`);
 
 --
+-- Índices de tabela `modelos`
+--
+ALTER TABLE `modelos`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Índices de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `numero_chassi` (`numero_chassi`);
+  ADD UNIQUE KEY `numero_chassi` (`numero_chassi`),
+  ADD KEY `modelo_id` (`modelo_id`);
 
 --
 -- AUTO_INCREMENT para tabelas despejadas
@@ -186,7 +233,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de tabela `estoque`
 --
 ALTER TABLE `estoque`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de tabela `funcionarios`
@@ -195,10 +242,16 @@ ALTER TABLE `funcionarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT de tabela `modelos`
+--
+ALTER TABLE `modelos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Restrições para tabelas despejadas
@@ -209,6 +262,12 @@ ALTER TABLE `veiculos`
 --
 ALTER TABLE `estoque`
   ADD CONSTRAINT `estoque_ibfk_1` FOREIGN KEY (`veiculo_id`) REFERENCES `veiculos` (`id`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `veiculos`
+--
+ALTER TABLE `veiculos`
+  ADD CONSTRAINT `veiculos_ibfk_1` FOREIGN KEY (`modelo_id`) REFERENCES `modelos` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
