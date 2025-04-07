@@ -6,6 +6,7 @@ body {
     margin: 0;
     padding: 0;
     overflow-x: hidden; /* Impede a rolagem horizontal */
+    overflow-y: hidden; /* Impede a rolagem horizontal */
 }
 
 .container {
@@ -15,7 +16,7 @@ body {
 /* Sidebar */
 .sidebar {
     width: 320px;
-    height: 97.7vh;
+    height: 100vh;
     position: relative;
     overflow: hidden;
     color: white;
@@ -125,6 +126,7 @@ tr {
 tr:hover {
     background-color: #d0d0d0;
     transition: 0.3s;
+    cursor: pointer;
 }
 
 /* Caixa de busca */

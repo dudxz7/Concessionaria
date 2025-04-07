@@ -3,22 +3,46 @@ session_start();
 
 // Verificar se o usuário está logado
 if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioLogado'] !== true) {
-    header("Location: login.php");
+    header("Location: ../login.html");
     exit;
 }
 
 // Conectar ao banco de dados
 $host = "localhost";
-$user = "root";  // Alterar para o seu usuário do banco de dados
-$pass = "";      // Alterar para a sua senha do banco de dados
-$db = "sistema_bmw";  // Nome do seu banco de dados
+$user = "root";
+$pass = "";
+$db = "sistema_bmw";
 
 $conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) {
     die("Falha na conexão: " . $conn->connect_error);
 }
 
-// Verificar se o ID do cliente foi passado via URL ou POST
+// Verificar o cargo do usuário logado
+$usuarioId = $_SESSION['usuarioId'] ?? null;
+
+if ($usuarioId) {
+    $sqlCargo = "SELECT cargo FROM clientes WHERE id = ?";
+    $stmtCargo = $conn->prepare($sqlCargo);
+    $stmtCargo->bind_param("i", $usuarioId);
+    $stmtCargo->execute();
+    $resultadoCargo = $stmtCargo->get_result();
+    $dadosCargo = $resultadoCargo->fetch_assoc();
+
+    if ($dadosCargo && $dadosCargo['cargo'] === 'Cliente') {
+        echo "<h2>Acesso Negado</h2>";
+        echo "<p>Você não tem permissão para acessar esta página.</p>";
+        exit;
+    }
+    $stmtCargo->close();
+} else {
+    echo "Usuário não identificado.";
+    exit;
+}
+
+// A partir daqui o acesso está liberado para funcionários, gerentes ou admins
+
+// Verificar se o ID do cliente foi passado via GET
 if (isset($_GET['id'])) {
     $cliente_id = $_GET['id'];
 
@@ -29,16 +53,15 @@ if (isset($_GET['id'])) {
     $stmt->execute();
     $stmt->bind_result($nome_completo, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $cargo, $endereco, $pis, $senha_atual);
 
-    // Recuperar os dados do cliente
-    if ($stmt->fetch()) {
-        // Aqui você já tem os dados do cliente nas variáveis
-    } else {
+    if (!$stmt->fetch()) {
         echo "Cliente não encontrado.";
+        exit;
     }
 
     $stmt->close();
 } else {
     echo "ID do cliente não fornecido.";
+    exit;
 }
 
 // Verificar se o formulário foi enviado para editar os dados
@@ -51,30 +74,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $estado = $_POST['estado'];
     $telefone = $_POST['telefone'];
     $cnh = $_POST['cnh'];
-    $senha = $_POST['senha'];  // Senha para edição, caso necessário
+    $senha = $_POST['senha'];
     $confirma_senha = $_POST['confirma_senha'];
 
-    // Verificar se a senha foi confirmada
     if (!empty($senha) && $senha !== $confirma_senha) {
-        $_SESSION['senha_error'] = "As senhas não coincidem."; // Definir erro de senha
+        $_SESSION['senha_error'] = "As senhas não coincidem.";
     } else {
-        // Se a senha estiver vazia, não vamos atualizar a senha no banco
         if (empty($senha)) {
-            // Atualizar apenas os outros campos, sem mexer na senha
             $sql_update = "UPDATE clientes SET nome_completo = ?, email = ?, cpf = ?, rg = ?, cidade = ?, estado = ?, telefone = ?, cnh = ? WHERE id = ?";
             $stmt_update = $conn->prepare($sql_update);
             $stmt_update->bind_param("ssssssssi", $nome, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $cliente_id);
         } else {
-            // Atualizar a senha junto com os outros campos
-            $senha_hash = password_hash($senha, PASSWORD_DEFAULT);  // Gerar o hash da senha
+            $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
             $sql_update = "UPDATE clientes SET nome_completo = ?, email = ?, cpf = ?, rg = ?, cidade = ?, estado = ?, telefone = ?, cnh = ?, senha = ? WHERE id = ?";
             $stmt_update = $conn->prepare($sql_update);
-            $stmt_update->bind_param("sssssssssi", $nome, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $senha_hash, $cliente_id);
+            $stmt_update->bind_param("ssssssssssi", $nome, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $senha_hash, $cliente_id);
         }
 
         if ($stmt_update->execute()) {
-            $mensagem = "Dados atualizados com sucesso!";
-            $mensagem_tipo = "sucesso";
+            header("Location: consultar_clientes.php");
+            exit;
         } else {
             $mensagem = "Erro ao atualizar os dados.";
             $mensagem_tipo = "erro";

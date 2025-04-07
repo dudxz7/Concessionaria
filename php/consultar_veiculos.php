@@ -23,7 +23,6 @@ $stmt->bind_result($cargo_usuario);
 $stmt->fetch();
 $stmt->free_result();
 
-$isFuncionario = ($cargo_usuario == 'Funcionario');
 
 // Paginação
 $veiculos_por_pagina = 10;
@@ -143,7 +142,7 @@ $conn->close();
         <div class="content">
             <h2 class="btn-shine">Consulta de Veículos</h2>
 
-            <?php if ($isFuncionario): ?>
+            <?php if ($cargo_usuario === 'Gerente' || $cargo_usuario === 'Admin'): ?>
                 <a href="cadastrar_veiculo.php" class="btn-novo-cliente">
                     <img src="../img/carro.png" alt="Cadastrar Veículo" class="img-btn">Cadastrar Veículo Novo
                 </a>

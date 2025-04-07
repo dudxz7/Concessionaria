@@ -223,8 +223,11 @@ input.com-asterisco[readonly], input.com-asterisco:disabled {
     width: 30px;
     height: 30px;
     cursor: pointer;
+    transition: transform 0.3s ease;
 }
-
+.back-button:hover img {
+    transform: scale(1.2);
+}
 .alert-success {
     color: #00297b;
     margin-top: -7px;

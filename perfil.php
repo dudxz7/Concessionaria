@@ -3,7 +3,7 @@ session_start();
 
 // Verificar se o usuário está logado
 if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioLogado'] !== true) {
-    header("Location: login.php");
+    header("Location: login.html");
     exit;
 }
 
@@ -99,15 +99,15 @@ $conn->close();
                 </div>
                 <div class="icon-item" onclick="window.location.href='php/consultar_modelos.php'">
                     <img src="img/referencia.png" alt="Consultar Modelos">
-                    <span>Consultar modelos</span>
+                    <span>Consultar Modelos</span>
                 </div>
                 <div class="icon-item" onclick="window.location.href='php/consultar_veiculos.php'">
                     <img src="img/carro_de_frente.png" alt="Consultar Veículos">
-                    <span>Consultar veículos</span>
+                    <span>Consultar Veículos</span>
                 </div>
                 <div class="icon-item" onclick="window.location.href='php/consultar_promocoes.php'">
                     <img src="img/promocoes.png" alt="Consultar promoções">
-                    <span>Consultar promoções</span>
+                    <span>Consultar Promoções</span>
                 </div>
                 <?php endif; ?>
                 <div class="icon-item" onclick="window.location.href='php/logout.php'">

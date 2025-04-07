@@ -1,5 +1,21 @@
 <?php
+session_start();
 include('conexao.php');
+
+// Verifica se o usuário está logado
+if (!isset($_SESSION['usuarioCargo'])) {
+    echo "<h2>Acesso Negado</h2>";
+    echo "<p>Você não tem permissão para acessar esta página.</p>";
+    exit;
+}
+
+// Permite apenas Funcionario, Gerente ou Admin
+$cargosPermitidos = ['Gerente', 'Admin'];
+if (!in_array($_SESSION['usuarioCargo'], $cargosPermitidos)) {
+    echo "<h2>Acesso Negado</h2>";
+    echo "<p>Você não tem permissão para acessar esta página.</p>";
+    exit;
+}
 
 // Atualizar modelo, se o formulário for enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -42,6 +58,7 @@ if ($result->num_rows === 0) {
 $modelo = $result->fetch_assoc();
 $coresSelecionadas = explode(',', $modelo['cor']);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">

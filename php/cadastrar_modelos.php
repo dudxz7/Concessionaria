@@ -1,11 +1,50 @@
 <?php
-// INÍCIO DO PHP
+session_start();
+
+// Verificar se o usuário está logado
+if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioLogado'] !== true) {
+    header("Location: ../login.html");
+    exit;
+}
+
+// Conectar ao banco de dados
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db = "sistema_bmw";
+
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die("Falha na conexão: " . $conn->connect_error);
+}
+
+// Verificar o cargo do usuário
+$usuarioId = $_SESSION['usuarioId'] ?? null;
+
+if ($usuarioId) {
+    $sqlCargo = "SELECT cargo FROM clientes WHERE id = ?";
+    $stmtCargo = $conn->prepare($sqlCargo);
+    $stmtCargo->bind_param("i", $usuarioId);
+    $stmtCargo->execute();
+    $resultadoCargo = $stmtCargo->get_result();
+    $dadosCargo = $resultadoCargo->fetch_assoc();
+
+    if (!$dadosCargo || ($dadosCargo['cargo'] !== 'Admin' && $dadosCargo['cargo'] !== 'Gerente')) {
+        echo "<h2>Acesso Negado</h2>";
+        echo "<p>Você não tem permissão para acessar esta página.</p>";
+        exit;
+    }
+    $stmtCargo->close();
+} else {
+    echo "Usuário não identificado.";
+    exit;
+}
+
+// Lógica de cadastro
 $mensagem = '';
 $mensagem_tipo = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    include_once '../php/conexao.php'; // <-- Verifique se o caminho está correto
-
     $modelo = trim($_POST['modelo']);
     $fabricante = trim($_POST['fabricante']);
     $ano = intval($_POST['ano']);

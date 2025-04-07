@@ -24,8 +24,14 @@ if ($usuarioId) {
 
     if ($row = $result->fetch_assoc()) {
         $cargo_usuario = $row['cargo'];
-        $_SESSION['usuarioCargo'] = $cargo_usuario; // salva na sessão pra usar depois também
-        $isFuncionario = ($cargo_usuario === 'Funcionario');
+        $_SESSION['usuarioCargo'] = $cargo_usuario;
+
+        // ❌ BLOQUEIA CLIENTES
+        if ($cargo_usuario === 'Cliente') {
+            echo "<h2>Acesso Negado</h2>";
+            echo "<p>Você não tem permissão para acessar esta página.</p>";
+            exit;
+        }
     }
 }
 
@@ -121,7 +127,7 @@ $result = $stmt->get_result();
     <div class="content">
         <h2 class="btn-shine">Consulta de Modelos</h2>
 
-        <?php if ($isFuncionario): ?>
+        <?php if ($cargo_usuario === 'Gerente' || $cargo_usuario === 'Admin'): ?>
             <a href="cadastrar_modelos.php" class="btn-novo-cliente">
                 <img src="../img/engrenagem.png" alt="Cadastrar Modelo" class="img-btn">Cadastrar Modelo
             </a>

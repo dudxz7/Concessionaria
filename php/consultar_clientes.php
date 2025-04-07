@@ -19,59 +19,50 @@ if ($conn->connect_error) {
 }
 
 // Buscar o cargo do usuário logado
-$usuario_id = $_SESSION['usuarioId'];  // Usando o ID da sessão para buscar os dados do usuário
+$usuario_id = $_SESSION['usuarioId'];
 $sql = "SELECT cargo FROM clientes WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
-
-// Bind do resultado
 $stmt->bind_result($cargo_usuario);
-$stmt->fetch(); // Isso vai popular a variável $cargo_usuario
+$stmt->fetch();
+$stmt->free_result();
 
-// Liberar o resultado da primeira consulta
-$stmt->free_result(); 
-
-// Verificar se o cargo é diferente de Funcionario, Gerente ou Admin
+// Verificar permissão de acesso
 if (!in_array($cargo_usuario, ['Funcionario', 'Gerente', 'Admin'])) {
-    // Se não for um desses cargos, exibe a mensagem de acesso negado
     echo "<h2>Acesso Negado</h2>";
     echo "<p>Você não tem permissão para acessar esta página.</p>";
     exit;
 }
 
-// Definir a quantidade de clientes por página
+// Paginação
 $clientes_por_pagina = 10;
-
-// Verificar a página atual
 $pagina_atual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_atual - 1) * $clientes_por_pagina;
 
-// Verificar qual letra foi selecionada
+// Filtros
 $letra_filtro = isset($_GET['letra']) ? $_GET['letra'] : '';
-
-// Definir o filtro de pesquisa se existir
 $filtro = isset($_GET['search']) ? $_GET['search'] : '';
 
-// Se houver um filtro por letra, incluir isso na consulta
+// Buscar clientes
 if ($letra_filtro) {
     $sql = "SELECT id, nome_completo, email, telefone, registrado_em FROM clientes 
-            WHERE nome_completo LIKE ? 
+            WHERE cargo = 'Cliente' AND nome_completo LIKE ? 
             LIMIT ?, ?";
     $stmt = $conn->prepare($sql);
-    $param = "$letra_filtro%";  // Filtrando pelo início do nome com a letra escolhida
+    $param = "$letra_filtro%";
     $stmt->bind_param("sii", $param, $offset, $clientes_por_pagina);
 } else {
-    // Consulta sem filtro de letra
     if ($filtro) {
         $sql = "SELECT id, nome_completo, email, telefone, registrado_em FROM clientes 
-                WHERE nome_completo LIKE ? OR email LIKE ? 
+                WHERE cargo = 'Cliente' AND (nome_completo LIKE ? OR email LIKE ?) 
                 LIMIT ?, ?";
         $stmt = $conn->prepare($sql);
-        $param = "%$filtro%";  // Filtro de pesquisa no nome ou email
+        $param = "%$filtro%";
         $stmt->bind_param("ssii", $param, $param, $offset, $clientes_por_pagina);
     } else {
         $sql = "SELECT id, nome_completo, email, telefone, registrado_em FROM clientes 
+                WHERE cargo = 'Cliente'
                 LIMIT ?, ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ii", $offset, $clientes_por_pagina);
@@ -83,16 +74,16 @@ $result = $stmt->get_result();
 
 // Contar total de clientes
 if ($letra_filtro) {
-    $sql_total = "SELECT COUNT(*) as total FROM clientes WHERE nome_completo LIKE ?";
+    $sql_total = "SELECT COUNT(*) as total FROM clientes WHERE cargo = 'Cliente' AND nome_completo LIKE ?";
     $stmt_total = $conn->prepare($sql_total);
     $stmt_total->bind_param("s", $param);
 } else {
     if ($filtro) {
-        $sql_total = "SELECT COUNT(*) as total FROM clientes WHERE nome_completo LIKE ? OR email LIKE ?";
+        $sql_total = "SELECT COUNT(*) as total FROM clientes WHERE cargo = 'Cliente' AND (nome_completo LIKE ? OR email LIKE ?)";
         $stmt_total = $conn->prepare($sql_total);
         $stmt_total->bind_param("ss", $param, $param);
     } else {
-        $sql_total = "SELECT COUNT(*) as total FROM clientes";
+        $sql_total = "SELECT COUNT(*) as total FROM clientes WHERE cargo = 'Cliente'";
         $stmt_total = $conn->prepare($sql_total);
     }
 }
@@ -100,8 +91,6 @@ if ($letra_filtro) {
 $stmt_total->execute();
 $total_result = $stmt_total->get_result()->fetch_assoc();
 $total_clientes = $total_result['total'];
-
-// Calcular o total de páginas
 $total_paginas = ceil($total_clientes / $clientes_por_pagina);
 $conn->close();
 ?>
@@ -176,9 +165,7 @@ $conn->close();
 
             <div class="letras-filtro">
             <?php
-                // Exibição das letras de A a Z
                 foreach (range('A', 'Z') as $letra) {
-                    // Adicionar a classe 'selected' se a letra for a selecionada
                     $class = ($letra == $letra_filtro) ? 'class="selected"' : '';
                     echo "<a href='?letra=$letra' $class>$letra</a> ";
                 }

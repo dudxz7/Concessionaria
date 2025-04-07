@@ -1,85 +1,69 @@
 <?php
 session_start();
 
-// Verificar se o usuário está logado e se é administrador
-if (!isset($_SESSION['usuarioId']) || $_SESSION['usuarioAdmin'] !== 1) {
-    header("Location: ../login.html");
+// Verifica se o usuário está logado e se é administrador
+if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioAdmin'] !== 1) {
+    // Redireciona para o index ou login se não for admin
+    header("Location: ../index.php");
     exit();
 }
 
-include 'conexao.php';
-
-// Função para exibir os usuários
-function exibirUsuarios($conn) {
-    $sql = "SELECT id, nome_completo, email, cpf, telefone, rg, cidade, estado, cnh, admin FROM clientes";
-    $result = $conn->query($sql);
-
-    // Verificar se ocorreu algum erro na consulta
-    if (!$result) {
-        die("Erro na consulta: " . $conn->error);
-    }
-
-    // Exibir a tabela de usuários
-    if ($result->num_rows > 0) {
-        echo "<table border='1' class='tabela-usuarios'>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>E-mail</th>
-                        <th>CPF</th>
-                        <th>Telefone</th>
-                        <th>RG</th>
-                        <th>Cidade</th>
-                        <th>Estado</th>
-                        <th>CNH</th>
-                        <th>Admin</th>
-                    </tr>
-                </thead>
-                <tbody>";
-
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>
-                    <td>{$row['id']}</td>
-                    <td>{$row['nome_completo']}</td>
-                    <td>{$row['email']}</td>
-                    <td>{$row['cpf']}</td>
-                    <td>{$row['telefone']}</td>
-                    <td>{$row['rg']}</td>
-                    <td>{$row['cidade']}</td>
-                    <td>{$row['estado']}</td>
-                    <td>{$row['cnh']}</td>
-                    <td>" . ($row['admin'] == 1 ? 'Sim' : 'Não') . "</td>
-                </tr>";
-        }
-
-        echo "</tbody></table>";
-    } else {
-        echo "Nenhum usuário encontrado.";
-    }
-}
-
+// Recupera dados da sessão
+$nome_completo = $_SESSION['nome_completo'] ?? 'Administrador';
+$email = $_SESSION['email'] ?? 'admin@gmail.com';
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Admin</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin_dashboard.css">
     <link rel="icon" href="../img/admin_colored.png">
 </head>
 <body>
-    <h1>Painel de Administração</h1>
-    <h2>Lista de Usuários</h2>
+    <div class="container">
+        <div class="sidebar">
+            <video autoplay loop muted>
+                <source src="../videos/overlay_branca.mp4" type="video/mp4">
+                Seu navegador não suporta vídeos.
+            </video>
+            <div class="profile-icon"><?php echo strtoupper(substr($nome_completo, 0, 1)); ?></div>
+            <p><strong><?php echo $nome_completo; ?></strong></p>
+            <p><?php echo $email; ?></p>
 
-    <?php
-    exibirUsuarios($conn);
-    $conn->close();
-    ?>
+            <div class="icons">
+                <div class="icon-item" onclick="window.location.href='admin_dashboard.php'">
+                    <img src="../img/casa.png" alt="Minha Conta">
+                    <span>Dashboard</span>
+                </div>
+                <div class="icon-item" onclick="window.location.href='cadastro_admin.php'">
+                    <img src="../img/novo-usuario.png" alt="Cadastro do admin">
+                    <span>Cadastrar</span>
+                </div>
+                <div class="icon-item" onclick="window.location.href='funcoes.php'">
+                    <img src="../img/referencia.png" alt="Funções">
+                    <span>Funções</span>
+                </div>
+                <div class="icon-item" onclick="window.location.href='esquecer_senha.php'">
+                    <img src="../img/ajudando.png" alt="Esqueceu a Senha">
+                    <span>Esqueceu a Senha</span>
+                </div>
+                <div class="icon-item" onclick="window.location.href='logout.php'">
+                    <img src="../img/sairr.png" alt="Sair">
+                    <span>Sair</span>
+                </div>
+            </div>
+        </div>
 
-    <br>
-    <a href="logout.php">Sair</a>
+        <div class="content">
+            <a href="../index.php" class="back-button">
+                <img src="../img/seta-esquerdabranca.png" alt="Voltar">
+            </a>
+            <h2>Área Administrativa</h2>
+            <p id="descricao">Escolha uma das opções abaixo para gerenciar o sistema.</p>
+        </div>
+    </div>
 </body>
 </html>
