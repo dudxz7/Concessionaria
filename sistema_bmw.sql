@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 07/04/2025 às 06:15
+-- Tempo de geração: 07/04/2025 às 07:10
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -61,7 +61,9 @@ INSERT INTO `clientes` (`id`, `nome_completo`, `email`, `cpf`, `telefone`, `rg`,
 (30, 'Maria Souza', 'cliente2@gmail.com', '99999999991', '9999999991', '9999991', 'Rio de Janeiro', 'RJ', '9999999991', '$2y$10$C.JV7nqb5uYiRe.yTl926.ZUh6nDicinHnMqFWH8gBqPBs.jUzOqO', 0, 'Cliente', '', NULL, '2025-03-25 16:19:09'),
 (31, 'Carlos Oliveira', 'cliente3@gmail.com', '99999999992', '9999999992', '9999992', 'Belo Horizonte', 'MG', '9999999992', '$2y$10$l6EjlBQTdZN7BGWWX220JeaaTMctM0XFBHoeqqLpn02Se4byK0F26', 0, 'Cliente', '', NULL, '2025-03-25 16:19:09'),
 (32, 'Ana Costa', 'cliente4@gmail.com', '99999999993', '9999999993', '9999993', 'Curitiba', 'PR', '9999999993', '$2y$10$Wu7YFYBb4fStqls/5bjdLOQHixx5t5gPgdTmkEPJ0oexTXk8kadIi', 0, 'Cliente', '', NULL, '2025-03-25 16:19:09'),
-(33, 'Menina da gym', 'bixaboa@gmail.com', '111.111.111-17', '(11) 11111-1117', '1111111111-7', 'FORTALEZA', 'CE', '11111111117', '$2y$10$B.KZZg8j.u15bre/kEI8q.9AF/olwFSa3UwhPXkwBjdPzWFdtNEVK', 0, 'Cliente', '', NULL, '2025-03-25 22:08:59');
+(33, 'Menina da gym', 'bixaboa@gmail.com', '111.111.111-17', '(11) 11111-1117', '1111111111-7', 'FORTALEZA', 'CE', '11111111117', '$2y$10$B.KZZg8j.u15bre/kEI8q.9AF/olwFSa3UwhPXkwBjdPzWFdtNEVK', 0, 'Cliente', '', NULL, '2025-03-25 22:08:59'),
+(34, 'Paris Morgan', 'parismorgan@gmail.com', '111.111.111-18', '(11) 11111-1118', '1111111111-8', 'BROOKLYN', 'RJ', '1111111118', '$2y$10$nxMkgbKA74vI1T2dxBHCvemB3axWCG15srDtY8x2RIp6IjWiabjC.', 0, 'Gerente', 'Rua bem ali no escuro 10', NULL, '2025-04-07 01:58:39'),
+(35, 'Megan Fox', 'megan@gmail.com', '111.111.111-19', '(11) 11111-1119', '1111111111-9', 'WASHINTON DC', 'RJ', '1111111119', '$2y$10$TrMH8y9grAvQn2O5iL7g7OLpLhl74IBjD3KJiv/HAWW10u0.YvEPi', 0, 'Gerente', 'Rua Fulano de Tal, numero 15', '00000000003', '2025-04-07 02:03:10');
 
 -- --------------------------------------------------------
 
@@ -227,7 +229,7 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT de tabela `estoque`
