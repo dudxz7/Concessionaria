@@ -109,3 +109,41 @@ body {
 .back-button:hover img{
     transform: scale(1.2);
 }
+.section {
+    margin-bottom: 40px;
+}
+
+.section h2 {
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    font-size: 22px;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.button-item {
+    background-color: #333;
+    padding: 12px 20px;
+    border-radius: 10px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.button-item:hover {
+    background-color: #555;
+    cursor: pointer;
+}
+
+.button-item a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15px;
+    display: inline-block;
+}

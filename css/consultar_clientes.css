@@ -254,6 +254,10 @@ button:hover {
     width: 30px;
     height: 30px;
     cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.back-button:hover img {
+    transform: scale(1.2);
 }
 .letras-filtro {
     text-align: center; /* Centraliza as letras */

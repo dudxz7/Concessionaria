@@ -42,7 +42,7 @@ $email = $_SESSION['email'] ?? 'admin@gmail.com';
                     <img src="../img/novo-usuario.png" alt="Cadastro do admin">
                     <span>Cadastrar</span>
                 </div>
-                <div class="icon-item" onclick="window.location.href='funcoes.php'">
+                <div class="icon-item" onclick="window.location.href='funcoes_admin.php'">
                     <img src="../img/referencia.png" alt="Funções">
                     <span>Funções</span>
                 </div>

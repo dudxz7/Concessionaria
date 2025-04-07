@@ -105,41 +105,86 @@ $conn->close();
 </head>
 <body>
     <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <video autoplay loop muted>
-                <source src="../videos/overlay_azul.mp4" type="video/mp4">
-            </video>
-            <div class="profile-icon"><?php echo strtoupper(substr($_SESSION['usuarioNome'], 0, 1)); ?></div>
-            <p><strong><?php echo htmlspecialchars($_SESSION['usuarioNome']); ?></strong></p>
-            <p><?php echo htmlspecialchars($_SESSION['usuarioEmail']); ?></p>
-            <div class="icons">
-                <div class="icon-item" onclick="window.location.href='../perfil.php'">
-                    <img src="../img/usersembarra.png" alt="Minha Conta"><span>Minha conta</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='esquecer_senha.php'">
-                    <img src="../img/ajudando.png" alt="Esqueceu a Senha"><span>Esqueceu a Senha</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='consultar_clientes.php'">
-                    <img src="../img/lupa.png" alt="Consultar Clientes"><span>Consultar Clientes</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='consultar_modelos.php'">
-                    <img src="../img/referencia.png" alt="Consultar Modelos"><span>Consultar Modelos</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='consultar_veiculos.php'">
-                    <img src="../img/carro_de_frente.png" alt="Consultar Veículos"><span>Consultar Veículos</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='consultar_promocoes.php'">
-                    <img src="../img/promocoes.png" alt="Consultar Promoções"><span>Consultar Promoções</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='logout.php'">
-                    <img src="../img/sairr.png" alt="Sair"><span>Sair</span>
-                </div>
+<!-- Sidebar -->
+<div class="sidebar">
+    <?php if ($cargo_usuario === 'Admin'): ?>
+        <video autoplay loop muted>
+            <source src="../videos/overlay_branca.mp4" type="video/mp4">
+        </video>
+        <div class="profile-icon"><?php echo strtoupper(substr($_SESSION['usuarioNome'], 0, 1)); ?></div>
+        <p><strong><?php echo htmlspecialchars($_SESSION['usuarioNome']); ?></strong></p>
+        <p><?php echo htmlspecialchars($_SESSION['usuarioEmail']); ?></p>
+
+        <div class="icons">
+            <div class="icon-item" onclick="window.location.href='admin_dashboard.php'">
+                <img src="../img/casa.png" alt="Dashboard">
+                <span>Dashboard</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='cadastro_admin.php'">
+                <img src="../img/novo-usuario.png" alt="Cadastrar">
+                <span>Cadastrar</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='funcoes_admin.php'">
+                <img src="../img/referencia.png" alt="Funções">
+                <span>Funções</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='esquecer_senha.php'">
+                <img src="../img/ajudando.png" alt="Esqueceu a Senha">
+                <span>Esqueceu a Senha</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='logout.php'">
+                <img src="../img/sairr.png" alt="Sair">
+                <span>Sair</span>
             </div>
         </div>
+    <?php else: ?>
+        <video autoplay loop muted>
+            <source src="../videos/overlay_azul.mp4" type="video/mp4">
+        </video>
+        <div class="profile-icon"><?php echo strtoupper(substr($_SESSION['usuarioNome'], 0, 1)); ?></div>
+        <p><strong><?php echo htmlspecialchars($_SESSION['usuarioNome']); ?></strong></p>
+        <p><?php echo htmlspecialchars($_SESSION['usuarioEmail']); ?></p>
+
+        <div class="icons">
+            <div class="icon-item" onclick="window.location.href='../perfil.php'">
+                <img src="../img/usersembarra.png" alt="Minha Conta">
+                <span>Minha conta</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='esquecer_senha.php'">
+                <img src="../img/ajudando.png" alt="Esqueceu a Senha">
+                <span>Esqueceu a Senha</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='consultar_clientes.php'">
+                <img src="../img/lupa.png" alt="Consultar Clientes">
+                <span>Consultar Clientes</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='consultar_modelos.php'">
+                <img src="../img/referencia.png" alt="Consultar Modelos">
+                <span>Consultar Modelos</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='consultar_veiculos.php'">
+                <img src="../img/carro_de_frente.png" alt="Consultar Veículos">
+                <span>Consultar Veículos</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='consultar_promocoes.php'">
+                <img src="../img/promocoes.png" alt="Consultar Promoções">
+                <span>Consultar Promoções</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='logout.php'">
+                <img src="../img/sairr.png" alt="Sair">
+                <span>Sair</span>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
 
         <!-- Conteúdo -->
         <div class="content">
+            <?php if ($cargo_usuario === 'Admin'): ?>
+                <a href="funcoes_admin.php" class="back-button">
+                    <img src="../img/seta-esquerdabranca.png" alt="Voltar">
+                </a>
+            <?php endif; ?>
             <h2 class="btn-shine">Consulta de Veículos</h2>
 
             <?php if ($cargo_usuario === 'Gerente' || $cargo_usuario === 'Admin'): ?>

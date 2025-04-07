@@ -18,13 +18,13 @@ if ($conn->connect_error) {
     die("Falha na conexão: " . $conn->connect_error);
 }
 
-// Buscar o cargo do usuário logado
+// Buscar informações do usuário logado
 $usuario_id = $_SESSION['usuarioId'];
-$sql = "SELECT cargo FROM clientes WHERE id = ?";
+$sql = "SELECT nome_completo, email, cargo FROM clientes WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
-$stmt->bind_result($cargo_usuario);
+$stmt->bind_result($nome_completo, $email, $cargo_usuario);
 $stmt->fetch();
 $stmt->free_result();
 
@@ -108,47 +108,86 @@ $conn->close();
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <video autoplay loop muted>
-                <source src="../videos/overlay_azul.mp4" type="video/mp4">
-                Seu navegador não suporta vídeos.
-            </video>
-            <div class="profile-icon"><?php echo strtoupper(substr($_SESSION['usuarioNome'], 0, 1)); ?></div>
-            <p><strong><?php echo htmlspecialchars($_SESSION['usuarioNome']); ?></strong></p>
-            <p><?php echo htmlspecialchars($_SESSION['usuarioEmail']); ?></p>
-            <div class="icons">
-                <div class="icon-item" onclick="window.location.href='../perfil.php'">
-                    <img src="../img/usersembarra.png" alt="Minha Conta">
-                    <span>Minha conta</span>
+            <?php if ($cargo_usuario === 'Admin'): ?>
+                <video autoplay loop muted>
+                    <source src="../videos/overlay_branca.mp4" type="video/mp4">
+                    Seu navegador não suporta vídeos.
+                </video>
+                <div class="profile-icon"><?php echo strtoupper(substr($nome_completo, 0, 1)); ?></div>
+                <p><strong><?php echo $nome_completo; ?></strong></p>
+                <p><?php echo $email; ?></p>
+
+                <div class="icons">
+                    <div class="icon-item" onclick="window.location.href='admin_dashboard.php'">
+                        <img src="../img/casa.png" alt="Dashboard">
+                        <span>Dashboard</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='cadastro_admin.php'">
+                        <img src="../img/novo-usuario.png" alt="Cadastro do admin">
+                        <span>Cadastrar</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='funcoes_admin.php'">
+                        <img src="../img/referencia.png" alt="Funções">
+                        <span>Funções</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='esquecer_senha.php'">
+                        <img src="../img/ajudando.png" alt="Esqueceu a Senha">
+                        <span>Esqueceu a Senha</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='logout.php'">
+                        <img src="../img/sairr.png" alt="Sair">
+                        <span>Sair</span>
+                    </div>
                 </div>
-                <div class="icon-item" onclick="window.location.href='esquecer_senha.php'">
-                    <img src="../img/ajudando.png" alt="Esqueceu a Senha">
-                    <span>Esqueceu a Senha</span>
+            <?php else: ?>
+                <video autoplay loop muted>
+                    <source src="../videos/overlay_azul.mp4" type="video/mp4">
+                    Seu navegador não suporta vídeos.
+                </video>
+                <div class="profile-icon"><?php echo strtoupper(substr($_SESSION['usuarioNome'], 0, 1)); ?></div>
+                <p><strong><?php echo htmlspecialchars($_SESSION['usuarioNome']); ?></strong></p>
+                <p><?php echo htmlspecialchars($_SESSION['usuarioEmail']); ?></p>
+                <div class="icons">
+                    <div class="icon-item" onclick="window.location.href='../perfil.php'">
+                        <img src="../img/usersembarra.png" alt="Minha Conta">
+                        <span>Minha conta</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='esquecer_senha.php'">
+                        <img src="../img/ajudando.png" alt="Esqueceu a Senha">
+                        <span>Esqueceu a Senha</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='consultar_clientes.php'">
+                        <img src="../img/lupa.png" alt="Consultar clientes">
+                        <span>Consultar Clientes</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='consultar_modelos.php'">
+                        <img src="../img/referencia.png" alt="Consultar Modelos">
+                        <span>Consultar modelos</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='consultar_veiculos.php'">
+                        <img src="../img/carro_de_frente.png" alt="Consultar Veículos">
+                        <span>Consultar veículos</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='consultar_promocoes.php'">
+                        <img src="../img/promocoes.png" alt="Consultar promoções">
+                        <span>Consultar promoções</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='logout.php'">
+                        <img src="../img/sairr.png" alt="Sair">
+                        <span>Sair</span>
+                    </div>
                 </div>
-                <div class="icon-item" onclick="window.location.href='consultar_clientes.php'">
-                    <img src="../img/lupa.png" alt="Consultar clientes">
-                    <span>Consultar Clientes</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='consultar_modelos.php'">
-                    <img src="../img/referencia.png" alt="Consultar Modelos">
-                    <span>Consultar modelos</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='consultar_veiculos.php'">
-                    <img src="../img/carro_de_frente.png" alt="Consultar Veículos">
-                    <span>Consultar veículos</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='consultar_promocoes.php'">
-                    <img src="../img/promocoes.png" alt="Consultar promoções">
-                    <span>Consultar promoções</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='logout.php'">
-                    <img src="../img/sairr.png" alt="Sair">
-                    <span>Sair</span>
-                </div>
-            </div>
+            <?php endif; ?>
         </div>
 
         <!-- Conteúdo -->
         <div class="content">
+            <?php if ($cargo_usuario === 'Admin'): ?>
+                <a href="funcoes_admin.php" class="back-button">
+                    <img src="../img/seta-esquerdabranca.png" alt="Voltar">
+                </a>
+            <?php endif; ?>
+
             <h2 class="btn-shine">Consulta de Clientes</h2>
 
             <a href="../registro.html" class="btn-novo-cliente">
