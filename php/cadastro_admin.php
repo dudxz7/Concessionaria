@@ -138,41 +138,65 @@
         </form>
     </div>
 
-    <script src="../js/icon-de-olho-registro.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.7/inputmask.min.js"></script>
     <script src="../js/validacoes-registro.js"></script>
-
+    <script src="../js/cadastro_admin.js"></script>
     <script>
-    const cargoSelect = document.getElementById("cargo");
-    const camposExtras = document.getElementById("camposExtras");
+        // Referências aos elementos
+const eyeIcon = document.getElementById("eyeIcon");
+const senhaInput = document.getElementById("senha");
+const confirmaSenhaInput = document.getElementById("confirmaSenha");
+const eyeIcon2 = document.getElementById("eyeIcon2");
+const errorMessage = document.getElementById("error-message"); // Elemento de mensagem de erro
 
-    // Mostra ou oculta os campos extras com base no cargo
-    cargoSelect.addEventListener("change", function() {
-        if (this.value === "Funcionario" || this.value === "Gerente") {
-            camposExtras.style.display = "block";
-        } else {
-            camposExtras.style.display = "none";
-        }
-    });
+// Função para alternar visibilidade da senha
+function togglePasswordVisibility(inputElement, eyeElement) {
+    if (inputElement.type === "password") {
+        inputElement.type = "text";  // Torna a senha visível
+        eyeElement.src = "../img/olhoaberto.png";  // Ícone de olho aberto
+    } else {
+        inputElement.type = "password";  // Torna a senha oculta
+        eyeElement.src = "../img/olhofechado.png";  // Ícone de olho fechado
+    }
+}
 
-    // Validação PIS
-    const pisInput = document.getElementById("pis");
-    const erroPis = document.getElementById("erroPis");
+// Evento para o primeiro ícone de olho (senha)
+eyeIcon.addEventListener("click", function () {
+    togglePasswordVisibility(senhaInput, eyeIcon);
+    togglePasswordVisibility(confirmaSenhaInput, eyeIcon2);
+});
 
-    pisInput.addEventListener("input", function () {
-        this.value = this.value.replace(/\D/g, ''); // Remove tudo que não for número
-        if (this.value.length === 11) {
-            erroPis.style.display = "none";
-        }
-    });
+// Evento para o segundo ícone de olho (confirmar senha)
+eyeIcon2.addEventListener("click", function () {
+    togglePasswordVisibility(confirmaSenhaInput, eyeIcon2);
+    togglePasswordVisibility(senhaInput, eyeIcon);
+});
 
-    pisInput.addEventListener("blur", function () {
-        if (this.value.length !== 11) {
-            erroPis.style.display = "block";
-        } else {
-            erroPis.style.display = "none";
-        }
-    });
-</script>
+// Função para verificar se as senhas coincidem em tempo real
+function verificarSenhas() {
+    if (senhaInput.value !== confirmaSenhaInput.value) {
+        errorMessage.textContent = "As senhas não coincidem."; // Exibe a mensagem de erro
+        errorMessage.style.display = "block"; // Torna a mensagem visível
+    } else {
+        errorMessage.textContent = ""; // Limpa a mensagem de erro
+        errorMessage.style.display = "none"; // Esconde a mensagem de erro
+    }
+}
+
+// Verifica as senhas enquanto o usuário digita
+senhaInput.addEventListener("input", verificarSenhas);
+confirmaSenhaInput.addEventListener("input", verificarSenhas);
+
+// Validação final ao enviar o formulário
+document.querySelector("form").addEventListener("submit", function (e) {
+    // Se as senhas não coincidirem, não envia o formulário
+    if (senhaInput.value !== confirmaSenhaInput.value) {
+        e.preventDefault(); // Impede o envio do formulário
+        errorMessage.textContent = "As senhas não coincidem."; // Exibe a mensagem de erro
+        errorMessage.style.display = "block"; // Exibe a mensagem de erro
+    }
+});
+
+    </script>
 </body>
 </html>
