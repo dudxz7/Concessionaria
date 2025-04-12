@@ -1,15 +1,40 @@
 <?php
-require_once("../php/conexao.php");
 session_start();
+require_once("conexao.php");
 
-$erro = "";
+// Verifica se o usuário está logado e se o cargo é adequado
+if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioLogado'] !== true) {
+    header("Location: ../login.html");
+    exit;
+}
+
+// Pega o ID do usuário logado
+$usuarioId = $_SESSION['usuarioId'];
+
+// Recupera o cargo do usuário logado
+$sqlCargo = "SELECT cargo FROM clientes WHERE id = ?";
+$stmtCargo = $conn->prepare($sqlCargo);
+$stmtCargo->bind_param("i", $usuarioId);
+$stmtCargo->execute();
+$resultCargo = $stmtCargo->get_result();
+
+if ($resultCargo->num_rows === 0) {
+    echo "Usuário não encontrado.";
+    exit;
+}
+
+$usuarioCargo = $resultCargo->fetch_assoc()['cargo'];  // Obtém o cargo do usuário
 
 // Verifica se o ID foi passado
 if (!isset($_GET['id']) && !isset($_POST['id'])) {
     echo "ID do funcionário não fornecido.";
     exit;
 }
-
+// Permite apenas "Admin" e "Gerente" acessarem a página
+if ($usuarioCargo !== 'Admin' && $usuarioCargo !== 'Gerente') {
+    echo "Você não tem permissão para acessar esta página.";
+    exit;
+}
 $id = $_GET['id'] ?? $_POST['id'];
 
 // Se o formulário foi enviado
@@ -79,6 +104,15 @@ if ($result->num_rows === 0) {
 }
 
 $dados = $result->fetch_assoc();
+
+// Verifica se o usuário logado tem permissão para acessar esse funcionário
+if ($usuarioCargo == 'Gerente') {
+    // Se for Gerente, ele não pode editar Gerentes ou Admins
+    if ($dados['cargo'] == 'Gerente' || $dados['cargo'] == 'Admin') {
+        echo "Você não tem permissão para editar esse funcionário.";
+        exit;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -179,14 +213,10 @@ $dados = $result->fetch_assoc();
                 <label>CNH</label>
                 <div class="input-wrapper">
                     <input type="text" name="cnh" value="<?= $dados['cnh'] ?? '' ?>">
-                    <img src="../img/carteira-de-motorista.png" alt="Ícone CNH">
+                    <img src="../img/condutor.png" alt="Ícone CNH">
                 </div>
             </div>
         </div>
-
-        <?php if (!empty($erro)): ?>
-            <div style="color: red; margin-top: 10px;"><?= $erro ?></div>
-        <?php endif; ?>
 
         <button type="submit" class="btn">
             <img src="../img/verifica.png" alt="Ícone de check">
