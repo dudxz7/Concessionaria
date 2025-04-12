@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se o usuário está logado e se é administrador
 if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioAdmin'] !== 1) {
-    header("Location: ../index.php");
+    header("Location: ../index.html");
     exit();
 }
 
@@ -86,8 +86,8 @@ $email = $_SESSION['email'] ?? 'admin@gmail.com';
             <div class="section">
                 <h2>Funcionários</h2>
                 <div class="buttons">
-                    <div class="button-item"><a href="cadastrar_funcionario.php">Cadastrar Funcionário</a></div>
-                    <div class="button-item"><a href="consultar_funcionarios.php">Consultar Funcionários</a></div>
+                    <div class="button-item"><a href="cadastro_admin.php">Cadastrar Funcionário</a></div>
+                    <div class="button-item"><a href="consultar_func_gerente.php">Consultar Funcionários</a></div>
                 </div>
             </div>
 

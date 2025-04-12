@@ -138,7 +138,6 @@
         </form>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.7/inputmask.min.js"></script>
     <script src="../js/validacoes-registro.js"></script>
     <script src="../js/cadastro_admin.js"></script>
     <script>

@@ -160,17 +160,23 @@ $conn->close();
                         <img src="../img/lupa.png" alt="Consultar clientes">
                         <span>Consultar Clientes</span>
                     </div>
+                    <?php if ($cargo_usuario === 'Gerente' || $cargo_usuario === 'Admin' ): ?>
+                    <div class="icon-item" onclick="window.location.href='consultar_func_gerente.php'">
+                        <img src="../img/homem-de-negocios.png" alt="Consultar Funcionários e Gerentes">
+                        <span>Consultar Funcionários</span>
+                    </div>
+                    <?php endif; ?>
                     <div class="icon-item" onclick="window.location.href='consultar_modelos.php'">
                         <img src="../img/referencia.png" alt="Consultar Modelos">
-                        <span>Consultar modelos</span>
+                        <span>Consultar Modelos</span>
                     </div>
                     <div class="icon-item" onclick="window.location.href='consultar_veiculos.php'">
                         <img src="../img/carro_de_frente.png" alt="Consultar Veículos">
-                        <span>Consultar veículos</span>
+                        <span>Consultar Veículos</span>
                     </div>
                     <div class="icon-item" onclick="window.location.href='consultar_promocoes.php'">
                         <img src="../img/promocoes.png" alt="Consultar promoções">
-                        <span>Consultar promoções</span>
+                        <span>Consultar Promoções</span>
                     </div>
                     <div class="icon-item" onclick="window.location.href='logout.php'">
                         <img src="../img/sairr.png" alt="Sair">

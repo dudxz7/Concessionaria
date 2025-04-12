@@ -158,6 +158,12 @@ $conn->close();
                 <img src="../img/lupa.png" alt="Consultar Clientes">
                 <span>Consultar Clientes</span>
             </div>
+            <?php if ($cargo_usuario === 'Gerente' || $cargo_usuario === 'Admin' ): ?>
+                    <div class="icon-item" onclick="window.location.href='consultar_func_gerente.php'">
+                        <img src="../img/homem-de-negocios.png" alt="Consultar Funcionários e Gerentes">
+                        <span>Consultar Funcionários</span>
+                    </div>
+                    <?php endif; ?>
             <div class="icon-item" onclick="window.location.href='consultar_modelos.php'">
                 <img src="../img/referencia.png" alt="Consultar Modelos">
                 <span>Consultar Modelos</span>

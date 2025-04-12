@@ -156,6 +156,12 @@ $result = $stmt->get_result();
                     <img src="../img/lupa.png">
                     <span>Consultar Clientes</span>
                 </div>
+                <?php if ($cargo_usuario === 'Gerente' || $cargo_usuario === 'Admin' ): ?>
+                <div class="icon-item" onclick="window.location.href='consultar_func_gerente.php'">
+                    <img src="../img/homem-de-negocios.png" alt="Consultar Funcionários e Gerentes">
+                    <span>Consultar Funcionários</span>
+                </div>
+                <?php endif; ?>
                 <div class="icon-item" onclick="window.location.href='consultar_modelos.php'">
                     <img src="../img/referencia.png">
                     <span>Consultar Modelos</span>
