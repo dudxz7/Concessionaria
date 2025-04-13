@@ -31,6 +31,13 @@ $stmt->store_result();
 if ($stmt->num_rows > 0) {
     $stmt->bind_result($nome_completo, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $cargo, $endereco, $pis);
     $stmt->fetch();
+
+    // Se o usuário for Admin, redireciona para o painel de admin
+    if ($cargo === 'Admin') {
+        header("Location: php/admin_dashboard.php");
+        exit;
+    }
+
 } else {
     echo "Erro ao recuperar os dados!";
     exit;

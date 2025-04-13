@@ -109,35 +109,9 @@ $conn->close();
 </head>
 <body>
 <div class="container">
-    <div class="sidebar">
-        <?php if ($cargo_usuario === 'Admin'): ?>
-            <video autoplay loop muted><source src="../videos/overlay_branca.mp4" type="video/mp4"></video>
-            <div class="profile-icon"><?php echo strtoupper(substr($nome_completo, 0, 1)); ?></div>
-            <p><strong><?php echo $nome_completo; ?></strong></p>
-            <p><?php echo $email; ?></p>
-            <div class="icons">
-                <div class="icon-item" onclick="window.location.href='admin_dashboard.php'"><img src="../img/casa.png"><span>Dashboard</span></div>
-                <div class="icon-item" onclick="window.location.href='cadastro_admin.php'"><img src="../img/novo-usuario.png"><span>Cadastrar</span></div>
-                <div class="icon-item" onclick="window.location.href='funcoes_admin.php'"><img src="../img/referencia.png"><span>Funções</span></div>
-                <div class="icon-item" onclick="window.location.href='esquecer_senha.php'"><img src="../img/ajudando.png"><span>Esqueceu a Senha</span></div>
-                <div class="icon-item" onclick="window.location.href='logout.php'"><img src="../img/sairr.png"><span>Sair</span></div>
-            </div>
-        <?php else: ?>
-            <video autoplay loop muted><source src="../videos/overlay_azul.mp4" type="video/mp4"></video>
-            <div class="profile-icon"><?php echo strtoupper(substr($_SESSION['usuarioNome'], 0, 1)); ?></div>
-            <p><strong><?php echo htmlspecialchars($_SESSION['usuarioNome']); ?></strong></p>
-            <p><?php echo htmlspecialchars($_SESSION['usuarioEmail']); ?></p>
-            <div class="icons">
-                <div class="icon-item" onclick="window.location.href='../perfil.php'"><img src="../img/usersembarra.png"><span>Minha conta</span></div>
-                <div class="icon-item" onclick="window.location.href='esquecer_senha.php'"><img src="../img/ajudando.png"><span>Esqueceu a Senha</span></div>
-                <div class="icon-item" onclick="window.location.href='consultar_clientes.php'"><img src="../img/lupa.png"><span>Consultar Clientes</span></div>
-                <div class="icon-item" onclick="window.location.href='consultar_clientes.php'"><img src="../img/homem-de-negocios.png"><span>Consultar Funcionários</span></div>
-                <div class="icon-item" onclick="window.location.href='consultar_modelos.php'"><img src="../img/referencia.png"><span>Consultar Modelos</span></div>
-                <div class="icon-item" onclick="window.location.href='consultar_veiculos.php'"><img src="../img/carro_de_frente.png"><span>Consultar Veículos</span></div>
-                <div class="icon-item" onclick="window.location.href='consultar_promocoes.php'"><img src="../img/promocoes.png"><span>Consultar Promoções</span></div>
-                <div class="icon-item" onclick="window.location.href='logout.php'"><img src="../img/sairr.png"><span>Sair</span></div>
-            </div>
-        <?php endif; ?>
+    <!-- Sidebar -->
+    <div>
+        <?php include 'sidebar.php'; ?>
     </div>
 
     <div class="content">
