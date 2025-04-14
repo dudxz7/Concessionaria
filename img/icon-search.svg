@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="93.069" height="59.927" viewBox="0 0 93.069 59.927">
+    <defs>
+        <clipPath id="prefix__clip-path">
+            <path id="prefix__Caminho_754" d="M439.395-120.605a2.066 2.066 0 0 1-2.922 0l-3.646-3.646a9.565 9.565 0 0 1-5.185 1.535 9.642 9.642 0 0 1-9.642-9.643 9.642 9.642 0 0 1 9.642-9.641 9.641 9.641 0 0 1 9.641 9.641 9.577 9.577 0 0 1-1.535 5.185l3.646 3.646a2.065 2.065 0 0 1 .001 2.923zm-11.753-18.64a6.887 6.887 0 0 0-6.887 6.887 6.887 6.887 0 0 0 6.887 6.887 6.886 6.886 0 0 0 6.887-6.887 6.886 6.886 0 0 0-6.887-6.887z" class="prefix__cls-1" data-name="Caminho 754"/>
+        </clipPath>
+        <clipPath id="prefix__clip-path-2">
+            <path id="prefix__Caminho_753" d="M-735 1401h1920V-814H-735z" class="prefix__cls-1" data-name="Caminho 753"/>
+        </clipPath>
+        <style>
+            .prefix__cls-1{fill:none}
+        </style>
+    </defs>
+    <g id="prefix__Grupo_931" data-name="Grupo 931" transform="translate(-805.553 -930.147)">
+        <path id="prefix__Caminho_755" fill="#fe1430" d="M6857.927 1990.147h73.7l-19.5 59.927h-73.574z" data-name="Caminho 755" transform="translate(-6033 -1060)"/>
+        <g id="prefix__Grupo_831" clip-path="url(#prefix__clip-path)" data-name="Grupo 831" transform="translate(423.5 1091.5)">
+            <g id="prefix__Grupo_830" clip-path="url(#prefix__clip-path-2)" data-name="Grupo 830">
+                <path id="prefix__Caminho_752" fill="#edede3" d="M413-147h32v32h-32z" data-name="Caminho 752"/>
+            </g>
+        </g>
+    </g>
+</svg>
