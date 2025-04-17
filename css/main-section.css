@@ -1,0 +1,223 @@
+/* Conteúdo principal do site ao rolar */
+.main-content {
+    padding: 40px 60px;
+    background-color: #d9d9d9;
+    font-family: 'Inter', sans-serif;
+}
+
+.search-bar-wrapper {
+    display: flex;
+    justify-content: center; /* Centraliza os itens no container */
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 40px; /* Aumentando o gap para mais espaço entre os elementos */
+    margin-bottom: 30px;
+}
+
+.search-titulo {
+    font-size: 24px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    padding: 0; 
+    border: 1px solid #d9d9d9;
+    border-radius: 10px;
+    height: 50px;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.search-container input.input {
+    background-color: #f2f2f2;
+    padding: 16px;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px 0 0 8px;
+    outline: none;
+    width: 350px; /* Aumentando a largura do input */
+}
+
+.search-container button {
+    padding: 12px;
+    margin-left: -40px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 8px 8px 0;
+}
+
+.icone-lupa {
+    width: 80%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.filtros-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px; /* Aumentando o gap entre os filtros */
+    min-width: fit-content;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.filtros-container span {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+}
+
+.filtros-container img {
+    width: 14px; /* Largura da imagem */
+    height: 14px; /* Ajuste a altura para o valor desejado */
+}
+.filtros-container a {
+    text-decoration: underline;
+    color: #000;
+    font-size: 16px;
+}
+
+.favorite-icon {
+    position: absolute;
+    top: 18px;
+    right: -10px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.heart-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain; /* Garante que a imagem mantenha proporção */
+    display: block; /* Remove espaços fantasmas abaixo da imagem */
+    transition: transform 0.2s ease-in-out;
+}
+
+.heart-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Cards e demais estilos continuam os mesmos */
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+}
+
+.card {
+    background-color: #f2f2f2;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinha todos os itens à esquerda */
+    text-align: left; /* Alinha o texto à esquerda */
+    min-height: 400px; /* Garante uma altura mínima para todos os cards */
+    box-sizing: border-box; /* Inclui o padding na contagem de altura e largura */
+    position: relative;
+}
+
+.card img {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.card h2 {
+    color: #2E2D37;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: 'Instrument Sans', serif;
+    margin: 8px 0 4px;
+    text-align: center; /* Centraliza o título */
+}
+
+.card p {
+    font-size: 13px;
+    color: #555;
+    margin: 4px 0;
+}
+
+.card p img {
+    width: 14px;
+    margin: 0 4px;
+    vertical-align: middle;
+}
+
+.rating {
+    display: flex;
+    align-items: center; /* Alinha verticalmente ao centro */
+    justify-content: flex-start; /* Alinha à esquerda */
+    gap: 4px;
+    margin: 10px 0;
+}
+
+.rating img {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}
+
+.rating .nota {
+    font-size: 13px;
+    color: #444;
+    line-height: 16px; /* Igual à altura da estrela */
+    display: inline-block;
+}
+
+.btn-send {
+    background-color: #2F4EDA;
+    color: white;
+    border: none;
+    margin-top: 10px;
+    padding: 13px;
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: 'Instrument Sans', serif;
+    font-size: 14px;
+    transition: 0.3s;
+    text-align: center; /* Centraliza o texto dentro do botão */
+}
+
+.btn-send:hover {
+    background-color: #0f1f66;
+}
+
+.view-all {
+    margin-top: 40px;
+    text-align: center;
+    width: 100%; /* Garantir que o botão ocupe toda a largura disponível */
+    display: flex;
+    justify-content: center; /* Centraliza o botão */
+}
+
+.view-all button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: 2px solid black;
+    background-color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: auto; /* Deixe o botão com o tamanho correto */
+}
+
+.view-all button:hover {
+    background-color: black;
+    color: white;
+}

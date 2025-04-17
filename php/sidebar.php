@@ -5,7 +5,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 // Pega os dados da sessão com segurança
-$cargo_usuario = $_SESSION['usuarioAdmin'] === '1' ? 'Admin' : ($_SESSION['cargo'] ?? 'Cliente');
+$cargo_usuario = $_SESSION['usuarioCargo'] ?? 'Cliente';
 // Variáveis global da sidebar
 $nome_completo = $_SESSION['usuarioNome'] ?? 'Usuário';
 $email = $_SESSION['usuarioEmail'] ?? '';

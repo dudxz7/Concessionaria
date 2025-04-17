@@ -38,7 +38,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] : "Cidade - Estado";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BMW Concessionária</title>
-    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/liquid-button.css">
     <link rel="icon" href="img/logoofcbmw.png">
 </head>
@@ -75,7 +75,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] : "Cidade - Estado";
         <div class="search-container">
             <input type="text" name="search" class="input" placeholder="Buscar por modelo...">
             <button type="submit" class="btn-search">
-                <img src="img/icon-search.svg" alt="Buscar" class="icone-lupa">
+                <img src="img/icon-search-azul.svg" alt="Buscar" class="icone-lupa">
             </button>
         </div>
 
