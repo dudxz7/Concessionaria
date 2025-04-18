@@ -115,6 +115,12 @@ $conn->close();
     </div>
 
     <div class="content">
+        <?php if ($cargo_usuario === 'Admin'): ?>
+            <a href="funcoes_admin.php" class="back-button">
+                <img src="../img/seta-esquerdabranca.png" alt="Voltar">
+            </a>
+        <?php endif; ?>
+        
         <h2 class="btn-shine">Consulta de Funcionários</h2>
         <form method="GET" action="">
             <input type="text" name="search" class="input" placeholder="Buscar por nome ou email..." value="<?php echo htmlspecialchars($filtro); ?>">

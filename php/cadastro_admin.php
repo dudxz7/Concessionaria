@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-            <a href="admin_dashboard.php" class="back-button">
+            <a href="funcoes_admin.php" class="back-button">
                 <img src="../img/seta-esquerda24.png" alt="Voltar">
             </a>
         <h2>Criar uma conta</h2>

@@ -28,6 +28,9 @@ $stmt->bind_result($nome_completo, $email, $cargo_usuario);
 $stmt->fetch();
 $stmt->free_result();
 
+// Armazenar o cargo na sessão para futuras verificações
+$_SESSION['usuarioCargo'] = $cargo_usuario;
+
 // Verificar permissão de acesso
 if (!in_array($cargo_usuario, ['Funcionario', 'Gerente', 'Admin'])) {
     echo "<h2>Acesso Negado</h2>";

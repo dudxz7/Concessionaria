@@ -1,12 +1,13 @@
 <?php
-// Garante que a sessão está ativa
-if (session_status() !== PHP_SESSION_ACTIVE) {
+// Iniciar a sessão (certifique-se de que a sessão não foi iniciada anteriormente)
+if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
 // Pega os dados da sessão com segurança
-$cargo_usuario = $_SESSION['usuarioCargo'] ?? 'Cliente';
-// Variáveis global da sidebar
+$cargo_usuario = $_SESSION['usuarioCargo'] ?? 'Cliente'; // Se o cargo não estiver setado, assume 'Cliente'
+
+// Variáveis globais da sidebar
 $nome_completo = $_SESSION['usuarioNome'] ?? 'Usuário';
 $email = $_SESSION['usuarioEmail'] ?? '';
 ?>

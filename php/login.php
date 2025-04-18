@@ -3,10 +3,10 @@
 session_start();
 
 // Conectar com o banco de dados
-$host = "localhost"; // Seu servidor MySQL
-$user = "root"; // Usuário do MySQL
-$pass = ""; // Senha do MySQL
-$db = "sistema_bmw"; // Nome do banco de dados
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db = "sistema_bmw";
 
 $conn = new mysqli($host, $user, $pass, $db);
 
@@ -33,8 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Preparar e executar a consulta SQL para verificar o usuário
-    $sql = "SELECT id, nome_completo, email, senha, admin, estado FROM clientes WHERE email = ?";
+    // Consulta SQL com campo cargo incluso
+    $sql = "SELECT id, nome_completo, email, senha, admin, estado, cargo FROM clientes WHERE email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Verificar se o usuário foi encontrado
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($id, $nome_completo, $email_db, $senha_db, $admin, $estado);
+        $stmt->bind_result($id, $nome_completo, $email_db, $senha_db, $admin, $estado, $cargo);
         $stmt->fetch();
 
         // Verificar a senha
@@ -56,14 +56,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['usuarioNome'] = $nome_completo;
             $_SESSION['usuarioEmail'] = $email_db;
             $_SESSION['usuarioAdmin'] = $admin;
-            $_SESSION['usuarioEstado'] = $estado;  // Adicionando estado na sessão
+            $_SESSION['usuarioEstado'] = $estado;
+            $_SESSION['usuarioCargo'] = $cargo; // ESSENCIAL! Aqui está o cargo!
 
             // Redirecionamento para o painel de administração, se for admin
             if ($admin == 1) {
                 header("Location: admin_dashboard.php");
                 exit;
             } else {
-                header("Location: ../index.php");  // Aqui redireciona para o index.php
+                header("Location: ../index.php");
                 exit;
             }
         } else {
