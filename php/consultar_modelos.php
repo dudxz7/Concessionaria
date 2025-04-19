@@ -4,7 +4,7 @@ include('conexao.php');
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['usuarioNome'])) {
-    header('Location: login.php');
+    header('Location: ../login.html');
     exit;
 }
 

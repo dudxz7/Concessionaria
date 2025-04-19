@@ -122,6 +122,12 @@ $conn->close();
         <?php endif; ?>
         
         <h2 class="btn-shine">Consulta de Funcionários</h2>
+        
+        <a href="cadastro_admin.php" class="btn-novo-cliente">
+            <img src="../img/adicionar-usuario.png" alt="Cadastrar Funcionário" class="img-btn">
+            Cadastrar Cliente Novo
+        </a>
+
         <form method="GET" action="">
             <input type="text" name="search" class="input" placeholder="Buscar por nome ou email..." value="<?php echo htmlspecialchars($filtro); ?>">
             <button type="submit"><img src="../img/lupa.png" alt="Buscar" class="icone-lupa"></button>

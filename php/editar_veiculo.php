@@ -1,6 +1,23 @@
 <?php
 include('conexao.php');
 
+// Inicia a sessão para verificar o login
+session_start();
+
+// Verificar se o usuário está logado
+if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioLogado'] !== true) {
+    header("Location: ../login.html"); // Redireciona para a página de login
+    exit;
+}
+
+// Verificar permissão de acesso
+$cargo_usuario = $_SESSION['usuarioCargo'];
+if (!in_array($cargo_usuario, ['Gerente', 'Admin'])) {
+    echo "<h2>Acesso Negado</h2>";
+    echo "<p>Você não tem permissão para acessar esta página.</p>";
+    exit;
+}
+
 $veiculo = null;
 $mensagem = '';
 $mensagem_tipo = '';

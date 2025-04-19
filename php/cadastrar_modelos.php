@@ -95,6 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -102,16 +103,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../css/registro.css">
     <link rel="stylesheet" href="../css/checkbox-cor-veiculos.css">
     <link rel="icon" href="../img/logoofcbmw.png">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mask-plugin/1.14.16/jquery.mask.min.js"></script>
+    <style>
+    input#input-fabricante[readonly], input#input-fabricante:disabled {
+        pointer-events: none;
+        background-color: #f2f2f2;
+        color: gray;
+    }
+    .input-group {
+        cursor: not-allowed;
+    }
+    </style>
 </head>
+
 <body>
     <div class="container">
         <a href="consultar_modelos.php" class="back-button">
             <img src="../img/seta-esquerda24.png" alt="Voltar">
-        </a> 
+        </a>
         <h2>Cadastrar Modelo</h2>
-        
+
         <form action="cadastrar_modelos.php" method="post">
             <!-- Modelo -->
             <div class="input-group">
@@ -126,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="input-group">
                 <label>Fabricante</label>
                 <div class="input-wrapper">
-                    <input type="text" name="fabricante" value="BMW" readonly>
+                    <input type="text" name="fabricante" id="input-fabricante" value="BMW" readonly>
                     <img src="../img/fabricante.png" alt="Ícone fabricante">
                 </div>
             </div>
@@ -166,7 +176,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <!-- Mensagem de erro ou sucesso -->
-            <div id="error-message" class="<?php echo !empty($mensagem) ? $mensagem_tipo : ''; ?>" <?php if (!empty($mensagem)) echo 'style="display:block;"'; ?>>
+            <div id="error-message" class="<?php echo !empty($mensagem) ? $mensagem_tipo : ''; ?>"
+                <?php if (!empty($mensagem)) echo 'style="display:block;"'; ?>>
                 <?php echo $mensagem ?? ''; ?>
             </div>
 
@@ -178,20 +189,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const precoInput = document.getElementById("preco");
-            const anoInput = document.getElementById("ano");
+    document.addEventListener("DOMContentLoaded", function() {
+        const precoInput = document.getElementById("preco");
+        const anoInput = document.getElementById("ano");
 
-            anoInput.addEventListener("input", function () {
-                this.value = this.value.replace(/\D/g, "");
-            });
-
-            precoInput.addEventListener("input", function () {
-                let valor = precoInput.value.replace(/\D/g, "");
-                valor = (parseInt(valor, 10) / 100).toFixed(2);
-                precoInput.value = valor.replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            });
+        anoInput.addEventListener("input", function() {
+            this.value = this.value.replace(/\D/g, "");
         });
+
+        precoInput.addEventListener("input", function() {
+            let valor = precoInput.value.replace(/\D/g, "");
+            valor = (parseInt(valor, 10) / 100).toFixed(2);
+            precoInput.value = valor.replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        });
+    });
     </script>
 </body>
+
 </html>

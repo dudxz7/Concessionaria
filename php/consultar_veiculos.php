@@ -23,6 +23,13 @@ $stmt->bind_result($cargo_usuario);
 $stmt->fetch();
 $stmt->free_result();
 
+// Bloquear acesso para clientes comuns
+if ($cargo_usuario === 'Cliente') {
+    echo "<h2>Acesso Negado</h2>";
+    echo "<p>Você não tem permissão para acessar esta página.</p>";
+    exit;
+}
+
 // Paginação
 $veiculos_por_pagina = 10;
 $pagina_atual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;

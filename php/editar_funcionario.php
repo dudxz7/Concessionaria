@@ -32,6 +32,7 @@ if (!isset($_GET['id']) && !isset($_POST['id'])) {
 }
 // Permite apenas "Admin" e "Gerente" acessarem a página
 if ($usuarioCargo !== 'Admin' && $usuarioCargo !== 'Gerente') {
+    echo "<h2>Acesso Negado</h2>";
     echo "Você não tem permissão para acessar esta página.";
     exit;
 }

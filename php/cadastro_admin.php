@@ -1,3 +1,20 @@
+<?php
+session_start();
+
+// Verificar se o usuário está logado e se é Admin ou Gerente
+if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioLogado'] !== true){
+    header("Location: ../login.html");
+    exit;
+}
+
+$cargoUsuario = $_SESSION['usuarioCargo'] ?? '';
+
+if ($cargoUsuario !== 'Admin' && $cargoUsuario !== 'Gerente') {
+    header("Location: ../login.html");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,9 +26,15 @@
 </head>
 <body>
     <div class="container">
-            <a href="funcoes_admin.php" class="back-button">
-                <img src="../img/seta-esquerda24.png" alt="Voltar">
-            </a>
+        <?php if ($cargoUsuario === 'Admin'): ?>
+        <a href="funcoes_admin.php" class="back-button">
+            <img src="../img/seta-esquerda24.png" alt="Voltar">
+        </a>
+        <?php else: ?> 
+        <a href="consultar_func_gerente.php" class="back-button">
+            <img src="../img/seta-esquerda24.png" alt="Voltar">
+        </a>
+        <?php endif; ?>
         <h2>Criar uma conta</h2>
         <form action="register.php" method="post">
             <div class="input-group">
@@ -21,7 +44,7 @@
                     <img src="../img/usersemfundo.png" alt="Ícone usuário">
                 </div>
             </div>
-            
+
             <div class="input-group">
                 <label>E-mail</label>
                 <div class="input-wrapper">
@@ -37,7 +60,9 @@
                         <option value="">Selecione o cargo</option>
                         <option value="Cliente">Cliente</option>
                         <option value="Funcionario">Funcionário</option>
-                        <option value="Gerente">Gerente</option>
+                        <?php if ($cargoUsuario === 'Admin'): ?>
+                            <option value="Gerente">Gerente</option>
+                        <?php endif; ?>
                     </select>
                     <img src="../img/cargo.png" alt="Ícone cargo">
                 </div>
@@ -60,7 +85,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="input-group">
                     <label>CPF</label>
@@ -77,7 +102,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="input-group">
                     <label>Cidade</label>
@@ -94,7 +119,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="input-group">
                     <label>Telefone</label>
@@ -111,7 +136,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="input-group">
                     <label>Senha</label>
@@ -141,61 +166,52 @@
     <script src="../js/validacoes-registro.js"></script>
     <script src="../js/cadastro_admin.js"></script>
     <script>
-        // Referências aos elementos
-const eyeIcon = document.getElementById("eyeIcon");
-const senhaInput = document.getElementById("senha");
-const confirmaSenhaInput = document.getElementById("confirmaSenha");
-const eyeIcon2 = document.getElementById("eyeIcon2");
-const errorMessage = document.getElementById("error-message"); // Elemento de mensagem de erro
+        const eyeIcon = document.getElementById("eyeIcon");
+        const senhaInput = document.getElementById("senha");
+        const confirmaSenhaInput = document.getElementById("confirmaSenha");
+        const eyeIcon2 = document.getElementById("eyeIcon2");
+        const errorMessage = document.getElementById("error-message");
 
-// Função para alternar visibilidade da senha
-function togglePasswordVisibility(inputElement, eyeElement) {
-    if (inputElement.type === "password") {
-        inputElement.type = "text";  // Torna a senha visível
-        eyeElement.src = "../img/olhoaberto.png";  // Ícone de olho aberto
-    } else {
-        inputElement.type = "password";  // Torna a senha oculta
-        eyeElement.src = "../img/olhofechado.png";  // Ícone de olho fechado
-    }
-}
+        function togglePasswordVisibility(inputElement, eyeElement) {
+            if (inputElement.type === "password") {
+                inputElement.type = "text";
+                eyeElement.src = "../img/olhoaberto.png";
+            } else {
+                inputElement.type = "password";
+                eyeElement.src = "../img/olhofechado.png";
+            }
+        }
 
-// Evento para o primeiro ícone de olho (senha)
-eyeIcon.addEventListener("click", function () {
-    togglePasswordVisibility(senhaInput, eyeIcon);
-    togglePasswordVisibility(confirmaSenhaInput, eyeIcon2);
-});
+        eyeIcon.addEventListener("click", function () {
+            togglePasswordVisibility(senhaInput, eyeIcon);
+            togglePasswordVisibility(confirmaSenhaInput, eyeIcon2);
+        });
 
-// Evento para o segundo ícone de olho (confirmar senha)
-eyeIcon2.addEventListener("click", function () {
-    togglePasswordVisibility(confirmaSenhaInput, eyeIcon2);
-    togglePasswordVisibility(senhaInput, eyeIcon);
-});
+        eyeIcon2.addEventListener("click", function () {
+            togglePasswordVisibility(confirmaSenhaInput, eyeIcon2);
+            togglePasswordVisibility(senhaInput, eyeIcon);
+        });
 
-// Função para verificar se as senhas coincidem em tempo real
-function verificarSenhas() {
-    if (senhaInput.value !== confirmaSenhaInput.value) {
-        errorMessage.textContent = "As senhas não coincidem."; // Exibe a mensagem de erro
-        errorMessage.style.display = "block"; // Torna a mensagem visível
-    } else {
-        errorMessage.textContent = ""; // Limpa a mensagem de erro
-        errorMessage.style.display = "none"; // Esconde a mensagem de erro
-    }
-}
+        function verificarSenhas() {
+            if (senhaInput.value !== confirmaSenhaInput.value) {
+                errorMessage.textContent = "As senhas não coincidem.";
+                errorMessage.style.display = "block";
+            } else {
+                errorMessage.textContent = "";
+                errorMessage.style.display = "none";
+            }
+        }
 
-// Verifica as senhas enquanto o usuário digita
-senhaInput.addEventListener("input", verificarSenhas);
-confirmaSenhaInput.addEventListener("input", verificarSenhas);
+        senhaInput.addEventListener("input", verificarSenhas);
+        confirmaSenhaInput.addEventListener("input", verificarSenhas);
 
-// Validação final ao enviar o formulário
-document.querySelector("form").addEventListener("submit", function (e) {
-    // Se as senhas não coincidirem, não envia o formulário
-    if (senhaInput.value !== confirmaSenhaInput.value) {
-        e.preventDefault(); // Impede o envio do formulário
-        errorMessage.textContent = "As senhas não coincidem."; // Exibe a mensagem de erro
-        errorMessage.style.display = "block"; // Exibe a mensagem de erro
-    }
-});
-
+        document.querySelector("form").addEventListener("submit", function (e) {
+            if (senhaInput.value !== confirmaSenhaInput.value) {
+                e.preventDefault();
+                errorMessage.textContent = "As senhas não coincidem.";
+                errorMessage.style.display = "block";
+            }
+        });
     </script>
 </body>
 </html>
