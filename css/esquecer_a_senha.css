@@ -76,7 +76,7 @@ input:valid ~ label {
 .campo-obrigatorio {
     display: none;
     font-size: 14px;
-    color: #0026fd; /* Vermelho para erro */
+    color: #0026fd; /* Vermelho para erro na teoria*/
     text-align: left;
     position: absolute;
     top: 100%;
@@ -89,7 +89,7 @@ input:valid ~ label {
 .sucesso {
     display: block;
     font-size: 14px;
-    color: #0026fd; /* Verde para sucesso */
+    color: #0026fd; /* Verde para sucesso só na teoria tbm*/
     text-align: left;
     position: absolute;
     top: 100%; /* Fica diretamente abaixo do campo de input */
@@ -188,5 +188,5 @@ input:valid ~ label {
 }
 
 .back-button:hover img {
-    transform: scale(1.7); /* Efeito de aumentar o tamanho da imagem ao passar o mouse */
+    transform: scale(1.4); /* Efeito de aumentar o tamanho da imagem ao passar o mouse */
 }

@@ -118,7 +118,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     function validarSenhasEmTempoReal() {
-        if (senhaInput.value !== confirmarSenhaInput.value) {
+        const senha = senhaInput.value.trim();
+        const confirmarSenha = confirmarSenhaInput.value.trim();
+
+        if (senha === "" || confirmarSenha === "") {
+            erroConfirmarSenha.style.display = "none";
+            btnRedefinir.disabled = true;
+            btnRedefinir.style.opacity = "0.5";
+            btnRedefinir.style.cursor = "not-allowed";
+            return;
+        }
+
+        if (senha !== confirmarSenha) {
             erroConfirmarSenha.style.display = "block";
             btnRedefinir.disabled = true;
             btnRedefinir.style.opacity = "0.5";
@@ -133,9 +144,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     senhaInput.addEventListener("input", validarSenhasEmTempoReal);
     confirmarSenhaInput.addEventListener("input", validarSenhasEmTempoReal);
-
     eyeIconSenha.addEventListener("click", togglePassword);
     eyeIconConfirmarSenha.addEventListener("click", togglePassword);
-    </script>
+
+    // Dispara a validação ao carregar a página (caso o campo já tenha algo)
+    window.addEventListener("DOMContentLoaded", validarSenhasEmTempoReal);
+</script>
+
 </body>
 </html>

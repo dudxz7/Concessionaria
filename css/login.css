@@ -86,7 +86,7 @@ input:valid ~ label {
     position: absolute;
     top: 100%;
     left: 0;
-    margin-top: 3px;
+    margin-top: 8px;
     font-weight: bold;
 }
 
