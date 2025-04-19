@@ -125,7 +125,7 @@ $conn->close();
         
         <a href="cadastro_admin.php" class="btn-novo-cliente">
             <img src="../img/adicionar-usuario.png" alt="Cadastrar Funcionário" class="img-btn">
-            Cadastrar Cliente Novo
+            Cadastrar Funcionário
         </a>
 
         <form method="GET" action="">
