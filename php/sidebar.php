@@ -35,7 +35,7 @@ $email = $_SESSION['usuarioEmail'] ?? '';
                 <img src="../img/referencia.png" alt="Funções">
                 <span>Funções</span>
             </div>
-            <div class="icon-item" onclick="window.location.href='esquecer_senha.php'">
+            <div class="icon-item" onclick="window.location.href='redefinir_a_senha.php'">
                 <img src="../img/ajudando.png" alt="Esqueceu a Senha">
                 <span>Esqueceu a Senha</span>
             </div>
@@ -59,7 +59,7 @@ $email = $_SESSION['usuarioEmail'] ?? '';
                 <img src="../img/usersembarra.png" alt="Minha Conta">
                 <span>Minha conta</span>
             </div>
-            <div class="icon-item" onclick="window.location.href='esquecer_senha.php'">
+            <div class="icon-item" onclick="window.location.href='redefinir_a_senha.php'">
                 <img src="../img/ajudando.png" alt="Esqueceu a Senha">
                 <span>Esqueceu a Senha</span>
             </div>

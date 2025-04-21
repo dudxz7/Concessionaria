@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redefinir Senha</title>
-    <link rel="stylesheet" href="../css/esquecer_a_senha.css">
+    <link rel="stylesheet" href="../css/redefinir_a_senha.css">
     <link rel="icon" href="../img/senha.png">
 </head>
 <body>

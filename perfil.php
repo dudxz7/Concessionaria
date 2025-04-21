@@ -95,7 +95,7 @@ $conn->close();
                     <img src="img/usersembarra.png" alt="Minha Conta">
                     <span>Minha conta</span>
                 </div>
-                <div class="icon-item" onclick="window.location.href='php/esquecer_senha.php'">
+                <div class="icon-item" onclick="window.location.href='php/redefinir_a_senha.php'">
                     <img src="img/ajudando.png" alt="Esqueceu a Senha">
                     <span>Esqueceu a Senha</span>
                 </div>

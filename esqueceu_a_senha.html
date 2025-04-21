@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="css/es.css">
+
+    <div class="icons">
+      <a href="https://www.instagram.com/dudxzn1" class="instagram">
+        <img src="../img/insta-branco.png" alt="Instagram"  />
+      </a>
+      <a href="" class="whatsapp">
+        <img src="../img/whatsapp-branco.png" alt="Whatsapp"  />
+      </a>
+      <a href="" class="discord">
+        <img src="../img/discord-branco.png" alt="Discord"  />
+      </a>
+    </div>
+  </div>
+  
+  <script>
+    // Função para trocar a imagem ao passar o mouse
+    function trocarImagem(icone, srcHover) {
+      const img = icone.querySelector('img'); // Encontra a imagem dentro do ícone
+      const originalSrc = img.src; // Guarda o caminho original da imagem
+  
+      icone.addEventListener('mouseenter', () => {
+        img.src = srcHover; // Troca a imagem quando o mouse entra
+      });
+  
+      icone.addEventListener('mouseleave', () => {
+        img.src = originalSrc; // Volta a imagem original quando o mouse sai
+      });
+    }
+  
+    // Aplicar para cada ícone com a imagem correspondente
+    document.querySelectorAll('.instagram').forEach(icone => {
+      trocarImagem(icone, '../img/insta-colorido.png'); // Para Instagram
+    });
+  
+    document.querySelectorAll('.whatsapp').forEach(icone => {
+      trocarImagem(icone, '../img/whatsapp-colorido.png'); // Para Whatsapp
+    });
+  
+    document.querySelectorAll('.discord').forEach(icone => {
+      trocarImagem(icone, '../img/discord-colorido.png'); // Para Discord
+    });
+  </script>

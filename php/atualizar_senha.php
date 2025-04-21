@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redefinir Senha - BMW</title>
+    <title>Atualizar Senha - BMW</title>
     <link rel="stylesheet" href="../css/login.css">
     <link rel="icon" href="../img/logoofcbmw.png">
     <style>
@@ -120,18 +120,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     .mensagem {
         font-size: 14px;
-        color: #0026fd;
+        color: #0026fd; /* vermelho só se quiser */
         text-align: left;
         top: 100%;
         left: 0;
-        margin-top: -30px;
+        margin-top: -30px; 
         margin-bottom: 20px;
         font-weight: bold;
         width: 100%;
     }
 
     .mensagem.sucesso {
-        color: green;
+        color: #0026fd; /* verde só se quiser*/
     }
     </style>
 </head>
@@ -144,7 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </a>
             <h2>Redefinir Senha</h2>
 
-            <form action="redefinir_senha.php" method="POST">
+            <form action="atualizar_senha.php" method="POST">
                 <div class="campodoinput">
                     <input type="text" name="email" id="email" required spellcheck="false" autocomplete="off">
                     <label for="email">E-mail do usuário</label>
