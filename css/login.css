@@ -174,10 +174,10 @@ input:valid ~ label {
 /* Texto de registro */
 .registro-texto {
     display: flex;
-    justify-content: left;
+    justify-content: space-between; /* Para que o link "Esqueci minha senha" fique alinhado à direita */
     align-items: center;
     margin-top: 15px;
-    font-size: 16px;
+    font-size: 12px;
     color: #000;
 }
 
@@ -185,10 +185,13 @@ input:valid ~ label {
     color: #2657f2;
     font-weight: bold;
     text-decoration: underline;
-    margin-left: 5px;
     transition: 0.3s;
 }
 
 .registro-texto a:hover {
     color: #1d47c2;
+}
+
+.registro-texto .esqueci-senha {
+    margin-left: 20px; /* Distância entre o link de registro e o link de 'Esqueci minha senha' */
 }
