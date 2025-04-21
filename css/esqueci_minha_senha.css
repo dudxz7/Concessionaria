@@ -164,8 +164,8 @@ body {
     color: #f8fafc;
     background-color: #262626;
     border-radius: 8px;
-      max-width: 500px; /* ou 50%, se quiser responsivo */
-      width: 100%;
+    max-width: 500px; /* ou 50%, se quiser responsivo */
+    width: 100%;
 }
 #titulo{
   font-size: 2.25rem;
@@ -186,7 +186,43 @@ body {
   line-height: 1.6;
   max-width: 40ch; /* controla o número de caracteres por linha */
   text-align: left; /* ou justify se quiser alinhar nas bordas */
+  font-family: 'poppins';
 }
-#card strong{
-  color: #197AE1;
+#card strong {
+  background: linear-gradient(to right, #9f9f9f 0, #fff 10%, #868686 20%);
+  background-position: 0;
+  background-size: 200%;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s infinite linear;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 0;
+  }
+  60% {
+    background-position: 180px;
+  }
+  100% {
+    background-position: 180px;
+  }
+}
+
+/*Botão de voltar*/
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+}
+
+.back-button img {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.back-button:hover img {
+  transform: scale(1.2);
 }
