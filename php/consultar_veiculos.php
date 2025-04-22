@@ -76,16 +76,16 @@ $stmt->close();
 // Consulta total para paginação
 if ($filtro) {
     $sql_total = "SELECT COUNT(*) as total 
-                  FROM veiculos 
-                  JOIN modelos ON veiculos.modelo_id = modelos.id 
-                  WHERE modelos.modelo LIKE ? OR veiculos.numero_chassi LIKE ?";
+                FROM veiculos 
+                JOIN modelos ON veiculos.modelo_id = modelos.id 
+                WHERE modelos.modelo LIKE ? OR veiculos.numero_chassi LIKE ?";
     $stmt_total = $conn->prepare($sql_total);
     $stmt_total->bind_param("ss", $param, $param);
 } elseif ($letra_filtro) {
     $sql_total = "SELECT COUNT(*) as total 
-                  FROM veiculos 
-                  JOIN modelos ON veiculos.modelo_id = modelos.id 
-                  WHERE modelos.modelo LIKE ?";
+                FROM veiculos 
+                JOIN modelos ON veiculos.modelo_id = modelos.id 
+                WHERE modelos.modelo LIKE ?";
     $stmt_total = $conn->prepare($sql_total);
     $stmt_total->bind_param("s", $param);
 } else {

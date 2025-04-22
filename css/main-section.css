@@ -100,7 +100,7 @@
     height: 32px;
     object-fit: contain; /* Garante que a imagem mantenha proporção */
     display: block; /* Remove espaços fantasmas abaixo da imagem */
-    transition: transform 0.2s ease-in-out;
+    transition: filter 0.3s ease; /* Transição para o brilho */
 }
 
 .heart-icon:hover {
@@ -158,23 +158,21 @@
 
 .rating {
     display: flex;
-    align-items: center; /* Alinha verticalmente ao centro */
-    justify-content: flex-start; /* Alinha à esquerda */
-    gap: 4px;
+    align-items: center; /* Alinha a estrela e a nota no centro verticalmente */
+    justify-content: center; /* Centraliza a estrela e a nota horizontalmente */
+    gap: 5px; /* Espaço entre as estrelas e o número */
+    opacity: 0.77;
     margin: 10px 0;
 }
 
 .rating img {
-    width: 16px;
-    height: 16px;
-    display: inline-block;
+    width: 20px; /* Ajuste o tamanho da estrela */
+    height: 20px;
 }
 
-.rating .nota {
-    font-size: 13px;
-    color: #444;
-    line-height: 16px; /* Igual à altura da estrela */
-    display: inline-block;
+.nota {
+    font-size: 14px; /* Ajuste o tamanho da nota */
+    color: #000;
 }
 
 .btn-send {
@@ -220,4 +218,100 @@
 .view-all button:hover {
     background-color: black;
     color: white;
+}
+.chamado-promocoes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin: 40px 0;
+    flex-wrap: wrap;
+}
+
+.chamado-promocoes img {
+    width: 55px; /* ajuste conforme desejar */
+    height: auto;
+    display: block;
+}
+
+.chamado-promocoes h2 {
+    font-size: 40px;
+    color: #000;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    line-height: 1.2;
+    display: flex;
+    align-items: center; /* garante que o texto e a imagem fiquem centralizados */
+    gap: 6px;
+}
+
+.chamado-promocoes span {
+    color: #2657F2;
+    font-weight: bold;
+    font-size: 40px;
+    font-family: 'Inter', sans-serif;
+}
+.preco-promocao {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 10px;
+    align-items: flex-start; /* Isso já ajuda todos a irem pra esquerda */
+}
+
+.preco-antigo{
+    text-decoration: line-through;
+    font-size: 16px;
+    margin: 0;
+    align-self: flex-start; /* Garante que fique alinhado à esquerda */
+    margin-top: -8px !important;
+    color: gray !important; 
+}
+
+.preco-novo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.preco-novo h2 {
+    color: #000;
+    margin: 0;
+    font-size: 22px;
+}
+
+.desconto {
+    background-color: #2657f2;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 14px;
+}
+/* Partícula de para o .heart-icon */
+
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, #ff9ac9, #ff2ea6, #f9595f);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: explode 800ms ease-out forwards;
+    z-index: 9999;
+    filter: blur(0.5px);
+    opacity: 0.8;
+    transform: scale(1);
+}
+
+@keyframes explode {
+    0% {
+        transform: scale(1) translate(0, 0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.2) translate(var(--x), var(--y)) rotate(360deg);
+        opacity: 0;
+    }
 }
