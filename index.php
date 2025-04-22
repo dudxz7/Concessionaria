@@ -256,6 +256,9 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] : "Cidade - Estado";
                     Estou interessado
                 </button>
             </div>
+            <div class="view-all">
+                <button>Ver todos os ofertas</button>
+            </div>
         </div>
     
 <script src="js/index.js" type="module"></script>

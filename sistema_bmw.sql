@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 07/04/2025 às 07:10
+-- Tempo de geração: 22/04/2025 às 05:27
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -50,10 +50,10 @@ CREATE TABLE `clientes` (
 --
 
 INSERT INTO `clientes` (`id`, `nome_completo`, `email`, `cpf`, `telefone`, `rg`, `cidade`, `estado`, `cnh`, `senha`, `admin`, `cargo`, `endereco`, `pis`, `registrado_em`) VALUES
-(1, 'a', 'a@gmail.com', '111.111.111-11', '(11) 11111-1122', '1111111111-1', 'XIQUE XIQUE ', 'SP', '11111111111', '$2y$10$io0pIXUD0YCmXCLRKY745O5EnMW6zS8LoSKllppvsAN/7DhGFPqZ6', 0, 'Funcionario', 'Rua Fulano de Tal, numero 11', '00000000001', '2025-03-25 14:57:44'),
-(3, 'dudu', 'teste@gmail.com', '111.111.111-12', '(11) 11111-1112', '1111111111-2', 'FORTALEZA', 'CE', '11111111112', '$2y$10$wm95eVC6ziG0vUNZn2UEz.nSFqbmjXngSdtXT/sqC8EHNlGW4Xm8C', 0, 'Cliente', '', NULL, '2025-03-25 14:57:44'),
+(1, 'a', 'a@gmail.com', '111.111.111-11', '(11) 11111-1122', '1111111111-1', 'XIQUE XIQUE ', 'SP', '11111111111', '$2y$10$qz4/R1dWGZ2XZiS8pJyUOunwuI6vWpJrhJFt3Lev36iOgEqiU9kg.', 0, 'Funcionario', 'Rua Fulano de Tal, numero 11', '00000000001', '2025-03-25 14:57:44'),
+(3, 'dudu', 'teste@gmail.com', '111.111.111-12', '(11) 11111-1212', '1111111111-2', 'FORTALEZA', 'CE', '11111111112', '$2y$10$wm95eVC6ziG0vUNZn2UEz.nSFqbmjXngSdtXT/sqC8EHNlGW4Xm8C', 0, 'Cliente', '', NULL, '2025-03-25 14:57:44'),
 (5, 'ana', 'analinda@gmail.com', '111.111.111-13', '(11) 11111-1113', '1111111111-3', 'SAO PAULO', 'SP', '11111111113', '$2y$10$u0m/mLqzNLsVbYLFcNEJCOdcbIVEPIr8bkWlqP0jnyHQYkAC.hBS6', 0, 'Cliente', '', NULL, '2025-03-25 14:57:44'),
-(8, 'Administrador', 'admin@gmail.com', '12345678910', '999999999', '111234567', 'Fortal', 'CE', '222123456', '$2y$10$fjmwvZiAFB3Fl95KWYKPkufmIlXQDJjMpRXuKtCTED9Txp0R3lWuy', 1, 'Admin', '', NULL, '2025-03-25 14:57:44'),
+(8, 'Administrador', 'admin@gmail.com', '12345678910', '999999999', '111234567', 'Fortal', 'CE', '222123456', '$2y$10$Afu4U38UJS88pOf2KtkJ2.3Y9e0BTp11WYhPFADyKYl.2Cl4LF.Bu', 1, 'Admin', '', NULL, '2025-03-25 14:57:44'),
 (10, 'Isabelly', 'mcqwwr@gmail.com', '111.111.111-14', '(11) 11111-1114', '1111111111-4', 'FORTALEZA', 'CE', '11111111114', '$2y$10$.XzfcmcxeXy64iSFw4psS.jTOt5u.3JRyiPPNs2hoJ3f85GxNeznG', 0, 'Cliente', '', NULL, '2025-03-25 14:57:44'),
 (11, 'Tati Zaqui', 'tati@gmail.com', '111.111.111-15', '(11) 11111-1115', '1111111111-5', 'FORTALEZA', 'CE', '11111111115', '$2y$10$80Gs.agwOSvLU0vIQYM/LOs64/3SmkZI8bhgjohCtqdslZepA9zWm', 0, 'Cliente', '', NULL, '2025-03-25 14:57:44'),
 (12, 'dudu ', 'd@gmail.com', '111.111.111-16', '(11) 11111-1116', '1111111111-6', 'PINDAMONHAGABAA', 'AC', '11111111116', '$2y$10$zldDKpzpBKpBXyTcG1cyEu2mk9TAd3DN7Tk4PxxQw2h0c2skTvCzO', 0, 'Cliente', '', NULL, '2025-03-25 14:57:44'),
@@ -62,8 +62,9 @@ INSERT INTO `clientes` (`id`, `nome_completo`, `email`, `cpf`, `telefone`, `rg`,
 (31, 'Carlos Oliveira', 'cliente3@gmail.com', '99999999992', '9999999992', '9999992', 'Belo Horizonte', 'MG', '9999999992', '$2y$10$l6EjlBQTdZN7BGWWX220JeaaTMctM0XFBHoeqqLpn02Se4byK0F26', 0, 'Cliente', '', NULL, '2025-03-25 16:19:09'),
 (32, 'Ana Costa', 'cliente4@gmail.com', '99999999993', '9999999993', '9999993', 'Curitiba', 'PR', '9999999993', '$2y$10$Wu7YFYBb4fStqls/5bjdLOQHixx5t5gPgdTmkEPJ0oexTXk8kadIi', 0, 'Cliente', '', NULL, '2025-03-25 16:19:09'),
 (33, 'Menina da gym', 'bixaboa@gmail.com', '111.111.111-17', '(11) 11111-1117', '1111111111-7', 'FORTALEZA', 'CE', '11111111117', '$2y$10$B.KZZg8j.u15bre/kEI8q.9AF/olwFSa3UwhPXkwBjdPzWFdtNEVK', 0, 'Cliente', '', NULL, '2025-03-25 22:08:59'),
-(34, 'Paris Morgan', 'parismorgan@gmail.com', '111.111.111-18', '(11) 11111-1118', '1111111111-8', 'BROOKLYN', 'RJ', '1111111118', '$2y$10$nxMkgbKA74vI1T2dxBHCvemB3axWCG15srDtY8x2RIp6IjWiabjC.', 0, 'Gerente', 'Rua bem ali no escuro 10', NULL, '2025-04-07 01:58:39'),
-(35, 'Megan Fox', 'megan@gmail.com', '111.111.111-19', '(11) 11111-1119', '1111111111-9', 'WASHINTON DC', 'RJ', '1111111119', '$2y$10$TrMH8y9grAvQn2O5iL7g7OLpLhl74IBjD3KJiv/HAWW10u0.YvEPi', 0, 'Gerente', 'Rua Fulano de Tal, numero 15', '00000000003', '2025-04-07 02:03:10');
+(34, 'Paris Morgan', 'parismorgan@gmail.com', '111.111.111-18', '(11) 11111-1118', '1111111111-8', 'BROOKLYN', 'RJ', '1111111118', '$2y$10$nxMkgbKA74vI1T2dxBHCvemB3axWCG15srDtY8x2RIp6IjWiabjC.', 0, 'Gerente', 'Rua bem ali no escuro 101', '00000000002', '2025-04-07 01:58:39'),
+(35, 'Megan Fox', 'meganfox@gmail.com', '111.111.111-19', '(11) 11111-1119', '1111111111-9', 'WASHINTON DC', 'RJ', '1111111119', '$2y$10$TrMH8y9grAvQn2O5iL7g7OLpLhl74IBjD3KJiv/HAWW10u0.YvEPi', 0, 'Gerente', 'Rua Fulano de Tal, numero 15', '00000000003', '2025-04-07 02:03:10'),
+(36, 'Malelly', 'malellysg@gmail.com', '111.111.111-20', '(11) 11111-1120', '1111111112-0', 'BROOKLYN', 'RS', '11111111120', '$2y$10$uW32HaTajccA8AQdIi9Rl.aOYNNMMRb2BJwLBbc0/U5g7nJUbU9X2', 0, 'Gerente', 'Rua bem ali 1020', '00000000004', '2025-04-12 18:34:39');
 
 -- --------------------------------------------------------
 
@@ -229,7 +230,7 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de tabela `estoque`
