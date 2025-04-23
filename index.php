@@ -29,7 +29,7 @@ $capitais = [
 
 // Definir a capital com base no estado do usuário
 $estado = isset($_SESSION['usuarioEstado']) ? $_SESSION['usuarioEstado'] : "";
-$capital = isset($capitais[$estado]) ? $capitais[$estado] : "Cidade - Estado";
+$capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "Cidade - Estado";
 ?>
 
 <!DOCTYPE html>

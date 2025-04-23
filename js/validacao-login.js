@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (document.querySelector("#senha").closest(".campodoinput").classList.contains("erro")) {
             eyeIcon.style.right = "40px"; // Move o ícone para a esquerda quando erro
         } else {
-            eyeIcon.style.right = "10px"; // Posição normal quando não há erro
+            eyeIcon.style.right = "20px"; // Posição normal quando não há erro
         }
     }
 
