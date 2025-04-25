@@ -253,36 +253,150 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
                 </button>
             </div>
             <div class="view-all">
-                <button>Ver todos os ofertas</button>
+                <button>Ver todas as ofertas</button>
             </div>
         </div>
 
     </div>
 
-    <!-- Agora a section "porque-comprar" está fora da div main-content -->
     <section class="porque-comprar">
         <h2>Porque comprar conosco?</h2>
         <div class="beneficios-container">
             <div class="beneficio">
                 <img src="img/verificacao.png" alt="Experiência">
                 <h3>Experiência e conhecimento</h3>
-                <p>Mais de uma década entendendo o que move você. Nossos especialistas dominam cada detalhe do universo automotivo. Com a gente, você não só compra um carro, você faz a escolha certa, com quem entende do assunto.</p>
+                <p>Mais de uma década entendendo o que move você. Nossos especialistas dominam cada detalhe do universo
+                    automotivo. Com a gente, você não só compra um carro, você faz a escolha certa, com quem entende do
+                    assunto.</p>
             </div>
             <div class="beneficio">
                 <img src="img/transparencia.png" alt="Transparência">
                 <h3>Transparência e honestidade</h3>
-                <p>A confiança é a base de qualquer relação de sucesso. Trabalhamos com total transparência, garantindo que você saiba exatamente o que está adquirindo. Nosso compromisso é ser claro e honesto em todas as etapas da sua compra, sem surpresas</p>
+                <p>A confiança é a base de qualquer relação de sucesso. Trabalhamos com total transparência, garantindo
+                    que você saiba exatamente o que está adquirindo. Nosso compromisso é ser claro e honesto em todas as
+                    etapas da sua compra, sem surpresas</p>
             </div>
             <div class="beneficio">
                 <img src="img/distintivo.png" alt="Qualidade">
                 <h3>Qualidade garantida</h3>
-                <p>Oferecemos apenas veículos de altíssima qualidade, com garantia de desempenho e durabilidade. Cada carro passa por rigorosos testes antes de ser oferecido. Com a gente, você tem a certeza de que está adquirindo o melhor do mercado.</p>
+                <p>Oferecemos apenas veículos de altíssima qualidade, com garantia de desempenho e durabilidade. Cada
+                    carro passa por rigorosos testes antes de ser oferecido. Com a gente, você tem a certeza de que está
+                    adquirindo o melhor do mercado.</p>
             </div>
             <div class="beneficio">
                 <img src="img/agente-de-atendimento-ao-cliente.png" alt="Atendimento">
                 <h3>Atendimento excepcional</h3>
-                <p>Nossa missão é entender suas necessidades para oferecer a melhor solução. Cada cliente recebe a atenção exclusiva para encontrar o carro ideal. A experiência de compra é única, pois personalizamos o atendimento para você.</p>
+                <p>Nossa missão é entender suas necessidades para oferecer a melhor solução. Cada cliente recebe a
+                    atenção exclusiva para encontrar o carro ideal. A experiência de compra é única, pois personalizamos
+                    o atendimento para você.</p>
             </div>
+        </div>
+    </section>
+
+    <section class="feedback-section">
+        <div class="avaliacao">
+            <p>
+                Avaliação 5,0
+                <img src="img/estrela.png" alt="Estrela">
+                <img src="img/estrela.png" alt="Estrela">
+                <img src="img/estrela.png" alt="Estrela">
+                <img src="img/estrela.png" alt="Estrela">
+                <img src="img/estrela.png" alt="Estrela">
+            </p>
+        </div>
+
+        <h2 class="chamado-feedback">Veja o que estão <span class="destaque">falando sobre nós</span></h2>
+        <p class="mensagem-sub">Mensagens de feedback espontâneas recebidas em nosso canal de suporte</p>
+
+
+        <div class="feedback-cards-container">
+            <div class="feedback-card">
+                <div class="img-canto-superior">
+                    <img src="img/pontos.png" alt="Imagem no Canto Superior Direito">
+                </div>
+                <div class="perfil">
+                    <img src="img/foto-default.svg" alt="Foto de perfil" class="foto-usuario">
+                    <div>
+                        <h3 class="nome">Ricardo Monteiro</h3>
+                        <p class="cargo">Analista de Logística</p>
+                    </div>
+                </div>
+                <p class="mensagem">
+                    "A melhor experiência que já tive comprando um carro! Desde o primeiro atendimento até a entrega,
+                    tudo foi impecável. A equipe foi super atenciosa, tirou todas as minhas dúvidas e me ajudou a
+                    encontrar o carro perfeito pra minha necessidade. Dá pra ver que eles realmente entendem do que
+                    estão falando. Recomendo de olhos fechados!"
+                </p>
+                <div class="acoes">
+                    <div class="acao">
+                        <img src="img/gostar.png" alt="Curtir">
+                        <span>Gostei</span>
+                    </div>
+                    <div class="acao">
+                        <img src="img/compartilhar.png" alt="Compartilhar">
+                        <span>Compartilhar</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-card">
+                <div class="img-canto-superior">
+                    <img src="img/pontos.png" alt="Imagem no Canto Superior Direito">
+                </div>
+                <div class="perfil">
+                    <img src="img/foto-default.svg" alt="Foto de perfil" class="foto-usuario">
+                    <div>
+                        <h3 class="nome">Lucas Pereira</h3>
+                        <p class="cargo">Gerente de Vendas</p>
+                    </div>
+                </div>
+                <p class="mensagem">
+                    "Tive uma experiência incrível! Desde o atendimento até a entrega do meu novo carro, tudo foi muito
+                    bem organizado e com muita atenção aos detalhes. A equipe me ajudou a escolher o modelo perfeito
+                    para minha família, e eu fiquei extremamente satisfeito com o resultado. Super recomendo a todos!"
+                </p>
+                <div class="acoes">
+                    <div class="acao">
+                        <img src="img/gostar.png" alt="Curtir">
+                        <span>Gostei</span>
+                    </div>
+                    <div class="acao">
+                        <img src="img/compartilhar.png" alt="Compartilhar">
+                        <span>Compartilhar</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Feedback de mulher (comprou um carro) -->
+            <div class="feedback-card">
+                <div class="img-canto-superior">
+                    <img src="img/pontos.png" alt="Imagem no Canto Superior Direito">
+                </div>
+                <div class="perfil">
+                    <img src="img/foto-default.svg" alt="Foto de perfil" class="foto-usuario">
+                    <div>
+                        <h3 class="nome">Ana Souza</h3>
+                        <p class="cargo">Coordenadora de Marketing</p>
+                    </div>
+                </div>
+                <p class="mensagem">
+                    "Acabei de comprar um BMW X1 e não poderia estar mais feliz com a minha escolha! O atendimento foi
+                    impecável do começo ao fim, e a equipe foi super paciente em me explicar todas as opções. A entrega
+                    foi rápida, e o carro está perfeito, com o design incrível e o conforto que eu precisava. Estou
+                    apaixonada pelo desempenho e pela tecnologia do modelo. Super recomendo a experiência!"
+                </p>
+                <div class="acoes">
+                    <div class="acao">
+                        <img src="img/gostar.png" alt="Curtir">
+                        <span>Gostei</span>
+                    </div>
+                    <div class="acao">
+                        <img src="img/compartilhar.png" alt="Compartilhar">
+                        <span>Compartilhar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         </div>
     </section>
     <script src="js/index.js" type="module"></script>

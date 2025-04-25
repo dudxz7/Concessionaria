@@ -1,0 +1,152 @@
+.feedback-section {
+    background-color: #000;
+    text-align: center;
+    padding: 40px 20px;
+    font-family: 'Poppins', Arial, sans-serif;
+}
+
+.feedback-section .avaliacao p {
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    margin-bottom: 50px;
+}
+
+.feedback-section h2 {
+    font-size: 24px;
+    margin-top: 10px;
+}
+
+.feedback-section .destaque {
+    color: #007bff;
+}
+
+.feedback-section .mensagem {
+    font-size: 14px;
+    color: #000000;
+    margin-bottom: 30px;
+}
+
+/* Novo contêiner flex para os cards */
+.feedback-cards-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center; /* Garante que os cards se espalhem igualmente */
+    flex-wrap: wrap; /* Permite que os cards quebrem para a linha de baixo quando necessário */
+    align-items: stretch; /* Faz com que todos os cards tenham a mesma altura */
+}
+
+.feedback-card {
+    background-color: #d9d9d9;
+    padding: 20px;
+    border-radius: 28px;
+    max-width: 350px;
+    text-align: left;
+    position: relative;
+    flex: 1 1 calc(33.33% - 20px); /* Ajusta a largura dos cards, permitindo 3 por linha */
+    box-sizing: border-box; /* Para incluir o padding na largura */
+    min-width: 280px; /* Definindo um tamanho mínimo para os cards */
+    display: flex;
+    flex-direction: column; /* Organiza o conteúdo do card verticalmente */
+    justify-content: space-between; /* Preenche o espaço entre o conteúdo, esticando o card */
+    min-height: 400px; /* Definindo uma altura mínima para garantir que os cards tenham a mesma altura */
+}
+
+.feedback-card .img-canto-superior {
+    position: absolute;
+    top: 8px;
+    right: 13px;
+    z-index: 10;
+}
+
+.feedback-card .img-canto-superior img {
+    max-width: 50px;
+    height: auto;
+}
+
+.feedback-card .perfil {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.feedback-card .foto-usuario {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.feedback-card .cargo {
+    font-size: 15px;
+    color: #525050;
+    margin-top: -25px;
+    font-weight: 600;
+}
+
+.feedback-card .mensagem {
+    font-size: 14px;
+    margin-bottom: 30px;
+    line-height: 1.4;
+    text-align: left;
+    opacity: 0.88;
+    flex-grow: 1; /* Faz com que o texto ocupe o espaço disponível e ajude no estiramento */
+}
+
+.feedback-card .acoes {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+    justify-content: center; /* Garante que as ações fiquem centralizadas */
+    align-items: center; /* Alinha as ações verticalmente */
+    height: 50px; /* Define uma altura fixa para a área de ações */
+}
+
+.feedback-card .icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.feedback-section .avaliacao img {
+    width: 20px;
+    height: 20px;
+    margin-top: -4px;
+    margin-left: -6px;
+    vertical-align: middle;
+}
+
+.feedback-card .acoes {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+    justify-content: flex-start; /* Alinha as ações à esquerda */
+    align-items: center;
+    height: 50px;
+}
+
+
+.feedback-section .acao {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    opacity: 0.88;
+    height: 100%; /* Faz as ações tomarem toda a altura da área de ações */
+}
+
+.feedback-section .acao img {
+    width: 20px;
+    height: 20px;
+}
+
+.chamado-feedback {
+    color: #fff;
+}
+
+.feedback-card h3 {
+    font-size: 1.4rem;
+}
