@@ -1,0 +1,54 @@
+
+.porque-comprar {
+    background-color: #000;
+    color: #fff;
+    padding: 60px 20px;
+    width: auto;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+.porque-comprar h2 {
+    font-size: 2rem;
+    margin-top: 10px;
+    margin-bottom: 60px;
+}
+
+.beneficios-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.beneficio {
+    background-color: #1a1a1a;
+    border-radius: 16px;
+    padding: 24px;
+    width: 260px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.beneficio:hover {
+    transform: scale(1.05);
+}
+
+.beneficio img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 2px;
+}
+
+.beneficio h3 {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: #fff;
+}
+
+.beneficio p {
+    font-size: 0.95rem;
+    text-align: left;
+    color: #AAAAAA;
+}
