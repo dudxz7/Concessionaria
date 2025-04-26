@@ -128,6 +128,7 @@
     min-height: 400px; /* Garante uma altura mínima para todos os cards */
     box-sizing: border-box; /* Inclui o padding na contagem de altura e largura */
     position: relative;
+    font-family: 'Poppins', Arial;
 }
 
 .card img {

@@ -397,7 +397,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
             </div>
         </div>
     </section>
-    
+
     <section class="faq-section">
         <h2 class="faq-title">Perguntas e respostas (FAQ)</h2>
 
@@ -479,17 +479,17 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
         </div>
     </section>
     <section class="suporte-section">
-  <h2 class="suporte-title">Ainda ficou com dúvidas ?</h2>
-  <p class="suporte-subtitle">
-    Nosso time de <strong>SUPORTE</strong> está pronto para te atender com agilidade<br>
-    através do Whatsapp, é só tocar no botão abaixo.
-  </p>
-  
-  <a href="" target="_blank" class="suporte-button">
-    <img src="img/whatsapp-preto.png" alt="WhatsApp">
-    FALAR COM O SUPORTE
-  </a>
-</section>
+        <h2 class="suporte-title">Ainda ficou com dúvidas ?</h2>
+        <p class="suporte-subtitle">
+            Nosso time de <strong>SUPORTE</strong> está pronto para te atender com agilidade<br>
+            através do Whatsapp, é só tocar no botão abaixo.
+        </p>
+
+        <a href="#" target="_blank" class="suporte-button">
+            <img src="img/whatsapp-preto.png" alt="WhatsApp">
+            FALAR COM O SUPORTE
+        </a>
+    </section>
 
     <script src="js/index.js" type="module"></script>
 </body>
