@@ -305,7 +305,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
             </p>
         </div>
 
-        <h2 class="chamado-feedback">Veja o que estão <span class="destaque">falando sobre nós</span></h2>
+        <h2 class="chamado-feedback">Veja o que estão <span class="destaque">falando sobre nós!</span></h2>
         <p class="mensagem-sub">Mensagens de feedback espontâneas recebidas em nosso canal de suporte</p>
 
 
@@ -476,9 +476,21 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
                     <p>Sim! Trabalhamos com veículos seminovos de excelente procedência e revisados.</p>
                 </div>
             </div>
-
         </div>
     </section>
+    <section class="suporte-section">
+  <h2 class="suporte-title">Ainda ficou com dúvidas ?</h2>
+  <p class="suporte-subtitle">
+    Nosso time de <strong>SUPORTE</strong> está pronto para te atender com agilidade<br>
+    através do Whatsapp, é só tocar no botão abaixo.
+  </p>
+  
+  <a href="" target="_blank" class="suporte-button">
+    <img src="img/whatsapp-preto.png" alt="WhatsApp">
+    FALAR COM O SUPORTE
+  </a>
+</section>
+
     <script src="js/index.js" type="module"></script>
 </body>
 </html>
