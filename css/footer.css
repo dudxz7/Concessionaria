@@ -110,6 +110,7 @@
 }
 
 .social-icons a img:hover {
+    filter: none;
     transform: scale(1.2);
 }
 
