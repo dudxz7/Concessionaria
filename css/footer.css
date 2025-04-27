@@ -1,0 +1,141 @@
+.footer {
+    background-color: #000;
+    color: #ccc;
+    font-family: 'Poppins', Arial, sans-serif;
+    padding: 50px 20px 20px 20px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.footer-top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.footer-logo,
+.footer-links,
+.footer-contact,
+.footer-social {
+    flex: 1 1 200px;
+    /* ocupa 1 parte flexível com mínimo de 200px */
+}
+
+.footer-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-logo img {
+    width: 120px;
+    margin-bottom: 10px;
+}
+
+.footer-logo p {
+    font-size: 14px;
+    color: #999;
+    margin-top: 10px;
+    max-width: 250px;
+    line-height: 1.5;
+}
+
+.footer-links h4,
+.footer-contact h4,
+.footer-social h4 {
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.footer-links ul,
+.footer-contact ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links ul li,
+.footer-contact ul li {
+    margin-bottom: 8px;
+}
+
+.footer-links ul li a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.footer-links ul li a:hover {
+    color: #409ef7;
+}
+
+.footer-contact ul li {
+    display: flex;
+    align-items: center;
+    color: #ccc;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.footer-contact ul li img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.footer-social {
+    display: flex;
+    flex-direction: column;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a img {
+    width: 30px;
+    height: 30px;
+    filter: brightness(0) invert(1);
+    transition: transform 0.3s ease;
+}
+
+.social-icons a img:hover {
+    transform: scale(1.2);
+}
+
+.footer-bottom {
+    border-top: 1px solid #333;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.footer-bottom p {
+    font-size: 12px;
+    color: #777;
+}
+
+.footer-bottom p {
+    font-size: 12px;
+    color: #777;
+}
+
+.footer-bottom p a {
+    color: #777;
+    text-decoration: none;
+    margin: 0 5px;
+    transition: color 0.3s;
+}
+
+.footer-bottom p a:hover {
+    color: #3498db;
+}

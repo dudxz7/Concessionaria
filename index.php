@@ -34,6 +34,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,6 +42,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
     <link rel="stylesheet" href="css/index.css">
     <link rel="icon" href="img/logoofcbmw.png">
 </head>
+
 <body>
 
     <!-- Tela inicial com a imagem de fundo -->
@@ -67,7 +69,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
     </div>
 
     <!-- Conteúdo da página que aparece ao rolar -->
-    <div class="main-content">
+    <div class="main-content" id="main">
         <div class="search-bar-wrapper">
             <h2 class="titulo-oferta">ENCONTRE UMA OFERTA</h2>
 
@@ -491,6 +493,81 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
         </a>
     </section>
 
+    <section class="atendimento-banner">
+        <p>
+            Nossos canais de atendimento são 100% digitais. Precisa de ajuda?
+            <a href="">CLIQUE AQUI</a>
+        </p>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+
+            <div class="footer-top">
+
+                <div class="footer-logo">
+                    <img src="img/logoofcbmw.png" alt="BMW Logo">
+                    <p>BMW Motors: Inovação, desempenho e paixão por dirigir.</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Links rápidos</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#main">Veículos</a></li>
+                        <li><a href="#">Serviços</a></li>
+                        <li><a href="#">Sobre nós</a></li>
+                        <li><a href="#">Contato</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Contato</h4>
+                    <ul>
+                        <li>
+                            <img src="img/email-branco.png" alt="Email ícone">
+                            atendimento@bmwmotors.com
+                        </li>
+                        <li>
+                            <img src="img/tel-branco.png" alt="Telefone ícone">
+                            (11) 1234-5678
+                        </li>
+                        <li>
+                            <img src="img/pin-de-localizacao-branco.png" alt="Endereço ícone">
+                            Av. BMW, 123 - São Paulo
+                        </li>
+                        <li>
+                            <img src="img/relogio-branco.png" alt="Relógio ícone">
+                            Seg à Sex 09:00 às 19:00
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-social">
+                    <h4>Redes sociais</h4>
+                    <div class="social-icons">
+                        <a href="#https://www.instagram.com/dudxzn1" ><img src="img/insta-branco.png" alt="Instagram"></a>
+                        <a href="" ><img src="img/whatsapp-branco.png" alt="WhatsApp"></a>
+                        <a href="#https://www.facebook.com"><img src="img/face-branco.png" alt="Facebook"></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                <p>
+                    © 2025 BMW Motors. Todos os direitos reservados.
+                    | <a href="#">Termos de Uso</a>
+                    | <a href="#">Política de Privacidade</a>
+                </p>
+            </div>
+
+
+        </div>
+    </footer>
+
+
     <script src="js/index.js" type="module"></script>
+
 </body>
 </html>
