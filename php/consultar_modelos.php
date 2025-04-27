@@ -44,12 +44,24 @@ $limite = 10;
 $pagina_atual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_atual - 1) * $limite;
 
-// Query base
-$sql_base = "SELECT * FROM modelos WHERE 1=1";
-$params = [];
-$tipos = "";
+// Query base com JOIN para contar o estoque
+$sql_base = "
+    SELECT 
+        modelos.id AS modelo_id, 
+        modelos.modelo, 
+        modelos.fabricante, 
+        modelos.ano, 
+        modelos.preco, 
+        modelos.cor, 
+        COUNT(veiculos.id) AS estoque
+    FROM modelos
+    LEFT JOIN veiculos ON veiculos.modelo_id = modelos.id
+    WHERE 1=1
+";
 
 // Adiciona filtro por busca
+$params = [];
+$tipos = "";
 if (!empty($filtro)) {
     $sql_base .= " AND (modelo LIKE ? OR fabricante LIKE ?)";
     $busca = "%$filtro%";
@@ -65,6 +77,8 @@ if (!empty($letra_filtro)) {
     $params[] = &$letra;
     $tipos .= "s";
 }
+
+$sql_base .= " GROUP BY modelos.id"; // Agrupar por modelo
 
 // Consulta total de resultados
 $stmt_total = $conn->prepare($sql_base);
@@ -146,21 +160,23 @@ $result = $stmt->get_result();
                     <th>Fabricante</th>
                     <th>Ano</th>
                     <th>Preço</th>
-                    <th>Cores</th>
+                    <th>Cor</th>
+                    <th>Estoque</th> <!-- Coluna para Estoque -->
                     <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <tr>
-                        <td><?php echo $row['id']; ?></td>
+                        <td><?php echo $row['modelo_id']; ?></td>
                         <td><?php echo $row['modelo']; ?></td>
                         <td><?php echo $row['fabricante']; ?></td>
                         <td><?php echo $row['ano']; ?></td>
                         <td>R$ <?php echo number_format($row['preco'], 2, ',', '.'); ?></td>
                         <td><?php echo $row['cor']; ?></td>
+                        <td><?php echo $row['estoque']; ?></td> <!-- Exibe o estoque -->
                         <td>
-                            <a class="a-btn" href="editar_modelo.php?id=<?php echo $row['id']; ?>">
+                            <a class="a-btn" href="editar_modelo.php?id=<?php echo $row['modelo_id']; ?>">
                                 <img src="../img/editar.png" alt="Editar" class="btn-editar">
                             </a>
                         </td>
