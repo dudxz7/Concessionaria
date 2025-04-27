@@ -13,6 +13,35 @@
     gap: 40px;
 }
 
+.footer-strip {
+    width: 100%;
+    height: 50px;  /* Mantém a altura do footer */
+    background: linear-gradient(
+        to bottom,
+        #DD001F 0%,
+        #DD001F 33%,  /* Primeira cor ocupa 33% */
+        #0424AB 33%,  /* Segunda cor começa a 33% */
+        #0424AB 66%,  /* Segunda cor vai até 66% */
+        #00D3E9 66%,  /* Terceira cor começa a 66% */
+        #00D3E9 100%  /* Terceira cor vai até 100% */
+    );
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;  /* Aumenta a margem inferior da .footer-strip */
+}
+
+.footer-logo-top {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.footer-logo-top img {
+    height: 100px;  /* Ajusta o tamanho da logo */
+}
+
 .footer-top {
     display: flex;
     justify-content: space-between;  /* Espaço entre a logo e os links */
@@ -31,7 +60,7 @@
 }
 
 .footer-logo {
-    margin-top: 25px;
+    padding-top: 25px;
     display: flex;
     flex-direction: column;
     align-items: flex-start; /* Garante que a logo fique à esquerda */
@@ -137,32 +166,4 @@
 
 .footer-bottom p a:hover {
     color: #3498db;
-}
-.footer-strip {
-    width: 100%;
-    height: 50px;  /* Mantém a altura do footer */
-    background: linear-gradient(
-        to bottom,
-        #DD001F 0%,
-        #DD001F 33%,  /* Primeira cor ocupa 33% */
-        #0424AB 33%,  /* Segunda cor começa a 33% */
-        #0424AB 66%,  /* Segunda cor vai até 66% */
-        #00D3E9 66%,  /* Terceira cor começa a 66% */
-        #00D3E9 100%  /* Terceira cor vai até 100% */
-    );
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 40px;  /* Aumenta a margem inferior da .footer-strip */
-}
-
-.footer-logo-top {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.footer-logo-top img {
-    height: 100px;  /* Ajusta o tamanho da logo */
 }
