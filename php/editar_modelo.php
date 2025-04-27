@@ -1,36 +1,129 @@
 <?php
 session_start();
-include('conexao.php');
 
-// Verifica se o usuário está logado
-if (!isset($_SESSION['usuarioCargo'])) {
-    echo "<h2>Acesso Negado</h2>";
-    echo "<p>Você não tem permissão para acessar esta página.</p>";
+// Verificar se o usuário está logado
+if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioLogado'] !== true) {
+    header("Location: ../login.html");
     exit;
 }
 
-// Permite apenas Funcionario, Gerente ou Admin
-$cargosPermitidos = ['Gerente', 'Admin'];
-if (!in_array($_SESSION['usuarioCargo'], $cargosPermitidos)) {
-    echo "<h2>Acesso Negado</h2>";
-    echo "<p>Você não tem permissão para acessar esta página.</p>";
+// Conexão
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db = "sistema_bmw";
+
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die("Falha na conexão: " . $conn->connect_error);
+}
+
+// Verificar se o usuário é Admin ou Gerente
+$usuarioId = $_SESSION['usuarioId'] ?? null;
+
+if ($usuarioId) {
+    $sqlCargo = "SELECT cargo FROM clientes WHERE id = ?";
+    $stmtCargo = $conn->prepare($sqlCargo);
+    $stmtCargo->bind_param("i", $usuarioId);
+    $stmtCargo->execute();
+    $resultadoCargo = $stmtCargo->get_result();
+    $dadosCargo = $resultadoCargo->fetch_assoc();
+
+    if (!$dadosCargo || ($dadosCargo['cargo'] !== 'Admin' && $dadosCargo['cargo'] !== 'Gerente')) {
+        echo "<h2>Acesso Negado</h2>";
+        echo "<p>Você não tem permissão para acessar esta página.</p>";
+        exit;
+    }
+    $stmtCargo->close();
+} else {
+    echo "Usuário não identificado.";
     exit;
 }
 
-// Atualizar modelo, se o formulário for enviado
+// Buscar informações do modelo
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    echo "ID do modelo não especificado.";
+    exit;
+}
+
+$modelo_id = intval($_GET['id']);
+
+// Busca dados atuais do modelo
+$sqlModelo = "SELECT modelos.*, detalhes_modelos.descricao, detalhes_modelos.imagem 
+              FROM modelos 
+              LEFT JOIN detalhes_modelos ON modelos.id = detalhes_modelos.modelo_id 
+              WHERE modelos.id = ?";
+$stmtModelo = $conn->prepare($sqlModelo);
+$stmtModelo->bind_param("i", $modelo_id);
+$stmtModelo->execute();
+$resultado = $stmtModelo->get_result();
+$modelo = $resultado->fetch_assoc();
+
+if (!$modelo) {
+    echo "Modelo não encontrado.";
+    exit;
+}
+$imagemAtual = $modelo['imagem'] ?? '';
+
+// Atualização
+$mensagem = '';
+$mensagem_tipo = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_POST['id'];
-    $modelo = $_POST['modelo'];
-    $fabricante = $_POST['fabricante'];
-    $ano = $_POST['ano'];
-    $preco = str_replace(['.', ','], ['', '.'], $_POST['preco']);
-    $cores = isset($_POST['cor']) ? implode(',', $_POST['cor']) : '';
+    $novoModelo = trim($_POST['modelo']);
+    $novoAno = intval($_POST['ano']);
+    $novoPreco = str_replace(['.', ','], ['', '.'], $_POST['preco']);
+    $novaDescricao = trim($_POST['descricao']);
+    $coresSelecionadas = isset($_POST['cor']) ? implode(',', $_POST['cor']) : '';
 
-    $stmt = $conn->prepare("UPDATE modelos SET modelo = ?, fabricante = ?, ano = ?, preco = ?, cor = ? WHERE id = ?");
-    $stmt->bind_param("sssssi", $modelo, $fabricante, $ano, $preco, $cores, $id);
+    $novaImagem = $imagemAtual; // Assume que não mudou
 
-    if ($stmt->execute()) {
-        header("Location: consultar_modelos.php?msg=atualizado");
+    // Se o usuário enviou nova imagem
+    if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
+        $nomeTemp = $_FILES['imagem']['tmp_name'];
+        $nomeImagem = basename($_FILES['imagem']['name']); // Usa o nome original do arquivo
+        $caminhoDestino = '../img/modelos/' . $nomeImagem;
+
+        if (move_uploaded_file($nomeTemp, $caminhoDestino)) {
+            // Se quiser, você pode excluir a imagem antiga aqui:
+            if (!empty($imagemAtual) && file_exists('../img/modelos/' . $imagemAtual)) {
+                unlink('../img/modelos/' . $imagemAtual);
+            }
+            $novaImagem = $nomeImagem;
+        }
+    }
+
+    // Atualizar tabela modelos
+    $stmtUpdate = $conn->prepare("UPDATE modelos SET modelo = ?, cor = ?, ano = ?, preco = ? WHERE id = ?");
+    $stmtUpdate->bind_param("ssidi", $novoModelo, $coresSelecionadas, $novoAno, $novoPreco, $modelo_id);
+    $sucessoModelo = $stmtUpdate->execute();
+    $stmtUpdate->close();
+
+    // Agora atualizar ou inserir em detalhes_modelos
+    if ($sucessoModelo) {
+        $sqlCheck = "SELECT id FROM detalhes_modelos WHERE modelo_id = ?";
+        $stmtCheck = $conn->prepare($sqlCheck);
+        $stmtCheck->bind_param("i", $modelo_id);
+        $stmtCheck->execute();
+        $resultCheck = $stmtCheck->get_result();
+        $existeDetalhes = $resultCheck->num_rows > 0;
+        $stmtCheck->close();
+
+        if ($existeDetalhes) {
+            // Se existe, faz UPDATE
+            $stmtDetalhes = $conn->prepare("UPDATE detalhes_modelos SET descricao = ?, imagem = ? WHERE modelo_id = ?");
+            $stmtDetalhes->bind_param("ssi", $novaDescricao, $novaImagem, $modelo_id);
+        } else {
+            // Se não existe, faz INSERT
+            $stmtDetalhes = $conn->prepare("INSERT INTO detalhes_modelos (descricao, imagem, modelo_id) VALUES (?, ?, ?)");
+            $stmtDetalhes->bind_param("ssi", $novaDescricao, $novaImagem, $modelo_id);
+        }
+        $sucessoDetalhes = $stmtDetalhes->execute();
+        $stmtDetalhes->close();
+    }
+
+    if ($sucessoModelo && isset($sucessoDetalhes) && $sucessoDetalhes) {
+        header("Location: consultar_modelos.php");
         exit;
     } else {
         $mensagem = "Erro ao atualizar modelo.";
@@ -38,166 +131,145 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Carregar dados para exibição do formulário
-if (!isset($_GET['id']) && !isset($_POST['id'])) {
-    header('Location: consultar_modelos.php');
-    exit;
-}
-
-$id = $_GET['id'] ?? $_POST['id'];
-$stmt = $conn->prepare("SELECT * FROM modelos WHERE id = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows === 0) {
-    echo "Modelo não encontrado!";
-    exit;
-}
-
-$modelo = $result->fetch_assoc();
-$coresSelecionadas = explode(',', $modelo['cor']);
+$conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Modelo</title>
     <link rel="stylesheet" href="../css/registro.css">
     <link rel="stylesheet" href="../css/checkbox-cor-veiculos.css">
     <link rel="icon" href="../img/logoofcbmw.png">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mask-plugin/1.14.16/jquery.mask.min.js"></script>
 </head>
+
 <body>
-<div class="container">
-    <a href="consultar_modelos.php" class="back-button">
-        <img src="../img/seta-esquerda24.png" alt="Voltar">
-    </a> 
-    <h2>Editar Modelo</h2>
-    
-    <form action="editar_modelo.php" method="post">
-        <input type="hidden" name="id" value="<?php echo $modelo['id']; ?>">
+    <div class="container">
+        <a href="consultar_modelos.php" class="back-button">
+            <img src="../img/seta-esquerda24.png" alt="Voltar">
+        </a>
+        <h2>Editar Modelo</h2>
 
-        <div class="input-group">
-            <label>Modelo</label>
-            <div class="input-wrapper">
-                <input type="text" id="modelo" name="modelo" required value="<?php echo htmlspecialchars($modelo['modelo']); ?>">
-                <img src="../img/carro.png" alt="Ícone modelo">
+        <form action="" method="post" enctype="multipart/form-data">
+            <!-- Modelo -->
+            <div class="input-group">
+                <label>Modelo</label>
+                <div class="input-wrapper">
+                    <input type="text" name="modelo" required
+                        value="<?php echo htmlspecialchars($modelo['modelo']); ?>">
+                    <img src="../img/carro.png" alt="Ícone modelo">
+                </div>
             </div>
-        </div>
 
-        <div class="input-group">
-            <label>Fabricante</label>
-            <div class="input-wrapper">
-                <input type="text" name="fabricante" value="BMW" readonly>
-                <img src="../img/fabricante.png" alt="Ícone fabricante">
+            <!-- Fabricante -->
+            <div class="input-group">
+                <label>Fabricante</label>
+                <div class="input-wrapper">
+                    <input type="text" name="fabricante" id="input-fabricante" value="BMW" readonly>
+                    <img src="../img/fabricante.png" alt="Ícone fabricante">
+                </div>
             </div>
-        </div>
 
-        <div class="input-group">
-            <label>Ano</label>
-            <div class="input-wrapper">
-                <input type="text" name="ano" required maxlength="4" id="ano" value="<?php echo $modelo['ano']; ?>">
-                <img src="../img/ano.png" alt="Ícone ano">
+            <!-- Ano -->
+            <div class="input-group">
+                <label>Ano</label>
+                <div class="input-wrapper">
+                    <input type="text" name="ano" required maxlength="4" id="ano"
+                        value="<?php echo htmlspecialchars($modelo['ano']); ?>">
+                    <img src="../img/ano.png" alt="Ícone ano">
+                </div>
             </div>
-        </div>
 
-        <div class="input-group">
-            <label>Preço</label>
-            <div class="input-wrapper">
-                <input type="text" name="preco" required id="preco" value="<?php echo number_format($modelo['preco'], 2, ',', '.'); ?>">
-                <img src="../img/preco.png" alt="Ícone preço">
+            <!-- Preço -->
+            <div class="input-group">
+                <label>Preço</label>
+                <div class="input-wrapper">
+                    <input type="text" name="preco" required id="preco"
+                        value="<?php echo number_format($modelo['preco'], 2, ',', '.'); ?>">
+                    <img src="../img/preco.png" alt="Ícone preço">
+                </div>
             </div>
-        </div>
 
-        <div class="input-group">
-            <label>Cores Disponíveis</label>
-            <div class="checkbox-group">
-                <?php
-                $cores_disponiveis = ["Preto", "Branco", "Azul", "Prata", "Verde", "Vermelho"];
-                foreach ($cores_disponiveis as $cor) {
-                    $checked = in_array($cor, $coresSelecionadas) ? 'checked' : '';
-                    echo '<label class="checkbox-field">
-                            <input type="checkbox" name="cor[]" value="'.$cor.'" '.$checked.'>
-                            <div class="checkmark"></div>
-                          </label>';
-                }
-                ?>
+            <!-- Descrição -->
+            <div class="input-group">
+                <label>Descrição</label>
+                <div class="input-wrapper">
+                    <input type="text" name="descricao" maxlength="62" required
+                        value="<?php echo htmlspecialchars($modelo['descricao']); ?>">
+                    <img src="../img/escrevendo.png" alt="Ícone descrição">
+                </div>
             </div>
-        </div>
 
-        <!-- Mensagem de erro ou sucesso -->
-        <?php if (!empty($mensagem)) : ?>
-        <div id="error-message" class="<?php echo $mensagem_tipo; ?>" style="display:block;">
-            <?php echo $mensagem; ?>
-        </div>
-        <?php endif; ?>
+            <!-- Imagem Atual -->
+            <div class="input-group">
+                <label>Imagem Atual</label>
+                <div class="input-wrapper">
+                    <?php if (!empty($modelo['imagem'])) : ?>
+                    <!-- Exibe o nome do arquivo de imagem se houver -->
+                    <p><?php echo htmlspecialchars($modelo['imagem']); ?></p>
+                    <?php else : ?>
+                    <!-- Caso não tenha imagem cadastrada -->
+                    <p>Sem imagem cadastrada.</p>
+                    <?php endif; ?>
+                </div>
+            </div>
 
-        <button type="submit" class="btn">
-            <img src="../img/verifica.png" alt="Ícone de check">
-            Atualizar Modelo
-        </button>
-    </form>
-</div>
+            <div class="input-group">
+                <label>Alterar Imagem</label>
+                <div class="input-wrapper">
+                    <input type="file" name="imagem" accept="image/*">
+                </div>
+            </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const precoInput = document.getElementById("preco");
-    const modeloInput = document.getElementById("modelo");
-    const anoInput = document.getElementById("ano");
-    const checkboxes = document.querySelectorAll('input[type="checkbox"][name="cor[]"]');
-    const botao = document.querySelector(".btn");
+            <!-- Cores Disponíveis -->
+            <div class="input-group">
+                <label>Cores Disponíveis</label>
+                <div class="checkbox-group">
+                    <?php
+                    $cores_disponiveis = ["Preto", "Branco", "Azul", "Prata", "Verde", "Vermelho"];
+                    $cores_atual = explode(',', $modelo['cor']);
 
-    // Desativa o botão no início
-    botao.disabled = true;
-    botao.style.opacity = "0.5";
-    botao.style.cursor = "not-allowed";
+                    foreach ($cores_disponiveis as $cor) {
+                        $checked = in_array($cor, $cores_atual) ? 'checked' : '';
+                        echo '<label class="checkbox-field">
+                                <input type="checkbox" name="cor[]" value="'.$cor.'" '.$checked.'>
+                                <div class="checkmark"></div> 
+                                </label>';
+                    }
+                    ?>
+                </div>
+            </div>
 
-    // Armazena os valores originais
-    const valorOriginal = {
-        modelo: modeloInput.value,
-        ano: anoInput.value,
-        preco: precoInput.value,
-        cores: Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value).sort().join(',')
-    };
+            <!-- Mensagem de erro ou sucesso -->
+            <div id="error-message" class="<?php echo !empty($mensagem) ? $mensagem_tipo : ''; ?>"
+                <?php if (!empty($mensagem)) echo 'style="display:block;"'; ?>>
+                <?php echo $mensagem ?? ''; ?>
+            </div>
 
-    function verificarAlteracoes() {
-        const modeloAlterado = modeloInput.value !== valorOriginal.modelo;
-        const anoAlterado = anoInput.value !== valorOriginal.ano;
-        const precoAlterado = precoInput.value !== valorOriginal.preco;
-        const coresSelecionadas = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value).sort().join(',');
-        const coresAlteradas = coresSelecionadas !== valorOriginal.cores;
+            <button type="submit" class="btn">
+                <img src="../img/verifica.png" alt="Ícone de check">
+                Atualizar Modelo
+            </button>
+        </form>
+    </div>
 
-        if (modeloAlterado || anoAlterado || precoAlterado || coresAlteradas) {
-            botao.disabled = false;
-            botao.style.opacity = "1";
-            botao.style.cursor = "pointer";
-        } else {
-            botao.disabled = true;
-            botao.style.opacity = "0.5";
-            botao.style.cursor = "not-allowed";
-        }
-    }
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const precoInput = document.getElementById("preco");
+        const anoInput = document.getElementById("ano");
 
-    // Formatação do campo preço
-    precoInput.addEventListener("input", function () {
-        let valor = precoInput.value.replace(/\D/g, "");
-        valor = (parseInt(valor, 10) / 100).toFixed(2);
-        precoInput.value = valor.replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        verificarAlteracoes();
+        anoInput.addEventListener("input", function() {
+            this.value = this.value.replace(/\D/g, "");
+        });
+
+        precoInput.addEventListener("input", function() {
+            let valor = precoInput.value.replace(/\D/g, "");
+            valor = (parseInt(valor, 10) / 100).toFixed(2);
+            precoInput.value = valor.replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        });
     });
-
-    modeloInput.addEventListener("input", verificarAlteracoes);
-    anoInput.addEventListener("input", verificarAlteracoes);
-
-    checkboxes.forEach(cb => {
-        cb.addEventListener("change", verificarAlteracoes);
-    });
-});
-</script>
+    </script>
 </body>
 </html>

@@ -49,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fabricante = trim($_POST['fabricante']);
     $ano = intval($_POST['ano']);
     $preco = str_replace(['.', ','], ['', '.'], $_POST['preco']); // Converte para decimal
+    $descricao = trim($_POST['descricao']);
 
     if (!isset($_POST['cor']) || empty($_POST['cor'])) {
         $mensagem = "Selecione pelo menos uma cor.";
@@ -70,10 +71,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $check_stmt->close();
 
+                // Inserir no modelos
                 $stmt = $conn->prepare("INSERT INTO modelos (modelo, fabricante, cor, ano, preco) VALUES (?, ?, ?, ?, ?)");
                 $stmt->bind_param("sssii", $modelo, $fabricante, $cores, $ano, $preco);
 
                 if ($stmt->execute()) {
+                    $modelo_id = $conn->insert_id; // ID do modelo cadastrado
+
+                    // Upload da imagem
+                    $imagem_nome = null;
+                    if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
+                        $imagem_tmp = $_FILES['imagem']['tmp_name'];
+                        $imagem_nome = basename($_FILES['imagem']['name']);
+                        $caminho_destino = '../img/modelos/' . $imagem_nome;
+
+                        if (!is_dir('../img/modelos/')) {
+                            mkdir('../img/modelos/', 0777, true);
+                        }
+
+                        if (!move_uploaded_file($imagem_tmp, $caminho_destino)) {
+                            $mensagem = "Erro ao fazer upload da imagem.";
+                            $mensagem_tipo = "erro";
+                        }
+                    } else {
+                        $mensagem = "Nenhuma imagem enviada.";
+                        $mensagem_tipo = "erro";
+                    }
+
+                    // Inserir na tabela detalhes_modelos
+                    $stmtDetalhes = $conn->prepare("INSERT INTO detalhes_modelos (modelo_id, descricao, imagem) VALUES (?, ?, ?)");
+                    $stmtDetalhes->bind_param("iss", $modelo_id, $descricao, $imagem_nome);
+                    $stmtDetalhes->execute();
+                    $stmtDetalhes->close();
+
                     $mensagem = "Modelo cadastrado com sucesso!";
                     $mensagem_tipo = "sucesso";
                 } else {
@@ -104,11 +134,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../css/checkbox-cor-veiculos.css">
     <link rel="icon" href="../img/logoofcbmw.png">
     <style>
-    input#input-fabricante[readonly], input#input-fabricante:disabled {
+    input#input-fabricante[readonly],
+    input#input-fabricante:disabled {
         pointer-events: none;
         background-color: #f2f2f2;
         color: gray;
     }
+
     .input-group {
         cursor: not-allowed;
     }
@@ -122,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </a>
         <h2>Cadastrar Modelo</h2>
 
-        <form action="cadastrar_modelos.php" method="post">
+        <form action="cadastrar_modelos.php" method="post" enctype="multipart/form-data">
             <!-- Modelo -->
             <div class="input-group">
                 <label>Modelo</label>
@@ -159,6 +191,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
+            <!-- Descrição -->
+            <div class="input-group">
+                <label>Descrição</label>
+                <div class="input-wrapper">
+                    <input type="text" name="descricao" maxlength="62" required>
+                    <img src="../img/escrevendo.png" alt="Ícone descrição">
+                </div>
+            </div>
+
+            <!-- Imagem -->
+            <div class="input-group">
+                <label>Imagem Principal</label>
+                <div class="input-wrapper">
+                    <input type="file" name="imagem" accept="image/*" required>
+                    <img src="../img/imagem.png" alt="Ícone imagem">
+                </div>
+            </div>
+
             <!-- Cores Disponíveis -->
             <div class="input-group">
                 <label>Cores Disponíveis</label>
@@ -169,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo '<label class="checkbox-field">
                                 <input type="checkbox" name="cor[]" value="'.$cor.'">
                                 <div class="checkmark"></div> 
-                              </label>';
+                                </label>';
                     }
                     ?>
                 </div>
