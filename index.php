@@ -88,49 +88,53 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
         <div class="cards-container">
             <?php include 'php/card-veiculos.php'; ?>
             <!-- Aqui é onde os cards serão gerados dinamicamente -->
-        </div>
 
-        <div class="view-all">
-            <button>Ver todos os modelos</button>
-        </div>
 
-        <!-- Promoções -->
-        <div class="chamado-promocoes">
-            <img src="img/promocoes-azul.png" alt="Ícone de Promoções">
-            <h2>Confira Ofertas Especiais da BMW em </h2>
-            <span><?php echo htmlspecialchars($capital); ?></span>
-        </div>
-
-        <!-- Card com promoção -->
-        <div class="card">
-            <div class="favorite-icon">
-                <img src="img/coracao-nao-salvo.png" alt="Favoritar" class="heart-icon">
+            <div class="view-all">
+                <button>Ver todos os modelos</button>
             </div>
-            <img src="img/modelos/carro4.webp" alt="BMW 330E">
-            <h2>BMW 330E</h2>
-            <p>2.0 16V TURBO HÍBRIDO M SPORT</p>
-            <p><img src="img/calendario.png" alt="Calendário"> 2023/2024 <img src="img/painel-de-controle.png" alt="Painel de Controle"> 0 Km</p>
-            <div class="rating">
-                <img src="img/estrela.png" alt="estrela">
-                <img src="img/estrela.png" alt="estrela">
-                <img src="img/estrela.png" alt="estrela">
-                <img src="img/estrela.png" alt="estrela">
-                <img src="img/estrela-neutra.png" alt="estrela">
-                <span class="nota">(1.010)</span>
+
+            <!-- Promoções -->
+            <div class="chamado-promocoes">
+                <img src="img/promocoes-azul.png" alt="Ícone de Promoções">
+                <h2>Confira Ofertas Especiais da BMW em </h2>
+                <span><?php echo htmlspecialchars($capital); ?></span>
             </div>
-            <div class="preco-promocao">
-                <h2 class="preco-antigo">R$ 454.950</h2>
-                <div class="preco-novo">
-                    <h2>R$ 414.950</h2>
-                    <span class="desconto">-10%</span>
+
+            <!-- Card com promoção -->
+            <div class="card">
+                <div class="favorite-icon">
+                    <img src="img/coracao-nao-salvo.png" alt="Favoritar" class="heart-icon">
                 </div>
+                <img src="img/modelos/carro4.webp" alt="BMW 330E">
+                <h2>BMW 330E</h2>
+                <p>2.0 16V TURBO HÍBRIDO M SPORT</p>
+                <p><img src="img/calendario.png" alt="Calendário"> 2023/2024 <img src="img/painel-de-controle.png"
+                        alt="Painel de Controle"> 0 Km</p>
+                <div class="rating">
+                    <img src="img/estrela.png" alt="estrela">
+                    <img src="img/estrela.png" alt="estrela">
+                    <img src="img/estrela.png" alt="estrela">
+                    <img src="img/estrela.png" alt="estrela">
+                    <img src="img/estrela-neutra.png" alt="estrela">
+                    <span class="nota">(1.010)</span>
+                </div>
+                <div class="preco-promocao">
+                    <h2 class="preco-antigo">R$ 454.950</h2>
+                    <div class="preco-novo">
+                        <h2>R$ 414.950</h2>
+                        <span class="desconto">-10%</span>
+                    </div>
+                </div>
+                <button class="btn-send">Estou interessado</button>
             </div>
-            <button class="btn-send">Estou interessado</button>
+
         </div>
 
         <div class="view-all">
             <button>Ver todas as ofertas</button>
         </div>
+
     </div>
 
 
@@ -366,20 +370,20 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
         </a>
     </section>
 
-    <section class="atendimento-banner">
-        <p>
-            Nossos canais de atendimento são 100% digitais. Precisa de ajuda?
-            <a href="">CLIQUE AQUI</a>
-        </p>
-    </section>
-
     <footer class="footer">
+        <!-- Faixa colorida com logo no meio -->
+        <div class="footer-strip">
+            <div class="footer-logo-top">
+                <img src="img/logoofcbmw.png" alt="BMW Logo" />
+            </div>
+        </div>
+
         <div class="footer-container">
 
             <div class="footer-top">
 
                 <div class="footer-logo">
-                    <img src="img/logoofcbmw.png" alt="BMW Logo">
+                    <img src="img/BMW_M_100px_white.png" alt="BMW Logo">
                     <p>BMW Motors: Inovação, desempenho e paixão por dirigir.</p>
                 </div>
 
