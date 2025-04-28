@@ -1,10 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="prefix__SETA_ESQUERDA" width="80.495" height="89.794" data-name="SETA ESQUERDA" viewBox="0 0 80.495 89.794">
-    <defs>
-        <style>
-            .prefix__cls-1{fill:#fe1430}
-        </style>
-    </defs>
-    <path id="prefix__Caminho_127" d="M-38.366 0l4.3.05-30.33 89.744h-3.92z" class="prefix__cls-1" data-name="Caminho 127" transform="translate(114.559)"/>
-    <path id="prefix__Caminho_126" d="M-51.253 0L5.592.029l-16.769 51.127h-57.137z" class="prefix__cls-1" data-name="Caminho 126" transform="translate(68.314 16.364)"/>
-    <path id="prefix__Caminho_125" fill="none" stroke="#edede3" stroke-width="2px" d="M0 0l8.893 8.893L17.786 0" data-name="Caminho 125" transform="rotate(90 3.647 36.374)"/>
+<svg width="81" height="90" viewBox="0 0 81 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M76.193 0L80.493 0.05L50.163 89.794H46.243L76.193 0Z" fill="#2F4EDA"/>
+<path d="M17.061 16.3638L73.906 16.3928L57.137 67.5198H0L17.061 16.3638Z" fill="#2F4EDA"/>
+<path d="M40.021 32.7271L31.128 41.6201L40.021 50.5131" stroke="#EDEDE3" stroke-width="2"/>
 </svg>

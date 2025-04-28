@@ -147,7 +147,6 @@ html, body {
     z-index: 1; /* Garante que os cartões fiquem por baixo dos botões */
 }
 
-
 .card {
     background-color: #f2f2f2;
     border-radius: 16px;
