@@ -155,20 +155,14 @@ html, body {
     width: 280px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    /* Alinha todos os itens à esquerda */
-    text-align: left;
-    /* Alinha o texto à esquerda */
-    min-height: 400px;
-    /* Garante uma altura mínima para todos os cards */
+    align-items: flex-start; /* Alinha todos os itens à esquerda */
+    text-align: left;     /* Alinha o texto à esquerda */
+    min-height: 400px; /* Garante uma altura mínima para todos os cards */
     flex-direction: column;
-    justify-content: space-between;
-    /* Garante que o conteúdo ocupe todo o espaço disponível */
-    min-height: 400px;
-    /* Garante que todos os cards tenham a mesma altura */
+    justify-content: space-between; /* Garante que o conteúdo ocupe todo o espaço disponível */
+    min-height: 400px;  /* Garante que todos os cards tenham a mesma altura */
     padding: 20px;
-    box-sizing: border-box;
-    /* Inclui o padding na contagem de altura e largura */
+    box-sizing: border-box; /* Inclui o padding na contagem de altura e largura */
     position: relative;
     font-family: 'Poppins', Arial;
     filter: none;
