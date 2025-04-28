@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 22/04/2025 às 05:27
+-- Tempo de geração: 28/04/2025 às 08:27
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -69,6 +69,31 @@ INSERT INTO `clientes` (`id`, `nome_completo`, `email`, `cpf`, `telefone`, `rg`,
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `detalhes_modelos`
+--
+
+CREATE TABLE `detalhes_modelos` (
+  `id` int(11) NOT NULL,
+  `modelo_id` int(11) NOT NULL,
+  `descricao` varchar(62) DEFAULT NULL,
+  `imagem` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `detalhes_modelos`
+--
+
+INSERT INTO `detalhes_modelos` (`id`, `modelo_id`, `descricao`, `imagem`) VALUES
+(1, 1, '1.5 12V GASOLINA SPORT GP STEPTRONIC', 'carro1.webp'),
+(2, 5, '2.0 16V TURBO GASOLINA M SPORT', 'carro5.webp'),
+(3, 2, '1.5 TWINTURBO GASOLINA GRAN COUPE M SPORT STEPTRONIC', 'carro2.webp'),
+(4, 3, '2.0 16V TURBO FLEX M SPORT 10TH ANNIVERSARY EDITION AUTOMÁTICO', 'carro3.webp'),
+(5, 4, '2.0 16V TURBO HÍBRIDO M SPORT', 'carro4.webp'),
+(6, 6, '2.0 16V GASOLINA CABRIO M SPORT', 'carro6.webp');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `estoque`
 --
 
@@ -94,7 +119,9 @@ INSERT INTO `estoque` (`id`, `veiculo_id`, `quantidade`) VALUES
 (9, 10, 1),
 (10, 11, 1),
 (11, 12, 1),
-(12, 13, 1);
+(12, 13, 1),
+(13, 14, 1),
+(14, 15, 1);
 
 -- --------------------------------------------------------
 
@@ -134,18 +161,46 @@ CREATE TABLE `modelos` (
   `fabricante` varchar(255) NOT NULL,
   `cor` varchar(50) NOT NULL,
   `ano` int(11) NOT NULL,
-  `preco` decimal(10,2) NOT NULL
+  `preco` decimal(10,2) NOT NULL,
+  `estoque` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `modelos`
 --
 
-INSERT INTO `modelos` (`id`, `modelo`, `fabricante`, `cor`, `ano`, `preco`) VALUES
-(1, 'BMW 118i', 'BMW', 'Azul,Prata', 2024, 320950.00),
-(2, 'BMW 218i', 'BMW', 'Preto', 2024, 320950.00),
-(3, 'BMW 320i', 'BMW', 'Branco,Azul,Prata', 2025, 412950.00),
-(4, 'BMW 330e', 'BMW', 'Azul', 2025, 454950.00);
+INSERT INTO `modelos` (`id`, `modelo`, `fabricante`, `cor`, `ano`, `preco`, `estoque`) VALUES
+(1, 'BMW 118i', 'BMW', 'Azul,Prata', 2024, 320950.00, 0),
+(2, 'BMW 218i', 'BMW', 'Preto', 2024, 320950.00, 0),
+(3, 'BMW 320i', 'BMW', 'Branco,Azul,Prata', 2025, 412950.00, 0),
+(4, 'BMW 330e', 'BMW', 'Azul', 2025, 454950.00, 0),
+(5, 'BMW 330I', 'BMW', 'Azul', 2021, 229990.00, 0),
+(6, 'BMW 420I', 'BMW', 'Azul', 2025, 503950.00, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `promocoes`
+--
+
+CREATE TABLE `promocoes` (
+  `id` int(11) NOT NULL,
+  `modelo_id` int(11) NOT NULL,
+  `desconto` decimal(5,2) NOT NULL,
+  `preco_com_desconto` decimal(10,2) NOT NULL,
+  `data_limite` date NOT NULL,
+  `ativo` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `promocoes`
+--
+
+INSERT INTO `promocoes` (`id`, `modelo_id`, `desconto`, `preco_com_desconto`, `data_limite`, `ativo`) VALUES
+(1, 1, 10.00, 207975.60, '2025-04-29', 1),
+(2, 2, 20.00, 256760.00, '2025-04-30', 1),
+(3, 3, 10.00, 371655.00, '2025-04-28', 1),
+(4, 6, 50.00, 251975.00, '2025-05-01', 1);
 
 -- --------------------------------------------------------
 
@@ -176,7 +231,9 @@ INSERT INTO `veiculos` (`id`, `modelo_id`, `numero_chassi`) VALUES
 (10, 4, 'BMW00000000000010'),
 (11, 1, 'BMW00000000000011'),
 (12, 4, 'BMW00000000000012'),
-(13, 4, 'BMW00000000000013');
+(13, 4, 'BMW00000000000013'),
+(14, 1, 'BMW00000000000014'),
+(15, 1, 'BMW00000000000015');
 
 --
 -- Índices para tabelas despejadas
@@ -191,6 +248,13 @@ ALTER TABLE `clientes`
   ADD UNIQUE KEY `rg` (`rg`),
   ADD UNIQUE KEY `telefone` (`telefone`),
   ADD UNIQUE KEY `cnh` (`cnh`);
+
+--
+-- Índices de tabela `detalhes_modelos`
+--
+ALTER TABLE `detalhes_modelos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `modelo_id` (`modelo_id`);
 
 --
 -- Índices de tabela `estoque`
@@ -215,6 +279,13 @@ ALTER TABLE `modelos`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Índices de tabela `promocoes`
+--
+ALTER TABLE `promocoes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `modelo_id` (`modelo_id`);
+
+--
 -- Índices de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
@@ -233,10 +304,16 @@ ALTER TABLE `clientes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
+-- AUTO_INCREMENT de tabela `detalhes_modelos`
+--
+ALTER TABLE `detalhes_modelos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT de tabela `estoque`
 --
 ALTER TABLE `estoque`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de tabela `funcionarios`
@@ -248,23 +325,41 @@ ALTER TABLE `funcionarios`
 -- AUTO_INCREMENT de tabela `modelos`
 --
 ALTER TABLE `modelos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de tabela `promocoes`
+--
+ALTER TABLE `promocoes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Restrições para tabelas despejadas
 --
 
 --
+-- Restrições para tabelas `detalhes_modelos`
+--
+ALTER TABLE `detalhes_modelos`
+  ADD CONSTRAINT `detalhes_modelos_ibfk_1` FOREIGN KEY (`modelo_id`) REFERENCES `modelos` (`id`) ON DELETE CASCADE;
+
+--
 -- Restrições para tabelas `estoque`
 --
 ALTER TABLE `estoque`
   ADD CONSTRAINT `estoque_ibfk_1` FOREIGN KEY (`veiculo_id`) REFERENCES `veiculos` (`id`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `promocoes`
+--
+ALTER TABLE `promocoes`
+  ADD CONSTRAINT `promocoes_ibfk_1` FOREIGN KEY (`modelo_id`) REFERENCES `modelos` (`id`);
 
 --
 -- Restrições para tabelas `veiculos`
