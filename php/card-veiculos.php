@@ -15,7 +15,7 @@ if ($result->num_rows > 0) {
 
         echo '<div class="card">
                 <div class="favorite-icon">
-                    <img src="img/coracao-nao-salvo.png" alt="Favoritar" class="heart-icon">
+                    <img src="img/coracao-nao-salvo.png" alt="Favoritar" class="heart-icon" draggable="false">
                 </div>
                 <img src="' . $imagemPath . '" alt="' . htmlspecialchars($carro['modelo']) . '">
                 <h2>' . htmlspecialchars($carro['modelo']) . '</h2>

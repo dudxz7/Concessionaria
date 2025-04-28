@@ -16,7 +16,7 @@
 
                 <div class="nav-icons">
                     <a href="carrinho.php">
-                        <img src="img/heart.png" alt="Favoritos" class="heart-icon">
+                        <img src="img/heart.png" alt="Favoritos" class="heart-icon-navbar">
                     </a>
                     <div class="login">
                         <?php if ($usuarioLogado): ?>

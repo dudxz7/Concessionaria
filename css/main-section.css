@@ -90,7 +90,7 @@
 .favorite-icon {
     position: absolute;
     top: 18px;
-    right: -10px;
+    right: 20px;
     cursor: pointer;
     z-index: 2;
 }
@@ -101,6 +101,8 @@
     object-fit: contain; /* Garante que a imagem mantenha proporção */
     display: block; /* Remove espaços fantasmas abaixo da imagem */
     transition: filter 0.3s ease; /* Transição para o brilho */
+    user-drag: none; /* Impede arrastar no Safari */
+    user-select: none; /* Impede selecionar texto */
 }
 
 .heart-icon:hover {

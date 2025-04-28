@@ -93,8 +93,11 @@ html {
 }
 
 /* Ícone de coração */
-.heart-icon {
+.heart-icon-navbar {
     margin-right: 65px; /* Ajuste fino do ícone */
+}
+.heart-icon-navbar:hover{
+    transform: scale(1.2);
 }
 
 /* Login */

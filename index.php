@@ -104,7 +104,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
             <!-- Card com promoção -->
             <div class="card">
                 <div class="favorite-icon">
-                    <img src="img/coracao-nao-salvo.png" alt="Favoritar" class="heart-icon">
+                    <img src="img/coracao-nao-salvo.png" alt="Favoritar" class="heart-icon" draggable="false">
                 </div>
                 <img src="img/modelos/carro4.webp" alt="BMW 330E">
                 <h2>BMW 330E</h2>
