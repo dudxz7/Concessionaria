@@ -7,36 +7,6 @@ function gerarAno($ano) {
     return $anoAnterior . '/' . $ano;
 }
 
-// Função para gerar o rating (quantidade de estrelas)
-function gerarRating() {
-    // Gera um número de estrelas aleatório de 3 a 5
-    $estrelasCheias = rand(3, 5);
-    $estrelas = [];
-
-    // Adiciona estrelas cheias
-    for ($i = 0; $i < $estrelasCheias; $i++) {
-        $estrelas[] = 'estrela.png';
-    }
-
-    // Se tiver espaço, chance de adicionar uma estrela metade
-    if (count($estrelas) < 5 && rand(0, 1)) { 
-        $estrelas[] = 'estrela-metade.png';
-    }
-
-    // Completa com estrelas neutras
-    while (count($estrelas) < 5) {
-        $estrelas[] = 'estrela-neutra.png';
-    }
-
-    return $estrelas;
-}
-
-// Função para gerar a nota (número de avaliações)
-function gerarNota() {
-    // Número aleatório de 1 a 1500 pq sim
-    return rand(1, 1500);
-}
-
 // Consulta para pegar os modelos de carros
 $sql = "SELECT m.id, m.modelo, m.fabricante, m.cor, m.ano, m.preco, d.descricao, d.imagem
         FROM modelos m
@@ -49,14 +19,8 @@ if ($result->num_rows > 0) {
         // Ajustando o caminho da imagem
         $imagemPath = 'img/modelos/' . htmlspecialchars($carro['imagem']); // Caminho completo da imagem
 
-        // Gerar ano formatado
+        // Gerar o ano no formato "2024/2025"
         $anoFormatado = gerarAno($carro['ano']);
-
-        // Gerar rating aleatório
-        $rating = gerarRating();
-
-        // Gerar nota aleatória
-        $nota = gerarNota();
 
         echo '<div class="card">
                 <div class="favorite-icon">
@@ -66,15 +30,13 @@ if ($result->num_rows > 0) {
                 <h2>' . htmlspecialchars($carro['modelo']) . '</h2>
                 <p>' . htmlspecialchars($carro['descricao']) . '</p>
                 <p><img src="img/calendario.png" alt="Ano"> ' . $anoFormatado . ' <img src="img/painel-de-controle.png" alt="Km"> 0 Km</p>
-                <div class="rating">';
-        
-        // Exibir estrelas
-        foreach ($rating as $estrela) {
-            echo '<img src="img/' . $estrela . '" alt="estrela">';
-        }
-
-        // Exibir nota aleatória
-        echo '<span class="nota">(' . number_format($nota, 0, ',', '.') . ')</span>
+                <div class="rating">
+                    <img src="img/estrela.png" alt="estrela">
+                    <img src="img/estrela.png" alt="estrela">
+                    <img src="img/estrela.png" alt="estrela">
+                    <img src="img/estrela.png" alt="estrela">
+                    <img src="img/estrela-neutra.png" alt="estrela">
+                    <span class="nota">(1.234)</span>
                 </div>
                 <h2>R$ ' . number_format($carro['preco'], 2, ',', '.') . '</h2>
                 <button class="btn-send">Estou interessado</button>
