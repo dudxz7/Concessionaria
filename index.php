@@ -442,5 +442,9 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
         </div>
     </footer>
     <script src="js/index.js" type="module"></script>
+    <script>
+
+
+    </script>
 </body>
 </html>

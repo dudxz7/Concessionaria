@@ -7,10 +7,12 @@
 
 .search-bar-wrapper {
     display: flex;
-    justify-content: center; /* Centraliza os itens no container */
+    justify-content: center;
+    /* Centraliza os itens no container */
     align-items: center;
     flex-wrap: wrap;
-    gap: 40px; /* Aumentando o gap para mais espaço entre os elementos */
+    gap: 40px;
+    /* Aumentando o gap para mais espaço entre os elementos */
     margin-bottom: 30px;
 }
 
@@ -23,7 +25,7 @@
 .search-container {
     display: flex;
     align-items: center;
-    padding: 0; 
+    padding: 0;
     border: 1px solid #d9d9d9;
     border-radius: 10px;
     height: 50px;
@@ -37,7 +39,8 @@
     border: 1px solid #d9d9d9;
     border-radius: 8px 0 0 8px;
     outline: none;
-    width: 350px; /* Aumentando a largura do input */
+    width: 350px;
+    /* Aumentando a largura do input */
 }
 
 .search-container button {
@@ -63,7 +66,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 40px; /* Aumentando o gap entre os filtros */
+    gap: 40px;
+    /* Aumentando o gap entre os filtros */
     min-width: fit-content;
     white-space: nowrap;
     flex-shrink: 0;
@@ -78,9 +82,12 @@
 }
 
 .filtros-container img {
-    width: 14px; /* Largura da imagem */
-    height: 14px; /* Ajuste a altura para o valor desejado */
+    width: 14px;
+    /* Largura da imagem */
+    height: 14px;
+    /* Ajuste a altura para o valor desejado */
 }
+
 .filtros-container a {
     text-decoration: underline;
     color: #000;
@@ -98,11 +105,14 @@
 .heart-icon {
     width: 32px;
     height: 32px;
-    object-fit: contain; /* Garante que a imagem mantenha proporção */
-    display: block; /* Remove espaços fantasmas abaixo da imagem */
-    transition: filter 0.3s ease; /* Transição para o brilho */
-    user-drag: none; /* Impede arrastar no Safari */
-    user-select: none; /* Impede selecionar texto */
+    object-fit: contain;
+    /* Garante que a imagem mantenha proporção */
+    display: block;
+    /* Remove espaços fantasmas abaixo da imagem */
+    transition: filter 0.3s ease;
+    /* Transição para o brilho */
+    user-select: none;
+    /* Impede selecionar texto */
 }
 
 .heart-icon:hover {
@@ -120,26 +130,51 @@
 .card {
     background-color: #f2f2f2;
     border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     width: 280px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Alinha todos os itens à esquerda */
-    text-align: left; /* Alinha o texto à esquerda */
-    min-height: 400px; /* Garante uma altura mínima para todos os cards */
+    align-items: flex-start;
+    /* Alinha todos os itens à esquerda */
+    text-align: left;
+    /* Alinha o texto à esquerda */
+    min-height: 400px;
+    /* Garante uma altura mínima para todos os cards */
     flex-direction: column;
-    justify-content: space-between; /* Garante que o conteúdo ocupe todo o espaço disponível */
-    min-height: 400px; /* Garante que todos os cards tenham a mesma altura */
+    justify-content: space-between;
+    /* Garante que o conteúdo ocupe todo o espaço disponível */
+    min-height: 400px;
+    /* Garante que todos os cards tenham a mesma altura */
     padding: 20px;
-    box-sizing: border-box; /* Inclui o padding na contagem de altura e largura */
+    box-sizing: border-box;
+    /* Inclui o padding na contagem de altura e largura */
     position: relative;
     font-family: 'Poppins', Arial;
+    filter: none;
 }
 
 .card img {
     width: 100%;
     margin-bottom: 10px;
+}
+
+/* Quando o mouse entra em um card específico, ele fica sem blur */
+.card:hover {
+    filter: none;
+    transform: scale(1.05);
+    z-index: 1;
+}
+
+/* Classe 'blur' para aplicar o blur aos cards */
+.card.blur {
+    filter: blur(5px);
+    /* filter: grayscale(1) blur(5px); esse é legal tbm*/
+}
+
+/* Classe 'imune' para garantir que o card em hover não tenha blur */
+.card.imune {
+    filter: none;
 }
 
 .card h2 {
@@ -148,7 +183,8 @@
     font-weight: 600;
     font-family: 'Instrument Sans', serif;
     margin: 8px 0 4px;
-    text-align: center; /* Centraliza o título */
+    text-align: center;
+    /* Centraliza o título */
 }
 
 .card p {
@@ -165,20 +201,25 @@
 
 .rating {
     display: flex;
-    align-items: center; /* Alinha a estrela e a nota no centro verticalmente */
-    justify-content: center; /* Centraliza a estrela e a nota horizontalmente */
-    gap: 5px; /* Espaço entre as estrelas e o número */
+    align-items: center;
+    /* Alinha a estrela e a nota no centro verticalmente */
+    justify-content: center;
+    /* Centraliza a estrela e a nota horizontalmente */
+    gap: 5px;
+    /* Espaço entre as estrelas e o número */
     opacity: 0.77;
     margin: 10px 0;
 }
 
 .rating img {
-    width: 20px; /* Ajuste o tamanho da estrela */
+    width: 20px;
+    /* Ajuste o tamanho da estrela */
     height: 20px;
 }
 
 .nota {
-    font-size: 14px; /* Ajuste o tamanho da nota */
+    font-size: 14px;
+    /* Ajuste o tamanho da nota */
     color: #000;
 }
 
@@ -195,7 +236,8 @@
     font-family: 'Instrument Sans', serif;
     font-size: 14px;
     transition: 0.3s;
-    text-align: center; /* Centraliza o texto dentro do botão */
+    text-align: center;
+    /* Centraliza o texto dentro do botão */
 }
 
 .btn-send:hover {
@@ -205,9 +247,11 @@
 .view-all {
     margin-top: 40px;
     text-align: center;
-    width: 100%; /* Garantir que o botão ocupe toda a largura disponível */
+    width: 100%;
+    /* Garantir que o botão ocupe toda a largura disponível */
     display: flex;
-    justify-content: center; /* Centraliza o botão */
+    justify-content: center;
+    /* Centraliza o botão */
 }
 
 .view-all button {
@@ -219,13 +263,15 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    width: auto; /* Deixe o botão com o tamanho correto */
+    width: auto;
+    /* Deixe o botão com o tamanho correto */
 }
 
 .view-all button:hover {
     background-color: black;
     color: white;
 }
+
 .chamado-promocoes {
     display: flex;
     align-items: center;
@@ -237,7 +283,8 @@
 }
 
 .chamado-promocoes img {
-    width: 55px; /* ajuste conforme desejar */
+    width: 55px;
+    /* ajuste conforme desejar */
     height: auto;
     display: block;
 }
@@ -249,7 +296,8 @@
     margin: 0;
     line-height: 1.2;
     display: flex;
-    align-items: center; /* garante que o texto e a imagem fiquem centralizados */
+    align-items: center;
+    /* garante que o texto e a imagem fiquem centralizados */
     gap: 6px;
 }
 
@@ -259,21 +307,24 @@
     font-size: 40px;
     font-family: 'Inter', sans-serif;
 }
+
 .preco-promocao {
     display: flex;
     flex-direction: column;
     gap: 4px;
     margin-top: 10px;
-    align-items: flex-start; /* Isso já ajuda todos a irem pra esquerda */
+    align-items: flex-start;
+    /* Isso já ajuda todos a irem pra esquerda */
 }
 
-.preco-antigo{
+.preco-antigo {
     text-decoration: line-through;
     font-size: 16px;
     margin: 0;
-    align-self: flex-start; /* Garante que fique alinhado à esquerda */
+    align-self: flex-start;
+    /* Garante que fique alinhado à esquerda */
     margin-top: -8px !important;
-    color: gray !important; 
+    color: gray !important;
 }
 
 .preco-novo {
@@ -296,6 +347,7 @@
     font-weight: bold;
     font-size: 14px;
 }
+
 /* Partícula de para o .heart-icon */
 
 .particle {
@@ -317,6 +369,7 @@
         transform: scale(1) translate(0, 0) rotate(0deg);
         opacity: 1;
     }
+
     100% {
         transform: scale(1.2) translate(var(--x), var(--y)) rotate(360deg);
         opacity: 0;
