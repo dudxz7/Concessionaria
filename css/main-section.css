@@ -1,4 +1,11 @@
 /* Conteúdo principal do site ao rolar */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden; /* Impede a rolagem horizontal */
+    overflow-y: auto;   /* Garante rolagem vertical, se necessário */
+}
 .main-content {
     padding: 40px 60px;
     background-color: #d9d9d9;
@@ -119,13 +126,27 @@
     transform: scale(1.1);
 }
 
+.carrossel-container {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    overflow-x: scroll;  /* Garante a rolagem horizontal */
+    overflow-y: hidden;  /* Evita rolagem vertical */
+    height: auto;
+    flex-wrap: nowrap;  /* Impede que os cards quebrem para a próxima linha */
+    padding-bottom: 20px; /* Espaço extra na parte inferior para evitar o corte */
+}
+
 /* Cards e demais estilos continuam os mesmos */
 .cards-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Impede que os cards quebrem para a próxima linha */
     gap: 24px;
-    justify-content: center;
+    justify-content: center; /* Centraliza os cards no carrossel */
+    position: relative;
+    z-index: 1; /* Garante que os cartões fiquem por baixo dos botões */
 }
+
 
 .card {
     background-color: #f2f2f2;

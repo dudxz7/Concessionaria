@@ -84,24 +84,25 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
             </div>
         </div>
 
-        <!-- Cards de carros -->
+        <div class="carrossel-container">
+            <div class="cards-container">
+                <?php include 'php/card-veiculos.php'; ?>
+            </div>
+        </div>
+
+        <div class="view-all">
+            <button>Ver todos os modelos</button>
+        </div>
+
+        <!-- Promoções -->
+        <div class="chamado-promocoes">
+            <img src="img/promocoes-azul.png" alt="Ícone de Promoções">
+            <h2>Confira Ofertas Especiais da BMW em </h2>
+            <span><?php echo htmlspecialchars($capital); ?></span>
+        </div>
+
+        <!-- Card com promoção -->
         <div class="cards-container">
-            <?php include 'php/card-veiculos.php'; ?>
-            <!-- Aqui é onde os cards serão gerados dinamicamente -->
-
-
-            <div class="view-all">
-                <button>Ver todos os modelos</button>
-            </div>
-
-            <!-- Promoções -->
-            <div class="chamado-promocoes">
-                <img src="img/promocoes-azul.png" alt="Ícone de Promoções">
-                <h2>Confira Ofertas Especiais da BMW em </h2>
-                <span><?php echo htmlspecialchars($capital); ?></span>
-            </div>
-
-            <!-- Card com promoção -->
             <div class="card">
                 <div class="favorite-icon">
                     <img src="img/coracao-nao-salvo.png" alt="Favoritar" class="heart-icon" draggable="false">
