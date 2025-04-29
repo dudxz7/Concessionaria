@@ -3,8 +3,6 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow-x: hidden; /* Impede a rolagem horizontal */
-    overflow-y: auto;   /* Garante rolagem vertical, se necessário */
 }
 .main-content {
     padding: 40px 60px;
@@ -166,6 +164,7 @@ html, body {
     position: relative;
     font-family: 'Poppins', Arial;
     filter: none;
+    overflow: visible; /* <<< Adicione isso! */
 }
 
 .card img {
@@ -388,4 +387,71 @@ html, body {
         transform: scale(1.2) translate(var(--x), var(--y)) rotate(360deg);
         opacity: 0;
     }
+}
+/* Wrapper do tempo (não precisa de gatilho agora) */
+.tempo-restante-wrapper {
+    position: absolute;  /* Posiciona dentro do card */
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center;     /* Centraliza verticalmente */
+    width: 100%;             /* Faz com que ocupe todo o espaço */
+    height: 100%;  
+    top: 10px;         /* Preenche o card */
+}
+
+/* Tempo-restante invisível no começo */
+.tempo-restante {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    padding-left: 10px;
+    color: #fff;
+    height: 30px;
+    border-radius: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateY(-10px); /* começa mais pra cima */
+    opacity: 0;
+    gap: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* Quando hover no card, mostrar o tempo-restante */
+.card:hover .tempo-restante {
+    transform: translateY(10px);  /* Desce o tempo-restante */
+    opacity: 1;                   /* Mostra o tempo-restante */
+    pointer-events: auto;         /* Ativa a interação */
+}
+
+/* Ícone do relógio dentro do tempo-restante */
+.tempo-restante .icon-tempo {
+    width: 16px;
+    height: 16px;
+    display: block;
+    padding-top: 10px;
+}
+
+/* Texto do tempo-restante */
+.tempo-restante .tempo-texto {
+    font-size: 12px;
+    color: #fff;
+}
+
+/* Estilo do "dias" */
+.tempo-restante .dias {
+    background-color: #2F4EDA;
+    color: white;
+    font-size: 12px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    padding: 0 12px;
+    max-width: 70px;
 }
