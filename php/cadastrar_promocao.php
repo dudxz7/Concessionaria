@@ -14,7 +14,7 @@ if (!in_array($cargo_usuario, ['Gerente', 'Admin'])) {
     exit;
 }
 
-// Buscar modelos (não veículos)
+// Buscar modelos
 $query = "SELECT id, modelo, preco FROM modelos";
 $result = $conn->query($query);
 
@@ -24,14 +24,15 @@ $mensagem_tipo = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $modelo_id = $_POST['modelo_id'];
     $desconto = $_POST['desconto'];
-    $data_limite = $_POST['data_limite'];
-    $preco_original = $_POST['preco_original']; // Preço original enviado do front-end
-
-    // Calculando o preço com o desconto
     $preco_original = isset($_POST['preco_original']) ? floatval($_POST['preco_original']) : 0;
+
+    // Novo: pega data e hora separadamente
+    $data = $_POST['data_limite_data'];
+    $hora = $_POST['data_limite_hora'];
+    $data_limite = "$data $hora:00"; // Formato DATETIME
+
     $preco_com_desconto = $preco_original - ($preco_original * ($desconto / 100));
 
-    // Gravar no banco (mudamos para modelo_id)
     $insert = $conn->prepare("INSERT INTO promocoes (modelo_id, desconto, preco_com_desconto, data_limite) VALUES (?, ?, ?, ?)");
     $insert->bind_param("idss", $modelo_id, $desconto, $preco_com_desconto, $data_limite);
 
@@ -53,11 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../css/registro.css">
     <link rel="icon" href="../img/logoofcbmw.png">
     <style>
-        input[type="date"] {
+        input[type="date"], input[type="time"] {
             padding: 10px;
-            padding-left: 20px; /* move o texto mais pra direita */
+            padding-left: 20px;
             width: 100%;
-            max-width: 600px; /* controla o tamanho máximo */
+            max-width: 600px;
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 20px;
@@ -100,10 +101,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
+        <!-- Data separada -->
         <div class="input-group">
-            <label for="data_limite">Data Limite</label>
+            <label for="data_limite_data">Data Limite</label>
             <div class="input-wrapper">
-                <input type="date" name="data_limite" id="data_limite" required>
+                <input type="date" name="data_limite_data" id="data_limite_data" required>
+            </div>
+        </div>
+
+        <!-- Hora separada -->
+        <div class="input-group">
+            <label for="data_limite_hora">Hora Limite</label>
+            <div class="input-wrapper">
+                <input type="time" name="data_limite_hora" id="data_limite_hora" required>
             </div>
         </div>
 
@@ -111,7 +121,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             Valor final: R$ 0,00
         </div>
 
-        <!-- Preço original escondido (será enviado via POST) -->
         <input type="hidden" name="preco_original" id="preco_original">
 
         <?php if (!empty($mensagem)): ?>

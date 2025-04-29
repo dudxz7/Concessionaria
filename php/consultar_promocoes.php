@@ -13,6 +13,10 @@ if ($conn->connect_error) {
     die("Falha na conexão: " . $conn->connect_error);
 }
 
+// Atualizar status de promoções automaticamente
+$agora = date('Y-m-d H:i:s');
+$conn->query("UPDATE promocoes SET status = 'Inativa' WHERE data_limite < '$agora'");
+
 // Buscar o cargo do usuário logado
 $usuario_id = $_SESSION['usuarioId'];
 $sql = "SELECT cargo FROM clientes WHERE id = ?";
@@ -40,7 +44,7 @@ $filtro = isset($_GET['search']) ? $_GET['search'] : '';
 $letra_filtro = isset($_GET['letra']) ? $_GET['letra'] : '';
 
 if ($filtro) {
-    $sql = "SELECT promocoes.id, modelos.modelo, promocoes.desconto, promocoes.preco_com_desconto, promocoes.data_limite 
+    $sql = "SELECT promocoes.id, modelos.modelo, promocoes.desconto, promocoes.preco_com_desconto, promocoes.data_limite, promocoes.status 
             FROM promocoes 
             JOIN modelos ON promocoes.modelo_id = modelos.id 
             WHERE modelos.modelo LIKE ? 
@@ -50,7 +54,7 @@ if ($filtro) {
     $param = "%$filtro%";
     $stmt->bind_param("ssi", $param, $offset, $promocoes_por_pagina);
 } elseif ($letra_filtro) {
-    $sql = "SELECT promocoes.id, modelos.modelo, promocoes.desconto, promocoes.preco_com_desconto, promocoes.data_limite 
+    $sql = "SELECT promocoes.id, modelos.modelo, promocoes.desconto, promocoes.preco_com_desconto, promocoes.data_limite, promocoes.status 
             FROM promocoes 
             JOIN modelos ON promocoes.modelo_id = modelos.id 
             WHERE modelos.modelo LIKE ? 
@@ -60,7 +64,7 @@ if ($filtro) {
     $param = "$letra_filtro%";
     $stmt->bind_param("sii", $param, $offset, $promocoes_por_pagina);
 } else {
-    $sql = "SELECT promocoes.id, modelos.modelo, promocoes.desconto, promocoes.preco_com_desconto, promocoes.data_limite 
+    $sql = "SELECT promocoes.id, modelos.modelo, promocoes.desconto, promocoes.preco_com_desconto, promocoes.data_limite, promocoes.status 
             FROM promocoes 
             JOIN modelos ON promocoes.modelo_id = modelos.id 
             ORDER BY promocoes.id ASC
@@ -74,14 +78,7 @@ $result = $stmt->get_result();
 $stmt->close();
 
 // Consulta total para paginação
-if ($filtro) {
-    $sql_total = "SELECT COUNT(*) as total 
-                FROM promocoes 
-                JOIN modelos ON promocoes.modelo_id = modelos.id 
-                WHERE modelos.modelo LIKE ?";
-    $stmt_total = $conn->prepare($sql_total);
-    $stmt_total->bind_param("s", $param);
-} elseif ($letra_filtro) {
+if ($filtro || $letra_filtro) {
     $sql_total = "SELECT COUNT(*) as total 
                 FROM promocoes 
                 JOIN modelos ON promocoes.modelo_id = modelos.id 
@@ -126,6 +123,7 @@ $conn->close();
                 <img src="../img/seta-esquerda.png" alt="Voltar">
             </a>
             <?php endif; ?>
+
             <h2 class="btn-shine">Consulta de Promoções</h2>
 
             <?php if ($cargo_usuario === 'Gerente' || $cargo_usuario === 'Admin'): ?>
@@ -148,6 +146,7 @@ $conn->close();
                         <th>Desconto (%)</th>
                         <th>Preço com Desconto</th>
                         <th>Data Limite</th>
+                        <th>Hora Limite</th>
                         <th>Status</th>
                         <th>Ações</th>
                     </tr>
@@ -160,10 +159,14 @@ $conn->close();
                         <td><?php echo $row['desconto']; ?>%</td>
                         <td>R$ <?php echo number_format($row['preco_com_desconto'], 2, ',', '.'); ?></td>
                         <td><?php echo date("d/m/Y", strtotime($row['data_limite'])); ?></td>
+                        <td><?php echo date("H:i", strtotime($row['data_limite'])); ?></td>
                         <td>
+                            <?php
+                                    $status = trim($row['status']) === 'Ativa' ? 'ativo' : 'inativo';
+                                ?>
                             <div class="status-container">
-                                <div class="point"></div>
-                                <span>Ativo</span>  <!-- Status fixo -->
+                                <div class="point <?php echo $status; ?>"></div>
+                                <span><?php echo ucfirst($row['status']); ?></span>
                             </div>
                         </td>
                         <td>

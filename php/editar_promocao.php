@@ -31,7 +31,8 @@ if (isset($_GET['id'])) {
         $modelo_id = $promo['modelo_id'];
         $desconto = $promo['desconto'];
         $preco_com_desconto = $promo['preco_com_desconto'];
-        $data_limite = $promo['data_limite'];
+        $data_limite = explode(" ", $promo['data_limite'])[0];
+        $hora_limite = explode(" ", $promo['data_limite'])[1] ?? '00:00';
     } else {
         echo "Promoção não encontrada!";
         exit;
@@ -48,14 +49,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $modelo_id = $_POST['modelo_id'];
     $desconto = $_POST['desconto'];
     $data_limite = $_POST['data_limite'];
+    $hora_limite = $_POST['hora_limite'] ?? '00:00';
+
+    // Combinar data e hora
+    $data_hora_limite = $data_limite . ' ' . $hora_limite;
 
     // Calcular o novo preço com desconto
-    $preco_original = $_POST['preco_original']; // Preço original enviado via POST
+    $preco_original = $_POST['preco_original'];
     $preco_com_desconto = floatval($preco_original) - (floatval($preco_original) * ($desconto / 100));
 
     // Atualizar no banco de dados
     $update = $conn->prepare("UPDATE promocoes SET modelo_id = ?, desconto = ?, preco_com_desconto = ?, data_limite = ? WHERE id = ?");
-    $update->bind_param("idssi", $modelo_id, $desconto, $preco_com_desconto, $data_limite, $promo_id);
+    $update->bind_param("idssi", $modelo_id, $desconto, $preco_com_desconto, $data_hora_limite, $promo_id);
 
     if ($update->execute()) {
         header("Location: consultar_promocoes.php");
@@ -79,7 +84,7 @@ $modelos_result = $conn->query($query_modelos);
     <link rel="stylesheet" href="../css/registro.css">
     <link rel="icon" href="../img/logoofcbmw.png">
     <style>
-        input[type="date"] {
+        input[type="date"], input[type="time"] {
             padding: 10px;
             padding-left: 20px;
             width: 100%;
@@ -135,11 +140,17 @@ $modelos_result = $conn->query($query_modelos);
             </div>
         </div>
 
+        <div class="input-group">
+            <label for="hora_limite">Hora Limite</label>
+            <div class="input-wrapper">
+                <input type="time" name="hora_limite" id="hora_limite" value="<?php echo $hora_limite; ?>" required>
+            </div>
+        </div>
+
         <div class="valor-final" id="valor-final">
             Valor final: R$ <?php echo number_format($preco_com_desconto, 2, ',', '.'); ?>
         </div>
 
-        <!-- Preço original escondido -->
         <input type="hidden" name="preco_original" value="<?php echo $preco_com_desconto; ?>" id="preco_original">
 
         <?php if (!empty($mensagem)): ?>
@@ -155,7 +166,6 @@ $modelos_result = $conn->query($query_modelos);
     </form>
 </div>
 
-<script src="../js/cadastrar_promo.js"> </script>
-
+<script src="../js/cadastrar_promo.js"></script>
 </body>
 </html>
