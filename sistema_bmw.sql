@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 28/04/2025 às 08:27
+-- Tempo de geração: 29/04/2025 às 10:52
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -188,19 +188,21 @@ CREATE TABLE `promocoes` (
   `modelo_id` int(11) NOT NULL,
   `desconto` decimal(5,2) NOT NULL,
   `preco_com_desconto` decimal(10,2) NOT NULL,
-  `data_limite` date NOT NULL,
-  `ativo` tinyint(1) DEFAULT 1
+  `data_limite` datetime DEFAULT NULL,
+  `ativo` tinyint(1) DEFAULT 1,
+  `status` enum('Ativa','Inativa') DEFAULT 'Ativa'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `promocoes`
 --
 
-INSERT INTO `promocoes` (`id`, `modelo_id`, `desconto`, `preco_com_desconto`, `data_limite`, `ativo`) VALUES
-(1, 1, 10.00, 207975.60, '2025-04-29', 1),
-(2, 2, 20.00, 256760.00, '2025-04-30', 1),
-(3, 3, 10.00, 371655.00, '2025-04-28', 1),
-(4, 6, 50.00, 251975.00, '2025-05-01', 1);
+INSERT INTO `promocoes` (`id`, `modelo_id`, `desconto`, `preco_com_desconto`, `data_limite`, `ativo`, `status`) VALUES
+(1, 1, 10.00, 187178.04, '2025-04-29 01:00:00', 1, 'Inativa'),
+(2, 2, 20.00, 256760.00, '2025-04-30 00:00:00', 1, 'Ativa'),
+(3, 3, 10.00, 371655.00, '2025-04-28 00:00:00', 1, 'Inativa'),
+(4, 6, 50.00, 251975.00, '2025-05-01 00:00:00', 1, 'Ativa'),
+(5, 4, 15.00, 386707.50, '2025-04-30 07:00:00', 1, 'Ativa');
 
 -- --------------------------------------------------------
 
@@ -331,7 +333,7 @@ ALTER TABLE `modelos`
 -- AUTO_INCREMENT de tabela `promocoes`
 --
 ALTER TABLE `promocoes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `veiculos`
