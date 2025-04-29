@@ -40,7 +40,12 @@ function gerarNota() {
 // Consulta para pegar os modelos de carros
 $sql = "SELECT m.id, m.modelo, m.fabricante, m.cor, m.ano, m.preco, d.descricao, d.imagem
         FROM modelos m
-        LEFT JOIN detalhes_modelos d ON m.id = d.modelo_id";
+        LEFT JOIN detalhes_modelos d ON m.id = d.modelo_id
+        WHERE m.id NOT IN (
+            SELECT modelo_id FROM promocoes
+            WHERE ativo = 1 AND data_limite > CURDATE()
+        )";
+
 $result = $conn->query($sql);
 
 // Gerar os cards

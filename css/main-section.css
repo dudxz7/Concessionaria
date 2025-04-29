@@ -140,7 +140,7 @@ html, body {
     display: flex;
     flex-wrap: nowrap; /* Impede que os cards quebrem para a próxima linha */
     gap: 24px;
-    justify-content: center; /* Centraliza os cards no carrossel */
+    justify-content: flex-start; /* Centraliza os cards no carrossel */
     position: relative;
     z-index: 1; /* Garante que os cartões fiquem por baixo dos botões */
 }
