@@ -9,7 +9,6 @@ function gerarAno($ano) {
 
 // Função para gerar o rating (quantidade de estrelas)
 function gerarRating() {
-    // Gera um número de estrelas aleatório de 3 a 5
     $estrelasCheias = rand(3, 5);
     $estrelas = [];
 
@@ -19,7 +18,7 @@ function gerarRating() {
     }
 
     // Se tiver espaço, chance de adicionar uma estrela metade
-    if (count($estrelas) < 5 && rand(0, 1)) { 
+    if (count($estrelas) < 5 && rand(0, 1)) {
         $estrelas[] = 'estrela-metade.png';
     }
 
@@ -33,18 +32,18 @@ function gerarRating() {
 
 // Função para gerar a nota (número de avaliações)
 function gerarNota() {
-    // Número aleatório de 1 a 1500 pq sim
     return rand(1, 1500);
 }
 
-// Consulta para pegar os modelos de carros
-$sql = "SELECT m.id, m.modelo, m.fabricante, m.cor, m.ano, m.preco, d.descricao, d.imagem
-        FROM modelos m
-        LEFT JOIN detalhes_modelos d ON m.id = d.modelo_id
-        WHERE m.id NOT IN (
-            SELECT modelo_id FROM promocoes
-            WHERE ativo = 1 AND data_limite > CURDATE()
-        )";
+// Consulta para pegar os modelos de carros **sem promoções ativas**
+$sql = "
+  SELECT m.id, m.modelo, m.fabricante, m.cor, m.ano, m.preco, d.descricao, d.imagem
+  FROM modelos m
+  LEFT JOIN detalhes_modelos d ON m.id = d.modelo_id
+  WHERE m.id NOT IN (
+    SELECT modelo_id FROM promocoes
+    WHERE status = 'Ativa' AND data_limite > NOW()
+  )";
 
 $result = $conn->query($sql);
 
@@ -72,7 +71,7 @@ if ($result->num_rows > 0) {
                 <p>' . htmlspecialchars($carro['descricao']) . '</p>
                 <p><img src="img/calendario.png" alt="Ano"> ' . $anoFormatado . ' <img src="img/painel-de-controle.png" alt="Km"> 0 Km</p>
                 <div class="rating">';
-        
+
         // Exibir estrelas
         foreach ($rating as $estrela) {
             echo '<img src="img/' . $estrela . '" alt="estrela">';

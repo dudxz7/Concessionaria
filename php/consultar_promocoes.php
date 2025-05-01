@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('America/Sao_Paulo');
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioLogado'] !== true) {
@@ -13,11 +14,12 @@ if ($conn->connect_error) {
     die("Falha na conexão: " . $conn->connect_error);
 }
 
-// Atualizar status de promoções automaticamente
+// Atualizar status de promoções automaticamente com base na data e hora atual
 $agora = date('Y-m-d H:i:s');
-$conn->query("UPDATE promocoes SET status = 'Inativa' WHERE data_limite < '$agora'");
+$conn->query("UPDATE promocoes SET status = 'Inativa' WHERE status = 'Ativa' AND data_limite < '$agora'");
+$conn->query("UPDATE promocoes SET status = 'Ativa' WHERE status = 'Inativa' AND data_limite >= '$agora'");
 
-// Buscar o cargo do usuário logado
+// Buscar cargo do usuário
 $usuario_id = $_SESSION['usuarioId'];
 $sql = "SELECT cargo FROM clientes WHERE id = ?";
 $stmt = $conn->prepare($sql);
@@ -25,9 +27,8 @@ $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
 $stmt->bind_result($cargo_usuario);
 $stmt->fetch();
-$stmt->free_result();
+$stmt->close();
 
-// Bloquear acesso para clientes comuns
 if ($cargo_usuario === 'Cliente') {
     echo "<h2>Acesso Negado</h2>";
     echo "<p>Você não tem permissão para acessar esta página.</p>";
@@ -52,7 +53,7 @@ if ($filtro) {
             LIMIT ?, ?";
     $stmt = $conn->prepare($sql);
     $param = "%$filtro%";
-    $stmt->bind_param("ssi", $param, $offset, $promocoes_por_pagina);
+    $stmt->bind_param("sii", $param, $offset, $promocoes_por_pagina);
 } elseif ($letra_filtro) {
     $sql = "SELECT promocoes.id, modelos.modelo, promocoes.desconto, promocoes.preco_com_desconto, promocoes.data_limite, promocoes.status 
             FROM promocoes 
@@ -100,7 +101,6 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <title>Consultar Promoções</title>
@@ -108,28 +108,23 @@ $conn->close();
     <link rel="stylesheet" href="../css/status-ativo.css">
     <link rel="icon" href="../img/logoofcbmw.png">
 </head>
-
 <body>
     <div class="container">
-        <!-- Sidebar -->
-        <div>
-            <?php include 'sidebar.php'; ?>
-        </div>
+        <?php include 'sidebar.php'; ?>
 
-        <!-- Conteúdo -->
         <div class="content">
             <?php if ($cargo_usuario === 'Admin'): ?>
-            <a href="funcoes_admin.php" class="back-button">
-                <img src="../img/seta-esquerda.png" alt="Voltar">
-            </a>
+                <a href="funcoes_admin.php" class="back-button">
+                    <img src="../img/seta-esquerda.png" alt="Voltar">
+                </a>
             <?php endif; ?>
 
             <h2 class="btn-shine">Consulta de Promoções</h2>
 
-            <?php if ($cargo_usuario === 'Gerente' || $cargo_usuario === 'Admin'): ?>
-            <a href="cadastrar_promocao.php" class="btn-novo-cliente">
-                <img src="../img/promocoes.png" alt="Cadastrar Promoção" class="img-btn">Cadastrar Nova Promoção
-            </a>
+            <?php if ($cargo_usuario === 'Admin' || $cargo_usuario === 'Gerente'): ?>
+                <a href="cadastrar_promocao.php" class="btn-novo-cliente">
+                    <img src="../img/promocoes.png" alt="Cadastrar Promoção" class="img-btn">Cadastrar Nova Promoção
+                </a>
             <?php endif; ?>
 
             <form method="GET" action="">
@@ -153,28 +148,28 @@ $conn->close();
                 </thead>
                 <tbody>
                     <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr>
-                        <td><?php echo $row['id']; ?></td>
-                        <td><?php echo $row['modelo']; ?></td>
-                        <td><?php echo $row['desconto']; ?>%</td>
-                        <td>R$ <?php echo number_format($row['preco_com_desconto'], 2, ',', '.'); ?></td>
-                        <td><?php echo date("d/m/Y", strtotime($row['data_limite'])); ?></td>
-                        <td><?php echo date("H:i", strtotime($row['data_limite'])); ?></td>
-                        <td>
-                            <?php
+                        <tr>
+                            <td><?php echo $row['id']; ?></td>
+                            <td><?php echo $row['modelo']; ?></td>
+                            <td><?php echo $row['desconto']; ?>%</td>
+                            <td>R$ <?php echo number_format($row['preco_com_desconto'], 2, ',', '.'); ?></td>
+                            <td><?php echo date("d/m/Y", strtotime($row['data_limite'])); ?></td>
+                            <td><?php echo date("H:i", strtotime($row['data_limite'])); ?></td>
+                            <td>
+                                <?php
                                     $status = trim($row['status']) === 'Ativa' ? 'ativo' : 'inativo';
                                 ?>
-                            <div class="status-container">
-                                <div class="point <?php echo $status; ?>"></div>
-                                <span><?php echo ucfirst($row['status']); ?></span>
-                            </div>
-                        </td>
-                        <td>
-                            <a class="a-btn" href="editar_promocao.php?id=<?php echo $row['id']; ?>">
-                                <img src="../img/editar.png" alt="Editar" class="btn-editar">
-                            </a>
-                        </td>
-                    </tr>
+                                <div class="status-container">
+                                    <div class="point <?php echo $status; ?>"></div>
+                                    <span><?php echo ucfirst($row['status']); ?></span>
+                                </div>
+                            </td>
+                            <td>
+                                <a class="a-btn" href="editar_promocao.php?id=<?php echo $row['id']; ?>">
+                                    <img src="../img/editar.png" alt="Editar" class="btn-editar">
+                                </a>
+                            </td>
+                        </tr>
                     <?php endwhile; ?>
                 </tbody>
             </table>
@@ -182,20 +177,17 @@ $conn->close();
             <div class="paginacao">
                 <span>Página <?php echo $pagina_atual; ?> de <?php echo $total_paginas; ?></span>
                 <?php if ($pagina_atual > 1): ?>
-                <a
-                    href="?pagina=<?php echo $pagina_atual - 1; ?>&search=<?php echo urlencode($filtro); ?>&letra=<?php echo urlencode($letra_filtro); ?>">
-                    <img src="../img/setinha-esquerda.png" class="seta-img">
-                </a>
+                    <a href="?pagina=<?php echo $pagina_atual - 1; ?>&search=<?php echo urlencode($filtro); ?>&letra=<?php echo urlencode($letra_filtro); ?>">
+                        <img src="../img/setinha-esquerda.png" class="seta-img">
+                    </a>
                 <?php endif; ?>
                 <?php if ($pagina_atual < $total_paginas): ?>
-                <a
-                    href="?pagina=<?php echo $pagina_atual + 1; ?>&search=<?php echo urlencode($filtro); ?>&letra=<?php echo urlencode($letra_filtro); ?>">
-                    <img src="../img/setinha.png" class="seta-img">
-                </a>
+                    <a href="?pagina=<?php echo $pagina_atual + 1; ?>&search=<?php echo urlencode($filtro); ?>&letra=<?php echo urlencode($letra_filtro); ?>">
+                        <img src="../img/setinha.png" class="seta-img">
+                    </a>
                 <?php endif; ?>
             </div>
         </div>
     </div>
 </body>
-
 </html>

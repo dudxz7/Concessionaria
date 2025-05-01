@@ -138,11 +138,13 @@ html, body {
 /* Cards e demais estilos continuam os mesmos */
 .cards-container {
     display: flex;
-    flex-wrap: nowrap; /* Impede que os cards quebrem para a próxima linha */
+    flex-wrap: nowrap;
     gap: 24px;
-    justify-content: flex-start; /* Centraliza os cards no carrossel */
+    justify-content: center; /* <- centraliza os cards */
+    width: max-content;      /* <- faz o container ter só a largura necessária */
+    margin: 0 auto;          /* <- centraliza quando não tem scroll */
     position: relative;
-    z-index: 1; /* Garante que os cartões fiquem por baixo dos botões */
+    z-index: 1;
 }
 
 .card {
@@ -390,15 +392,15 @@ html, body {
 }
 /* Wrapper do tempo (não precisa de gatilho agora) */
 .tempo-restante-wrapper {
-    position: absolute;  /* Posiciona dentro do card */
+    position: absolute;
     display: flex;
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center;     /* Centraliza verticalmente */
-    width: 100%;             /* Faz com que ocupe todo o espaço */
-    height: 100%;  
-    top: 10px;         /* Preenche o card */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    top: 10px;
+    pointer-events: none; /* Impede o bloqueio de cliques no conteúdo abaixo */
 }
-
 /* Tempo-restante invisível no começo */
 .tempo-restante {
     display: inline-flex;
