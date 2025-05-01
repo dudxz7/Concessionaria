@@ -169,6 +169,6 @@ $modelos_result = $conn->query($query_modelos);
     </form>
 </div>
 
-<script src="../js/cadastrar_promo.js"></script>
+<script src="../js/atualizar_promo.js"></script>
 </body>
 </html>

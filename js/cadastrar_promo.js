@@ -1,34 +1,60 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const selectModelo = document.getElementById("modelo_id");
-    const inputDesconto = document.getElementById("desconto");
-    const campoValorFinal = document.getElementById("valor-final");
-    const inputPrecoOriginal = document.getElementById("preco_original");
+$(function() {
+    let precoOriginal = {};
+    $('#modelo_id option').each(function() {
+        let id = $(this).val(),
+            p = $(this).data('preco');
+        if (id !== 'all') precoOriginal[id] = parseFloat(p);
+    });
 
-    function atualizarPrecoFinal() {
-        // Primeiro tenta o preco_original escondido (definido pelo PHP)
-        let precoBase = parseFloat(inputPrecoOriginal.value || 0);
+    const select = $('#modelo_id'),
+        desconto = $('#desconto'),
+        msg = $('#mensagem-desconto');
 
-        // Se modelo mudou, pega o novo preco do <option>
-        if (selectModelo.selectedOptions.length > 0) {
-            const precoFromOption = parseFloat(selectModelo.selectedOptions[0].dataset.preco || 0);
-            if (!isNaN(precoFromOption)) precoBase = precoFromOption;
+    function atualizar() {
+        let ids = select.val() || [],
+            d = parseFloat(desconto.val());
+        let total = select.find('option').not('[value="all"]').length;
+        if (!ids.length || isNaN(d)) {
+            msg.text('');
+            return;
         }
-
-        const desconto = parseFloat(inputDesconto.value || 0);
-
-        if (!isNaN(precoBase) && !isNaN(desconto)) {
-            const precoComDesconto = precoBase * (1 - desconto / 100);
-            campoValorFinal.textContent = "Valor final: R$ " + precoComDesconto.toLocaleString('pt-BR', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
+        if (ids.includes('all')) {
+            select.val(Object.keys(precoOriginal)).trigger('change.select2');
+            msg.html(`Aplicando ${d}% de desconto em <strong>todos os veículos</strong>.`);
+        } else if (ids.length === 1) {
+            let p = precoOriginal[ids[0]],
+                pf = p - p * d / 100;
+            msg.text('Valor final: R$ ' +
+                pf.toLocaleString('pt-BR', {
+                    minimumFractionDigits: 2
+                }));
         } else {
-            campoValorFinal.textContent = "Valor final: R$ -";
+            msg.html(`Aplicando ${d}% de desconto em <strong>${ids.length} veículos</strong>.`);
         }
     }
 
-    atualizarPrecoFinal();
+    select.select2({
+            placeholder: "Selecione os modelos",
+            width: '100%',
+            minimumResultsForSearch: Infinity // Remove barra de pesquisa
+        })
+        .on('change', atualizar)
+        .on('select2:opening', function() {
+            // Impede digitação no campo de busca interno
+            setTimeout(() => {
+                $('.select2-search__field').prop('readonly', true);
+            }, 0);
+        });
 
-    selectModelo.addEventListener("change", atualizarPrecoFinal);
-    inputDesconto.addEventListener("input", atualizarPrecoFinal);
+    // Impede remover opções selecionadas com o teclado
+    $(document).on('keydown', '.select2-selection__choice__remove', function(e) {
+        e.preventDefault();
+    });
+
+    desconto.on('input', atualizar);
+
+    // Ao focar nos campos de data e hora, abrir o seletor automaticamente (para navegadores compatíveis)
+    $('#data_limite_data, #data_limite_hora').on('focus', function() {
+        if (this.showPicker) this.showPicker();
+    });
 });
