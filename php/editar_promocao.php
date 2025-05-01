@@ -2,7 +2,6 @@
 include('conexao.php');
 session_start();
 
-// Verificar se o usuário está logado e tem permissões adequadas
 if (!isset($_SESSION['usuarioLogado']) || $_SESSION['usuarioLogado'] !== true) {
     header("Location: ../login.html");
     exit;
@@ -15,11 +14,9 @@ if (!in_array($cargo_usuario, ['Gerente', 'Admin'])) {
     exit;
 }
 
-// Verificar se o ID da promoção foi passado
 if (isset($_GET['id'])) {
     $promo_id = $_GET['id'];
 
-    // Buscar os dados da promoção
     $query = "SELECT * FROM promocoes WHERE id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $promo_id);
@@ -33,6 +30,14 @@ if (isset($_GET['id'])) {
         $preco_com_desconto = $promo['preco_com_desconto'];
         $data_limite = explode(" ", $promo['data_limite'])[0];
         $hora_limite = explode(" ", $promo['data_limite'])[1] ?? '00:00';
+
+        // Buscar o preço original do modelo
+        $query_preco = "SELECT preco FROM modelos WHERE id = ?";
+        $stmt_preco = $conn->prepare($query_preco);
+        $stmt_preco->bind_param("i", $modelo_id);
+        $stmt_preco->execute();
+        $result_preco = $stmt_preco->get_result();
+        $preco_original = $result_preco->fetch_assoc()['preco'] ?? 0;
     } else {
         echo "Promoção não encontrada!";
         exit;
@@ -50,15 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $desconto = $_POST['desconto'];
     $data_limite = $_POST['data_limite'];
     $hora_limite = $_POST['hora_limite'] ?? '00:00';
+    $preco_original = floatval($_POST['preco_original']);
 
-    // Combinar data e hora
     $data_hora_limite = $data_limite . ' ' . $hora_limite;
+    $preco_com_desconto = $preco_original - ($preco_original * ($desconto / 100));
 
-    // Calcular o novo preço com desconto
-    $preco_original = $_POST['preco_original'];
-    $preco_com_desconto = floatval($preco_original) - (floatval($preco_original) * ($desconto / 100));
-
-    // Atualizar no banco de dados
     $update = $conn->prepare("UPDATE promocoes SET modelo_id = ?, desconto = ?, preco_com_desconto = ?, data_limite = ? WHERE id = ?");
     $update->bind_param("idssi", $modelo_id, $desconto, $preco_com_desconto, $data_hora_limite, $promo_id);
 
@@ -71,7 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Buscar todos os modelos para o select
 $query_modelos = "SELECT id, modelo, preco FROM modelos";
 $modelos_result = $conn->query($query_modelos);
 ?>
@@ -116,7 +116,9 @@ $modelos_result = $conn->query($query_modelos);
                 <select name="modelo_id" id="modelo_id" required>
                     <option value="" disabled>Selecione o modelo</option>
                     <?php while ($row = $modelos_result->fetch_assoc()): ?>
-                        <option value="<?php echo $row['id']; ?>" <?php echo ($row['id'] == $modelo_id) ? 'selected' : ''; ?> data-preco="<?php echo $row['preco']; ?>">
+                        <option value="<?php echo $row['id']; ?>"
+                                <?php echo ($row['id'] == $modelo_id) ? 'selected' : ''; ?>
+                                data-preco="<?php echo $row['preco']; ?>">
                             <?php echo htmlspecialchars($row['modelo']); ?>
                         </option>
                     <?php endwhile; ?>
@@ -128,7 +130,8 @@ $modelos_result = $conn->query($query_modelos);
         <div class="input-group">
             <label for="desconto">Desconto (%)</label>
             <div class="input-wrapper">
-                <input type="number" name="desconto" id="desconto" min="0" max="100" step="0.01" value="<?php echo $desconto; ?>" required>
+                <input type="number" name="desconto" id="desconto" min="0" max="100" step="0.01"
+                       value="<?php echo $desconto; ?>" required>
                 <img src="../img/preco.png" alt="Ícone desconto">
             </div>
         </div>
@@ -148,10 +151,10 @@ $modelos_result = $conn->query($query_modelos);
         </div>
 
         <div class="valor-final" id="valor-final">
-            Valor final: R$ <?php echo number_format($preco_com_desconto, 2, ',', '.'); ?>
+            Calculando...
         </div>
 
-        <input type="hidden" name="preco_original" value="<?php echo $preco_com_desconto; ?>" id="preco_original">
+        <input type="hidden" name="preco_original" value="<?php echo $preco_original; ?>" id="preco_original">
 
         <?php if (!empty($mensagem)): ?>
             <div class="<?php echo $mensagem_tipo; ?>" style="display:block;">
