@@ -7,10 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Troca a imagem
             if (estaSalvo) {
-                this.src = "img/coracao-nao-salvo.png";
+                this.src = "img/coracoes/coracao-nao-salvo.png";
                 this.setAttribute("data-salvo", "false");
             } else {
-                this.src = "img/coracao-salvo.png";
+                this.src = "img/coracoes/coracao-salvo.png";
                 this.setAttribute("data-salvo", "true");
 
                 // Cria partículas rosa

@@ -82,7 +82,7 @@ $modelos_result = $conn->query($query_modelos);
     <meta charset="UTF-8">
     <title>Editar Promoção</title>
     <link rel="stylesheet" href="../css/registro.css">
-    <link rel="icon" href="../img/logoofcbmw.png">
+    <link rel="icon" href="../img/logos/logoofcbmw.png">
     <style>
         input[type="date"], input[type="time"] {
             padding: 10px;
@@ -123,7 +123,7 @@ $modelos_result = $conn->query($query_modelos);
                         </option>
                     <?php endwhile; ?>
                 </select>
-                <img src="../img/carro.png" alt="Ícone modelo">
+                <img src="../img/veiculos/carro.png" alt="Ícone modelo">
             </div>
         </div>
 
@@ -132,7 +132,7 @@ $modelos_result = $conn->query($query_modelos);
             <div class="input-wrapper">
                 <input type="number" name="desconto" id="desconto" min="0" max="100" step="0.01"
                        value="<?php echo $desconto; ?>" required>
-                <img src="../img/preco.png" alt="Ícone desconto">
+                <img src="../img/veiculos/preco.png" alt="Ícone desconto">
             </div>
         </div>
 
@@ -163,7 +163,7 @@ $modelos_result = $conn->query($query_modelos);
         <?php endif; ?>
 
         <button type="submit" class="btn">
-            <img src="../img/verifica.png" alt="Ícone de check">
+            <img src="../img/registro/verifica.png" alt="Ícone de check">
             Atualizar Promoção
         </button>
     </form>

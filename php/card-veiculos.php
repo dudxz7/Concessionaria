@@ -64,17 +64,17 @@ if ($result->num_rows > 0) {
 
         echo '<div class="card">
                 <div class="favorite-icon">
-                    <img src="img/coracao-nao-salvo.png" alt="Favoritar" class="heart-icon" draggable="false">
+                    <img src="img/coracoes/coracao-nao-salvo.png" alt="Favoritar" class="heart-icon" draggable="false">
                 </div>
                 <img src="' . $imagemPath . '" alt="' . htmlspecialchars($carro['modelo']) . '">
                 <h2>' . htmlspecialchars($carro['modelo']) . '</h2>
                 <p>' . htmlspecialchars($carro['descricao']) . '</p>
-                <p><img src="img/calendario.png" alt="Ano"> ' . $anoFormatado . ' <img src="img/painel-de-controle.png" alt="Km"> 0 Km</p>
+                <p><img src="img/cards/calendario.png" alt="Ano"> ' . $anoFormatado . ' <img src="img/cards/painel-de-controle.png" alt="Km"> 0 Km</p>
                 <div class="rating">';
 
         // Exibir estrelas
         foreach ($rating as $estrela) {
-            echo '<img src="img/' . $estrela . '" alt="estrela">';
+            echo '<img src="img/cards/' . $estrela . '" alt="estrela">';
         }
 
         // Exibir nota aleatória

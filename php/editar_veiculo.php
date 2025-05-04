@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $veiculo) {
     <meta charset="UTF-8">
     <title>Editar Veículo</title>
     <link rel="stylesheet" href="../css/registro.css">
-    <link rel="icon" href="../img/logoofcbmw.png">
+    <link rel="icon" href="../img/logos/logoofcbmw.png">
 </head>
 <body>
     <div class="container">
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $veiculo) {
                             <option disabled>Nenhum modelo encontrado</option>
                         <?php endif; ?>
                     </select>
-                    <img src="../img/carro.png" alt="Ícone modelo">
+                    <img src="../img/veiculos/carro.png" alt="Ícone modelo">
                 </div>
             </div>
 
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $veiculo) {
             <?php endif; ?>
 
             <button type="submit" class="btn">
-                <img src="../img/verifica.png" alt="Ícone de check">
+                <img src="../img/registro/verifica.png" alt="Ícone de check">
                 Salvar Alterações
             </button>
         </form>

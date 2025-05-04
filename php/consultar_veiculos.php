@@ -107,7 +107,7 @@ $conn->close();
     <meta charset="UTF-8">
     <title>Consultar Veículos</title>
     <link rel="stylesheet" href="../css/consultar_clientes.css">
-    <link rel="icon" href="../img/logoofcbmw.png">
+    <link rel="icon" href="../img/logos/logoofcbmw.png">
 </head>
 <body>
     <div class="container">
@@ -127,7 +127,7 @@ $conn->close();
 
             <?php if ($cargo_usuario === 'Gerente' || $cargo_usuario === 'Admin'): ?>
                 <a href="cadastrar_veiculo.php" class="btn-novo-cliente">
-                    <img src="../img/carro.png" alt="Cadastrar Veículo" class="img-btn">Cadastrar Veículo Novo
+                    <img src="../img/veiculos/carro.png" alt="Cadastrar Veículo" class="img-btn">Cadastrar Veículo Novo
                 </a>
             <?php endif; ?>
 

@@ -1,7 +1,7 @@
 /* Seção inicial com a imagem de fundo */
 .hero-section {
     height: 100vh; /* A altura vai ocupar toda a tela */
-    background-image: url('../img/bg.jpg'); /* Imagem de fundo */
+    background-image: url('../img/background-main/bg.jpg'); /* Imagem de fundo */
     background-size: cover; /* A imagem vai cobrir toda a tela */
     background-position: center; /* Centraliza a imagem */
     display: flex;

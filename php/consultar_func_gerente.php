@@ -105,7 +105,7 @@ $conn->close();
     <meta charset="UTF-8">
     <title>Consultar Funcionários</title>
     <link rel="stylesheet" href="../css/consultar_clientes.css">
-    <link rel="icon" href="../img/logoofcbmw.png">
+    <link rel="icon" href="../img/logos/logoofcbmw.png">
 </head>
 <body>
 <div class="container">

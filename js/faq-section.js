@@ -11,14 +11,14 @@ faqItems.forEach((item) => {
     // Fecha todos
     faqItems.forEach((i) => {
         i.classList.remove("open");
-        i.querySelector(".faq-toggle img").src = "img/mais.png";
+        i.querySelector(".faq-toggle img").src = "img/faq/mais.png";
         // Remove a classe 'highlighted' de todos os spans
         i.querySelector(".faq-question span").classList.remove("highlighted");
     });
 
     if (!isOpen) {
         item.classList.add("open");
-        img.src = "img/x-fechar.png";
+        img.src = "img/faq/x-fechar.png";
         // Adiciona a classe 'highlighted' ao span quando o item for aberto
         question.querySelector("span").classList.add("highlighted");
     }

@@ -13,7 +13,7 @@ function trocarImagem(icone, srcHover) {
 
 // Rodar só depois que carregar tudo
 document.addEventListener("DOMContentLoaded", () => {
-    trocarImagem(document.querySelector(".instagram"), "img/insta-colorido.png");
-    trocarImagem(document.querySelector(".whatsapp"),"img/whatsapp-colorido.png");
-    trocarImagem(document.querySelector(".facebook"), "img/facebook-colorido.png");
+    trocarImagem(document.querySelector(".instagram"), "img/redes-sociais/insta-colorido.png");
+    trocarImagem(document.querySelector(".whatsapp"),"img/redes-sociais/whatsapp-colorido.png");
+    trocarImagem(document.querySelector(".facebook"), "img/redes-sociais/facebook-colorido.png");
 });

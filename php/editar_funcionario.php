@@ -122,7 +122,7 @@ if ($usuarioCargo == 'Gerente') {
     <meta charset="UTF-8">
     <title>Editar Funcionário</title>
     <link rel="stylesheet" href="../css/registro.css">
-    <link rel="icon" href="../img/logoofcbmw.png">
+    <link rel="icon" href="../img/logos/logoofcbmw.png">
 </head>
 <body>
 <div class="container">
@@ -138,7 +138,7 @@ if ($usuarioCargo == 'Gerente') {
             <label>Nome completo</label>
             <div class="input-wrapper">
                 <input type="text" name="nome" value="<?= $dados['nome_completo'] ?? '' ?>" required>
-                <img src="../img/usersemfundo.png" alt="Ícone usuário">
+                <img src="../img/registro/usersemfundo.png" alt="Ícone usuário">
             </div>
         </div>
 
@@ -146,7 +146,7 @@ if ($usuarioCargo == 'Gerente') {
             <label>E-mail</label>
             <div class="input-wrapper">
                 <input type="email" name="email" value="<?= $dados['email'] ?? '' ?>" required>
-                <img src="../img/e-mail.png" alt="Ícone e-mail">
+                <img src="../img/registro/e-mail.png" alt="Ícone e-mail">
             </div>
         </div>
 
@@ -155,7 +155,7 @@ if ($usuarioCargo == 'Gerente') {
                 <label>PIS</label>
                 <div class="input-wrapper">
                     <input type="text" name="pis" value="<?= $dados['pis'] ?? '' ?>" maxlength="11">
-                    <img src="../img/arquivo.png" alt="Ícone PIS">
+                    <img src="../img/registro/arquivo.png" alt="Ícone PIS">
                 </div>
             </div>
 
@@ -163,7 +163,7 @@ if ($usuarioCargo == 'Gerente') {
                 <label>Endereço</label>
                 <div class="input-wrapper">
                     <input type="text" name="endereco" value="<?= $dados['endereco'] ?? '' ?>">
-                    <img src="../img/lugar-colocar.png" alt="Ícone endereço">
+                    <img src="../img/registro/lugar-colocar.png" alt="Ícone endereço">
                 </div>
             </div>
         </div>
@@ -173,14 +173,14 @@ if ($usuarioCargo == 'Gerente') {
                 <label>CPF</label>
                 <div class="input-wrapper">
                     <input type="text" name="cpf" value="<?= $dados['cpf'] ?? '' ?>" required>
-                    <img src="../img/arquivo.png" alt="Ícone CPF">
+                    <img src="../img/registro/arquivo.png" alt="Ícone CPF">
                 </div>
             </div>
             <div class="input-group">
                 <label>RG</label>
                 <div class="input-wrapper">
                     <input type="text" name="rg" value="<?= $dados['rg'] ?? '' ?>" required>
-                    <img src="../img/cartaozin.png" alt="Ícone RG">
+                    <img src="../img/registro/cartaozin.png" alt="Ícone RG">
                 </div>
             </div>
         </div>
@@ -190,14 +190,14 @@ if ($usuarioCargo == 'Gerente') {
                 <label>Cidade</label>
                 <div class="input-wrapper">
                     <input type="text" name="cidade" value="<?= $dados['cidade'] ?? '' ?>" required>
-                    <img src="../img/construcao-da-cidade.png" alt="Ícone cidade">
+                    <img src="../img/registro/construcao-da-cidade.png" alt="Ícone cidade">
                 </div>
             </div>
             <div class="input-group">
                 <label>Estado</label>
                 <div class="input-wrapper">
                     <input type="text" name="estado" value="<?= $dados['estado'] ?? '' ?>" maxlength="2" required>
-                    <img src="../img/lugar-colocar.png" alt="Ícone estado">
+                    <img src="../img/registro/lugar-colocar.png" alt="Ícone estado">
                 </div>
             </div>
         </div>
@@ -207,20 +207,20 @@ if ($usuarioCargo == 'Gerente') {
                 <label>Telefone</label>
                 <div class="input-wrapper">
                     <input type="tel" name="telefone" value="<?= $dados['telefone'] ?? '' ?>" required>
-                    <img src="../img/telefone.png" alt="Ícone telefone">
+                    <img src="../img/registro/telefone.png" alt="Ícone telefone">
                 </div>
             </div>
             <div class="input-group">
                 <label>CNH</label>
                 <div class="input-wrapper">
                     <input type="text" name="cnh" value="<?= $dados['cnh'] ?? '' ?>">
-                    <img src="../img/condutor.png" alt="Ícone CNH">
+                    <img src="../img/registro/carteira-de-motorista.png" alt="Ícone CNH">
                 </div>
             </div>
         </div>
 
         <button type="submit" class="btn">
-            <img src="../img/verifica.png" alt="Ícone de check">
+            <img src="../img/registro/verifica.png" alt="Ícone de check">
             Atualizar Dados
         </button>
     </form>

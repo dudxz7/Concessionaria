@@ -113,7 +113,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Dados Cliente</title>
     <link rel="stylesheet" href="../css/registro.css">
-    <link rel="icon" href="../img/logoofcbmw.png">
+    <link rel="icon" href="../img/logos/logoofcbmw.png">
 </head>
 <body>
     <div class="container">
@@ -128,7 +128,7 @@ $conn->close();
                 <label>Nome completo</label>
                 <div class="input-wrapper">
                     <input type="text" name="nome" value="<?php echo $nome_completo; ?>" required>
-                    <img src="../img/usersemfundo.png" alt="Ícone usuário">
+                    <img src="../img/registro/usersemfundo.png" alt="Ícone usuário">
                 </div>
             </div>
             
@@ -137,7 +137,7 @@ $conn->close();
                 <label>E-mail</label>
                 <div class="input-wrapper">
                     <input type="email" name="email" value="<?php echo $email; ?>" required>
-                    <img src="../img/e-mail.png" alt="Ícone e-mail">
+                    <img src="../img/registro/e-mail.png" alt="Ícone e-mail">
                 </div>
             </div>
             
@@ -147,14 +147,14 @@ $conn->close();
                     <label>CPF</label>
                     <div class="input-wrapper">
                         <input type="text" name="cpf" value="<?php echo $cpf; ?>" id="cpf" required>
-                        <img src="../img/arquivo.png" alt="Ícone CPF">
+                        <img src="../img/registro/arquivo.png" alt="Ícone CPF">
                     </div>
                 </div>
                 <div class="input-group">
                     <label>RG</label>
                     <div class="input-wrapper">
                         <input type="text" name="rg" value="<?php echo $rg; ?>" id="rg" required>
-                        <img src="../img/cartaozin.png" alt="Ícone RG">
+                        <img src="../img/registro/cartaozin.png" alt="Ícone RG">
                     </div>
                 </div>
             </div>
@@ -165,14 +165,14 @@ $conn->close();
                     <label>Cidade</label>
                     <div class="input-wrapper">
                         <input type="text" name="cidade" value="<?php echo $cidade; ?>" id="cidade" required>
-                        <img src="../img/construcao-da-cidade.png" alt="Ícone cidade">
+                        <img src="../img/registro/construcao-da-cidade.png" alt="Ícone cidade">
                     </div>
                 </div>
                 <div class="input-group">
                     <label>Estado</label>
                     <div class="input-wrapper">
                         <input type="text" name="estado" value="<?php echo $estado; ?>" id="estado" required maxlength="2">
-                        <img src="../img/lugar-colocar.png" alt="Ícone estado">
+                        <img src="../img/registro/lugar-colocar.png" alt="Ícone estado">
                     </div>
                 </div>
             </div>
@@ -183,14 +183,14 @@ $conn->close();
                     <label>Telefone</label>
                     <div class="input-wrapper">
                         <input type="tel" name="telefone" value="<?php echo $telefone; ?>" id="telefone" required>
-                        <img src="../img/telefone.png" alt="Ícone telefone">
+                        <img src="../img/registro/telefone.png" alt="Ícone telefone">
                     </div>
                 </div>
                 <div class="input-group">
                     <label>CNH</label>
                     <div class="input-wrapper">
                         <input type="text" name="cnh" value="<?php echo $cnh; ?>" id="cnh">
-                        <img src="../img/carteira-de-motorista.png" alt="Ícone CNH">
+                        <img src="../img/registro/carteira-de-motorista.png" alt="Ícone CNH">
                     </div>
                 </div>
             </div>
@@ -219,7 +219,7 @@ $conn->close();
             </div>
 
             <button type="submit" class="btn">
-                <img src="../img/verifica.png" alt="Ícone de check">
+                <img src="../img/registro/verifica.png" alt="Ícone de check">
                 Salvar alterações
             </button>
         </form>

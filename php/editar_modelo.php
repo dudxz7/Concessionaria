@@ -142,7 +142,7 @@ $conn->close();
     <title>Editar Modelo</title>
     <link rel="stylesheet" href="../css/registro.css">
     <link rel="stylesheet" href="../css/checkbox-cor-veiculos.css">
-    <link rel="icon" href="../img/logoofcbmw.png">
+    <link rel="icon" href="../img/logos/logoofcbmw.png">
 </head>
 
 <body>
@@ -159,7 +159,7 @@ $conn->close();
                 <div class="input-wrapper">
                     <input type="text" name="modelo" required
                         value="<?php echo htmlspecialchars($modelo['modelo']); ?>">
-                    <img src="../img/carro.png" alt="Ícone modelo">
+                    <img src="../img/veiculos/carro.png" alt="Ícone modelo">
                 </div>
             </div>
 
@@ -168,7 +168,7 @@ $conn->close();
                 <label>Fabricante</label>
                 <div class="input-wrapper">
                     <input type="text" name="fabricante" id="input-fabricante" value="BMW" readonly>
-                    <img src="../img/fabricante.png" alt="Ícone fabricante">
+                    <img src="../img/veiculos/fabricante.png" alt="Ícone fabricante">
                 </div>
             </div>
 
@@ -178,7 +178,7 @@ $conn->close();
                 <div class="input-wrapper">
                     <input type="text" name="ano" required maxlength="4" id="ano"
                         value="<?php echo htmlspecialchars($modelo['ano']); ?>">
-                    <img src="../img/ano.png" alt="Ícone ano">
+                    <img src="../img/registro/ano.png" alt="Ícone ano">
                 </div>
             </div>
 
@@ -188,7 +188,7 @@ $conn->close();
                 <div class="input-wrapper">
                     <input type="text" name="preco" required id="preco"
                         value="<?php echo number_format($modelo['preco'], 2, ',', '.'); ?>">
-                    <img src="../img/preco.png" alt="Ícone preço">
+                    <img src="../img/veiculos/preco.png" alt="Ícone preço">
                 </div>
             </div>
 
@@ -198,7 +198,7 @@ $conn->close();
                 <div class="input-wrapper">
                     <input type="text" name="descricao" maxlength="62" required
                         value="<?php echo htmlspecialchars($modelo['descricao']); ?>">
-                    <img src="../img/escrevendo.png" alt="Ícone descrição">
+                    <img src="../img/veiculos/escrevendo.png" alt="Ícone descrição">
                 </div>
             </div>
 
@@ -249,7 +249,7 @@ $conn->close();
             </div>
 
             <button type="submit" class="btn">
-                <img src="../img/verifica.png" alt="Ícone de check">
+                <img src="../img/registro/verifica.png" alt="Ícone de check">
                 Atualizar Modelo
             </button>
         </form>

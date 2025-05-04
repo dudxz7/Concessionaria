@@ -22,7 +22,7 @@ if ($cargoUsuario !== 'Admin' && $cargoUsuario !== 'Gerente') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro BMW - Admin</title>
     <link rel="stylesheet" href="../css/registro.css">
-    <link rel="icon" href="../img/logoofcbmw.png">
+    <link rel="icon" href="../img/logos/logoofcbmw.png">
 </head>
 <body>
     <div class="container">
@@ -41,7 +41,7 @@ if ($cargoUsuario !== 'Admin' && $cargoUsuario !== 'Gerente') {
                 <label>Nome completo</label>
                 <div class="input-wrapper">
                     <input type="text" name="nome" placeholder="Nome completo" required>
-                    <img src="../img/usersemfundo.png" alt="Ícone usuário">
+                    <img src="../img/registro/usersemfundo.png" alt="Ícone usuário">
                 </div>
             </div>
 
@@ -49,7 +49,7 @@ if ($cargoUsuario !== 'Admin' && $cargoUsuario !== 'Gerente') {
                 <label>E-mail</label>
                 <div class="input-wrapper">
                     <input type="email" name="email" placeholder="E-mail" required>
-                    <img src="../img/e-mail.png" alt="Ícone e-mail">
+                    <img src="../img/registro/e-mail.png" alt="Ícone e-mail">
                 </div>
             </div>
 
@@ -73,7 +73,7 @@ if ($cargoUsuario !== 'Admin' && $cargoUsuario !== 'Gerente') {
                     <label>PIS</label>
                     <div class="input-wrapper">
                         <input type="text" id="pis" name="pis" placeholder="Número do PIS" required maxlength="11">
-                        <img src="../img/arquivo.png" alt="Ícone PIS">
+                        <img src="../img/registro/arquivo.png" alt="Ícone PIS">
                     </div>
                 </div>
 
@@ -81,7 +81,7 @@ if ($cargoUsuario !== 'Admin' && $cargoUsuario !== 'Gerente') {
                     <label>Endereço</label>
                     <div class="input-wrapper">
                         <input type="text" name="endereco" placeholder="Endereço completo" required>
-                        <img src="../img/lugar-colocar.png" alt="Ícone endereço">
+                        <img src="../img/registro/lugar-colocar.png" alt="Ícone endereço">
                     </div>
                 </div>
             </div>
@@ -91,14 +91,14 @@ if ($cargoUsuario !== 'Admin' && $cargoUsuario !== 'Gerente') {
                     <label>CPF</label>
                     <div class="input-wrapper">
                         <input type="text" name="cpf" placeholder="CPF" id="cpf" required>
-                        <img src="../img/arquivo.png" alt="Ícone CPF">
+                        <img src="../img/registro/arquivo.png" alt="Ícone CPF">
                     </div>
                 </div>
                 <div class="input-group">
                     <label>RG</label>
                     <div class="input-wrapper">
                         <input type="text" name="rg" placeholder="RG" id="rg" required>
-                        <img src="../img/cartaozin.png" alt="Ícone RG">
+                        <img src="../img/registro/cartaozin.png" alt="Ícone RG">
                     </div>
                 </div>
             </div>
@@ -108,14 +108,14 @@ if ($cargoUsuario !== 'Admin' && $cargoUsuario !== 'Gerente') {
                     <label>Cidade</label>
                     <div class="input-wrapper">
                         <input type="text" name="cidade" placeholder="Cidade" id="cidade" required>
-                        <img src="../img/construcao-da-cidade.png" alt="Ícone cidade">
+                        <img src="../img/registro/construcao-da-cidade.png" alt="Ícone cidade">
                     </div>
                 </div>
                 <div class="input-group">
                     <label>Estado</label>
                     <div class="input-wrapper">
                         <input type="text" name="estado" placeholder="Estado Abreviado" id="estado" required maxlength="2">
-                        <img src="../img/lugar-colocar.png" alt="Ícone estado">
+                        <img src="../img/registro/lugar-colocar.png" alt="Ícone estado">
                     </div>
                 </div>
             </div>
@@ -125,14 +125,14 @@ if ($cargoUsuario !== 'Admin' && $cargoUsuario !== 'Gerente') {
                     <label>Telefone</label>
                     <div class="input-wrapper">
                         <input type="tel" name="telefone" placeholder="Telefone" id="telefone" required>
-                        <img src="../img/telefone.png" alt="Ícone telefone">
+                        <img src="../img/registro/telefone.png" alt="Ícone telefone">
                     </div>
                 </div>
                 <div class="input-group">
                     <label>CNH</label>
                     <div class="input-wrapper">
                         <input type="text" name="cnh" placeholder="CNH" id="cnh">
-                        <img src="../img/carteira-de-motorista.png" alt="Ícone CNH">
+                        <img src="../img/registro/carteira-de-motorista.png" alt="Ícone CNH">
                     </div>
                 </div>
             </div>

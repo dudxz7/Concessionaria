@@ -78,7 +78,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil BMW</title>
     <link rel="stylesheet" href="css/perfil.css">
-    <link rel="icon" href="img/logoofcbmw.png">
+    <link rel="icon" href="img/logos/logoofcbmw.png">
 </head>
 <body>
     <div class="container">

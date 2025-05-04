@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Cadastrar Modelo</title>
     <link rel="stylesheet" href="../css/registro.css">
     <link rel="stylesheet" href="../css/checkbox-cor-veiculos.css">
-    <link rel="icon" href="../img/logoofcbmw.png">
+    <link rel="icon" href="../img/logos/logoofcbmw.png">
     <style>
     input#input-fabricante[readonly],
     input#input-fabricante:disabled {
@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>Modelo</label>
                 <div class="input-wrapper">
                     <input type="text" name="modelo" required>
-                    <img src="../img/carro.png" alt="Ícone modelo">
+                    <img src="../img/veiculos/carro.png" alt="Ícone modelo">
                 </div>
             </div>
 
@@ -169,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>Fabricante</label>
                 <div class="input-wrapper">
                     <input type="text" name="fabricante" id="input-fabricante" value="BMW" readonly>
-                    <img src="../img/fabricante.png" alt="Ícone fabricante">
+                    <img src="../img/veiculos/fabricante.png" alt="Ícone fabricante">
                 </div>
             </div>
 
@@ -178,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>Ano</label>
                 <div class="input-wrapper">
                     <input type="text" name="ano" required maxlength="4" id="ano">
-                    <img src="../img/ano.png" alt="Ícone ano">
+                    <img src="../img/registro/ano.png" alt="Ícone ano">
                 </div>
             </div>
 
@@ -187,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>Preço</label>
                 <div class="input-wrapper">
                     <input type="text" name="preco" required id="preco">
-                    <img src="../img/preco.png" alt="Ícone preço">
+                    <img src="../img/veiculos/preco.png" alt="Ícone preço">
                 </div>
             </div>
 
@@ -196,7 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>Descrição</label>
                 <div class="input-wrapper">
                     <input type="text" name="descricao" maxlength="62" required>
-                    <img src="../img/escrevendo.png" alt="Ícone descrição">
+                    <img src="../img/veiculos/escrevendo.png" alt="Ícone descrição">
                 </div>
             </div>
 
@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>Imagem Principal</label>
                 <div class="input-wrapper">
                     <input type="file" name="imagem" accept="image/*" required>
-                    <img src="../img/imagem.png" alt="Ícone imagem">
+                    <img src="../img/veiculos/imagem.png" alt="Ícone imagem">
                 </div>
             </div>
 
@@ -232,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <button type="submit" class="btn">
-                <img src="../img/verifica.png" alt="Ícone de check">
+                <img src="../img/registro/verifica.png" alt="Ícone de check">
                 Cadastrar Modelo
             </button>
         </form>

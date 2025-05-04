@@ -19,7 +19,7 @@ $email = $_SESSION['email'] ?? 'admin@gmail.com';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Funções Admin</title>
     <link rel="stylesheet" href="../css/admin_dashboard.css">
-    <link rel="icon" href="../img/admin_colored.png">
+    <link rel="icon" href="../img/logos/admin_colored.png">
 </head>
 <body>
     <div class="container">
