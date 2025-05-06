@@ -64,30 +64,24 @@ if ($result && $result->num_rows > 0) {
         $precoOriginal = (float)$carro['preco_original'];
         $precoComDesconto = (float)$carro['preco_com_desconto'];
 
-        // --- Tempo restante ---
-        // A diferença entre a data atual e a data limite
+        // --- Tempo restante (preciso) ---
+        $dataAtual = new DateTime();
         $dataLimite = new DateTime($carro['data_limite']);
-        $intervalo = (new DateTime())->diff($dataLimite);
+        $intervalo = $dataAtual->diff($dataLimite);
 
-        // Verificar a unidade de tempo a ser exibida
-        if ($intervalo->y > 0) { 
-            // Se for mais de 1 ano
-            $diasRest = $intervalo->y . ' ano' . ($intervalo->y > 1 ? 's' : ''); 
-        } elseif ($intervalo->m > 0) { 
-            // Se for mais de 1 mês
-            $diasRest = $intervalo->m . ' mês' . ($intervalo->m > 1 ? 'es' : '');
-        } elseif ($intervalo->d > 0) { 
-            // Se for mais de 1 dia
-            $diasRest = $intervalo->d . ' dia' . ($intervalo->d > 1 ? 's' : '');
-        } elseif ($intervalo->h > 0) { 
-            // Se for mais de 1 hora
+        if ($intervalo->days > 1) {
+            $diasRest = $intervalo->days . ' dias';
+        } elseif ($intervalo->days === 1) {
+            $diasRest = '1 dia';
+        } elseif ($intervalo->h >= 1) {
             $diasRest = $intervalo->h . ' hora' . ($intervalo->h > 1 ? 's' : '');
-        } else { 
-            // Se for menos de 1 hora
+        } elseif ($intervalo->i >= 1) {
             $diasRest = $intervalo->i . ' minuto' . ($intervalo->i > 1 ? 's' : '');
+        } else {
+            $diasRest = 'menos de 1 minuto';
         }
 
-        // Exibindo o card com as promoções
+        // --- Exibindo o card com a promoção ---
         echo '<div class="card">
                 <div class="tempo-restante-wrapper">
                     <div class="tempo-restante">
@@ -126,7 +120,9 @@ if ($result && $result->num_rows > 0) {
                     </div>
                 </div>
 
-                <button class="btn-send">Estou interessado</button>
+                <a href="php/pagina_veiculo.php?id='. $carro['id'] .'" class="btn-link">
+                    <button class="btn-send">Estou interessado</button>
+                </a>
             </div>';
     }
 } else {

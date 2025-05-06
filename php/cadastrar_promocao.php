@@ -217,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <button type="submit" class="btn">
-                <img src="../img/verifica.png" alt="Ícone check"> Salvar Promoção
+                <img src="../img/registro/verifica.png" alt="Ícone check"> Salvar Promoção
             </button>
         </form>
     </div>

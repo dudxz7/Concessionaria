@@ -123,7 +123,7 @@ $conn->close();
             </div>
 
             <button type="submit" class="btn">
-                <img src="../img/verifica.png" alt="Ícone de check">
+                <img src="../img/registro/verifica.png" alt="Ícone de check">
                 Cadastrar Veículo
             </button>
         </form>

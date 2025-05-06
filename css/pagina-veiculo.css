@@ -596,7 +596,7 @@ body {
   font-family: 'Poppins', Arial, sans-serif;
   text-align: left;
   width: 65%;
-  margin: 30px 0; /* Tira o auto que centraliza horizontalmente */
+  margin: 0px 0; /* Tira o auto que centraliza horizontalmente */
 }
 
 .container-visita h2 {
@@ -827,4 +827,90 @@ body {
   width: 40px;
   height: 40px;
   margin-bottom: 10px;
+}
+/* Modal base */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  background-color: #fefefe;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #000;
+  font-family: 'Helvetica Neue', 'Segoe UI', sans-serif;
+  text-align: center;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-content h2 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #000;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+#countdown {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: #000;
+  text-shadow: 0 0 4px black;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.close img {
+  width: 100%;
+  filter: brightness(0);
+}
+
+.close:hover {
+  transform: scale(1.2) rotate(90deg);
+}
+.recomendados .card-carro a {
+  text-decoration: none !important;
+  color: inherit !important;
 }

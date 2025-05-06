@@ -2,12 +2,11 @@
 session_start();
 $usuarioLogado = isset($_SESSION['usuarioLogado']) && $_SESSION['usuarioLogado'] === true;
 
-// Verificar se o nome do usuário está na sessão
+// Nome do usuário (primeiro nome)
 $nomeUsuario = "";
 if ($usuarioLogado && isset($_SESSION['usuarioNome'])) {
     $nomes = explode(" ", trim($_SESSION['usuarioNome']));
-    $primeiroNome = $nomes[0] ?? "";
-    $nomeUsuario = $primeiroNome;
+    $nomeUsuario = $nomes[0] ?? "";
 }
 
 // Verificar se é admin
@@ -18,19 +17,102 @@ if ($usuarioLogado && isset($_SESSION['usuarioAdmin']) && $_SESSION['usuarioAdmi
 
 // Mapeamento das capitais
 $capitais = [
-    "AC" => "Rio Branco", "AL" => "Maceió", "AM" => "Manaus", "AP" => "Macapá",
-    "BA" => "Salvador", "CE" => "Fortaleza", "DF" => "Brasília", "ES" => "Vitória",
-    "GO" => "Goiânia", "MA" => "São Luís", "MG" => "Belo Horizonte", "MS" => "Campo Grande",
-    "MT" => "Cuiabá", "PA" => "Belém", "PB" => "João Pessoa", "PE" => "Recife",
-    "PI" => "Teresina", "PR" => "Curitiba", "RJ" => "Rio de Janeiro", "RN" => "Natal",
+    "AC" => "Rio Branco", "AL" => "Maceió", "AM" => "Manaus", "AP" => "Macapá", "BA" => "Salvador",
+    "CE" => "Fortaleza", "DF" => "Brasília", "ES" => "Vitória", "GO" => "Goiânia", "MA" => "São Luís",
+    "MG" => "Belo Horizonte", "MS" => "Campo Grande", "MT" => "Cuiabá", "PA" => "Belém", "PB" => "João Pessoa",
+    "PE" => "Recife", "PI" => "Teresina", "PR" => "Curitiba", "RJ" => "Rio de Janeiro", "RN" => "Natal",
     "RO" => "Porto Velho", "RR" => "Boa Vista", "RS" => "Porto Alegre", "SC" => "Florianópolis",
     "SE" => "Aracaju", "SP" => "São Paulo", "TO" => "Palmas"
 ];
 
-// Definir a capital com base no estado do usuário
-$estado = isset($_SESSION['usuarioEstado']) ? $_SESSION['usuarioEstado'] : "";
-$capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "Cidade - Estado";
+$estado = $_SESSION['usuarioEstado'] ?? "";
+$capital = $capitais[$estado] ?? "Cidade - Estado";
+$capital .= $estado ? " - $estado" : "";
+
+// Conexão com banco
+include 'conexao.php';
+
+// ID do modelo via GET
+$id_modelo = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+// Variáveis padrão
+$imagemCarro = 'imagem-padrao.jpg';
+$modelo = '';
+$anoModelo = 'Ano Indefinido';
+$quilometragem = '0 Km';
+$cores_atual = [];
+$precoOriginal = 0;
+$precoComDesconto = 0;
+$temPromocao = false;
+$dataFimPromo = null;
+
+// Dados do modelo atual
+if ($id_modelo > 0) {
+    // Imagem
+    $sqlImg = "SELECT imagem FROM detalhes_modelos WHERE modelo_id = ?";
+    $stmt = $conn->prepare($sqlImg);
+    $stmt->bind_param("i", $id_modelo);
+    $stmt->execute();
+    $stmt->bind_result($imagemBanco);
+    if ($stmt->fetch() && !empty($imagemBanco)) {
+        $imagemCarro = $imagemBanco;
+    }
+    $stmt->close();
+
+    // Nome, ano, cor, preço
+    $sqlModelo = "SELECT modelo, ano, cor, preco FROM modelos WHERE id = ?";
+    $stmt = $conn->prepare($sqlModelo);
+    $stmt->bind_param("i", $id_modelo);
+    $stmt->execute();
+    $stmt->bind_result($modeloBanco, $anoBanco, $corBanco, $precoBanco);
+    if ($stmt->fetch()) {
+        $modelo = $modeloBanco;
+        $anoModelo = ($anoBanco - 1) . "/" . $anoBanco;
+        $cores_atual = explode(",", $corBanco);
+        $precoOriginal = $precoBanco;
+    }
+    $stmt->close();
+
+    // Promoção
+    $sqlPromo = "SELECT preco_com_desconto, data_limite FROM promocoes WHERE modelo_id = ?";
+    $stmt = $conn->prepare($sqlPromo);
+    $stmt->bind_param("i", $id_modelo);
+    $stmt->execute();
+    $stmt->bind_result($precoDesconto, $dataLimite);
+    if ($stmt->fetch()) {
+        $temPromocao = true;
+        $precoComDesconto = $precoDesconto;
+        $dataFimPromo = $dataLimite;
+    }
+    $stmt->close();
+
+    // Recomendação com base no preço mais próximo
+    $precoReferencia = $temPromocao ? $precoComDesconto : $precoOriginal;
+    $sqlRecomendados = "
+        SELECT m.id, m.modelo, m.preco, d.imagem
+        FROM modelos m
+        LEFT JOIN detalhes_modelos d ON m.id = d.modelo_id
+        WHERE m.id != ?
+        ORDER BY ABS(m.preco - ?) ASC
+        LIMIT 3
+    ";
+    $stmt = $conn->prepare($sqlRecomendados);
+    $stmt->bind_param("id", $id_modelo, $precoReferencia);
+    $stmt->execute();
+    $resultRecomendados = $stmt->get_result();
+
+    $veiculosRecomendados = [];
+    while ($row = $resultRecomendados->fetch_assoc()) {
+        $veiculosRecomendados[] = $row;
+    }
+    $stmt->close();
+}
+
+// Funcionários (caso necessário)
+$sql = "SELECT id, nome_completo FROM clientes WHERE cargo = 'Funcionario'";
+$result = $conn->query($sql);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -43,6 +125,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
     <link rel="stylesheet" href="../css/pagina-veiculo.css" />
     <link rel="stylesheet" href="../css/navbar.css" />
     <link rel="stylesheet" href="../css/footer.css" />
+    <link rel="stylesheet" href="../css/checkbox-cor-veiculos.css">
     <style>
     .navbar {
         background-color: black;
@@ -53,6 +136,10 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
     .footer {
         z-index: 1000;
     }
+
+    /* img {
+        filter: hue-rotate(-210deg) brightness(1.2) saturate(1.5);
+    } */
     </style>
 </head>
 
@@ -61,7 +148,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
     <!-- Cabeçalho -->
     <nav class="navbar">
         <div class="logo">
-            <a href="index.php">
+            <a href="../index.php">
                 <img src="../img/logos/logoofcbmw.png" alt="Logo BMW">
             </a>
             <a href="../index.php" id="textlogo">BMW</a>
@@ -101,9 +188,8 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
     <main class="container">
 
         <!-- Seção da Imagem e Carrossel -->
-        <!-- Seção da Imagem e Carrossel -->
         <section class="car-section">
-            <img src="../img/modelos/carro1.webp" alt="BMW 118i" class="car-image">
+            <img src="../img/modelos/<?= htmlspecialchars($imagemCarro); ?>" alt="BMW" class="car-image">
 
             <!-- Imagem âncora à esquerda -->
             <div class="anchor-left">
@@ -116,7 +202,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
             </div>
 
             <div class="thumbnail-row">
-                <img src="../img/modelos/carro1.webp" alt="" class="thumb">
+                <img src="../img/modelos/<?= htmlspecialchars($imagemCarro) ?>" alt="Imagem do modelo" class="thumb">
                 <img src="../img/modelos/detalhar-modelos/2.webp" alt="" class="thumb">
                 <img src="../img/modelos/detalhar-modelos/3.webp" alt="" class="thumb">
                 <img src="../img/modelos/detalhar-modelos/4.webp" alt="" class="thumb">
@@ -127,57 +213,109 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
             </div>
 
             <!-- Card lateral -->
-                <aside class="side-card">
-                    <div class="header">
-                        <h2><strong>BMW</strong> <span>118i</span></h2>
-                        <button class="favorite">
-                            <img src="../img/coracoes/coracao-nao-salvo.png" alt="Favorito" class="favorite-icon" />
-                            Favoritar
-                        </button>
+            <aside class="side-card">
+                <div class="header">
+                    <h2><span><?= htmlspecialchars($modelo) ?></span></h2>
+                    <button class="favorite">
+                        <img src="../img/coracoes/coracao-nao-salvo.png" alt="Favorito" class="favorite-icon" />
+                        Favoritar
+                    </button>
 
+                </div>
+
+                <p class="year-km"><?= htmlspecialchars($anoModelo) ?> ·
+                    <span><?= htmlspecialchars($quilometragem) ?></span>
+                </p>
+
+                <hr class="section-divider" />
+
+                <div class="location-card">
+                    <img src="../img/mapa/localizacao-consorcio.webp" alt="Local" />
+                    <p>
+                        <span>Esse carro está disponível em</span><br>
+                        <strong>TODO O BRASIL!</strong>
+                    </p>
+                    <span class="arrow">→</span>
+                </div>
+
+                <hr class="section-divider" />
+
+                <label>Escolha a cor</label>
+
+                <!-- Cores Disponíveis -->
+                <div class="input-group">
+                    <div class="checkbox-group">
+                        <?php
+                        // Definindo a variável para cores atuais. Pode vir do POST ou ser um array vazio inicialmente.
+                        $cores_atual = isset($_POST['cor']) ? $_POST['cor'] : [];
+
+                        // Recuperar as cores disponíveis para este modelo
+                        $cores_disponiveis = [];
+                        if ($id_modelo > 0) {
+                            // Consultar as cores diretamente da tabela 'modelos'
+                            $sqlCores = "SELECT cor FROM modelos WHERE id = ?"; // Usar 'id' como o identificador correto
+                            $stmt = $conn->prepare($sqlCores);
+                            $stmt->bind_param("i", $id_modelo);
+                            $stmt->execute();
+                            $stmt->bind_result($corBanco);
+                            while ($stmt->fetch()) {
+                                // Se as cores estiverem separadas por vírgula, você pode dividir em um array
+                                $cores_disponiveis = explode(',', $corBanco); // Caso as cores sejam armazenadas como string separada por vírgula
+                            }
+                            $stmt->close();
+                        }
+
+                        // Exibir as cores disponíveis para o modelo, sem nome
+                        foreach ($cores_disponiveis as $cor) {
+                            $checked = ($cor == $cores_atual) ? 'checked' : '';
+                            echo '<label class="checkbox-field">
+                                <input type="checkbox" name="cor[]" value="' . $cor . '" class="color-checkbox" ' . $checked . '>
+                                <div class="checkmark" style="background-color: ' . htmlspecialchars($cor) . ';"></div>
+                            </label>';
+                        }
+                        
+                        ?>
                     </div>
+                </div>
 
-                    <p class="year-km">2023/2024 · <span>0 Km</span></p>
+                </div>
+                </div>
 
-                    <hr class="section-divider" />
 
-                    <div class="location-card">
-                        <img src="../img/mapa/localizacao-consorcio.webp" alt="Local" />
-                        <p>
-                            <span>Esse carro está disponível em</span><br>
-                            <strong>TODO O BRASIL!</strong>
-                        </p>
-                        <span class="arrow">→</span>
-                    </div>
+                <hr class="section-divider" />
 
-                    <hr class="section-divider" />
+                <select class="funcionario-select">
+                    <option>Selecione um funcionário</option>
+                    <?php
+                    if ($result && $result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $nome = htmlspecialchars($row['nome_completo']); // Escapar por segurança
+                            echo "<option value='{$row['id']}'>$nome</option>";
+                        }
+                    } else {
+                        echo "<option disabled>Nenhum funcionário encontrado</option>";
+                    }
+                    ?>
+                </select>
 
-                    <label>Escolha a cor</label>
-                    <div class="color-options">
-                        <div class="color-circle" style="background: #000;"></div>
-                        <div class="color-circle" style="background: #1c1cb9;"></div>
-                        <div class="color-circle" style="background: #d5d5d5;"></div>
-                    </div>
+                <hr class="section-divider" />
 
-                    <hr class="section-divider" />
+                <div class="price-section">
+                    <?php if ($temPromocao): ?>
+                    <p class="old-price">R$ <?= number_format($precoOriginal, 2, ',', '.') ?></p>
+                    <p class="new-price">
+                        R$ <?= number_format($precoComDesconto, 2, ',', '.') ?>
+                        <img src="../img/em-formacao.png" alt="Engrenagem" class="gear-icon" id="gearIcon">
+                    </p>
+                    <?php else: ?>
+                    <p class="new-price">R$ <?= number_format($precoOriginal, 2, ',', '.') ?></p>
+                    <?php endif; ?>
+                    <a href="#" class="payment-link" id="abrirModal">Formas de pagamento</a>
+                </div>
 
-                    <select class="funcionario-select">
-                        <option>Selecione um funcionário</option>
-                        <!-- opções aqui -->
-                    </select>
-
-                    <hr class="section-divider" />
-
-                    <div class="price-section">
-                        <p class="old-price">R$ 320.950</p>
-                        <p class="new-price">R$ 290.950 <img src="../img/em-formacao.png" alt="Engrenagem"
-                                class="gear-icon"></p>
-                        <a href="#" class="payment-link" id="abrirModal">Formas de pagamento</a>
-                    </div>
-
-                    <button class="buy-button">Compre agora</button>
-                    <button class="visit-button">Agendar visita</button>
-                </aside>
+                <button class="buy-button">Compre agora</button>
+                <button class="visit-button">Agendar visita</button>
+            </aside>
 
             <!-- Selo verde -->
             <div class="badge">
@@ -197,7 +335,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
                 </div>
                 <div class="feature-box">
                     <img src="../img/sobre-veiculos/calendario-sobre.svg" alt="Ano">
-                    <span>2022/2021</span>
+                    <span><?= htmlspecialchars($anoModelo) ?></span>
                 </div>
                 <div class="feature-box">
                     <img src="../img/sobre-veiculos/gasolina-sobre.svg" alt="Combustível">
@@ -219,10 +357,13 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
                     <img src="../img/sobre-veiculos/portas-sobre.svg" alt="Portas">
                     <span>4 portas</span>
                 </div>
+                <?php if (!empty($corBanco)): ?>
                 <div class="feature-box">
                     <img src="../img/sobre-veiculos/cor-de-fabrica-sobre.svg" alt="Cor">
-                    <span>Branco</span>
+                    <span><?= htmlspecialchars($corBanco) ?></span>
                 </div>
+                <?php endif; ?>
+
                 <div class="feature-box">
                     <img src="../img/sobre-veiculos/suv-sobre.svg" alt="Tipo">
                     <span>SUV</span>
@@ -517,21 +658,15 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
         <section class="recomendados">
             <h3>Você também pode gostar...</h3>
             <div class="carros-recomendados">
+                <?php foreach ($veiculosRecomendados as $veiculo): ?>
                 <div class="card-carro">
-                    <img src="../img/modelos/carro1.webp" alt="BMW 218i Azul">
-                    <h4>BMW 218i</h4>
-                    <p>Preço: R$ 320.950,00</p>
+                    <a href="pagina_veiculo.php?id=<?= $veiculo['id'] ?>">
+                        <img src="../img/modelos/<?= $veiculo['imagem'] ?>" alt="<?= $veiculo['modelo'] ?>">
+                        <h4><?= $veiculo['modelo'] ?></h4>
+                        <p>Preço: R$ <?= number_format($veiculo['preco'], 2, ',', '.') ?></p>
+                    </a>
                 </div>
-                <div class="card-carro">
-                    <img src="../img/modelos/carro2.webp" alt="BMW 218i Preto">
-                    <h4>BMW 218i</h4>
-                    <p>Preço: R$ 320.950,00</p>
-                </div>
-                <div class="card-carro">
-                    <img src="../img/modelos/carro3.webp" alt="BMW 218i Branco">
-                    <h4>BMW 218i</h4>
-                    <p>Preço: R$ 320.950,00</p>
-                </div>
+                <?php endforeach; ?>
             </div>
         </section>
 
@@ -635,12 +770,27 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
             </div>
         </div>
     </div>
+    <!-- Modal de cronômetro -->
+    <div id="modalPromo" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('modalPromo').style.display='none'">
+                <img src="../img/x-fechar.png" alt="Fechar" style="width: 20px; cursor: pointer;">
+            </span>
+            <h2>Promoção acaba em:</h2>
+            <div id="countdown" data-fim="<?= str_replace(' ', 'T', $dataFimPromo) ?>"
+                style="font-size: 24px; margin-top: 10px;"></div>
+        </div>
+    </div>
+
 
     <script src="../js/veiculo-carrossel.js"></script>
+    <script src="../js/only-one-selected.js"></script>
     <script src="../js/mostrar-mais.js"></script>
     <script src="../js/horario-detalhado.js"></script>
     <script src="../js/corrigindo-aside.js"></script>
     <script src="../js/modal-payments.js"></script>
+    <script src="../js/modal-cronometro.js"></script>
+
     <script>
     function trocarImagem(icone, srcHover) {
         const img = icone.querySelector("img");
@@ -663,4 +813,5 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
     });
     </script>
 </body>
+
 </html>

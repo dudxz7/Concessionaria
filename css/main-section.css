@@ -238,6 +238,13 @@ html, body {
     color: #000;
 }
 
+a {
+    display: block;  /* Garante que o <a> seja um bloco e ocupe toda a largura disponível */
+    width: 98%;      /* Garante que o <a> tenha a mesma largura do seu contêiner */
+    text-decoration: none; /* Remove o sublinhado do link */
+}
+
+/* Estilo do botão dentro do <a> */
 .btn-send {
     background-color: #2F4EDA;
     color: white;
@@ -252,7 +259,7 @@ html, body {
     font-size: 14px;
     transition: 0.3s;
     text-align: center;
-    /* Centraliza o texto dentro do botão */
+    display: block; /* Garantir que o botão seja um bloco e ocupe toda a largura */
 }
 
 .btn-send:hover {
