@@ -119,3 +119,26 @@ html {
 a{
     text-decoration: none;
 }
+
+.heart-counter {
+    position: absolute;
+    top: 23px;
+    right: 188px;
+    background-color: #2f4eda;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-family: 'Poppins', sans-serif;
+    width: 10px; /* Definindo largura fixa */
+    height: 20px; /* Definindo altura fixa */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.heart-counter.oculto {
+    display: none;
+}
