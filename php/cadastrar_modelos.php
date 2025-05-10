@@ -144,9 +144,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .input-group {
         cursor: not-allowed;
     }
+
+    .preview-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0px;
+    }
+
+    #preview {
+        display: none;
+        max-width: 100%;
+        max-height: 170px;
+        border-radius: 6px;
+    }
     </style>
 </head>
-
 <body>
     <div class="container">
         <a href="consultar_modelos.php" class="back-button">
@@ -209,6 +222,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
+            <!-- Pré-visualização da imagem -->
+            <div class="input-group preview-wrapper">
+                <div class="preview-container">
+                    <img id="preview" src="#" alt="Pré-visualização">
+                </div>
+            </div>
+
             <!-- Cores Disponíveis -->
             <div class="input-group">
                 <label>Cores Disponíveis</label>
@@ -225,7 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
-            <!-- Mensagem de erro ou sucesso -->
+            <!-- Mensagem -->
             <div id="error-message" class="<?php echo !empty($mensagem) ? $mensagem_tipo : ''; ?>"
                 <?php if (!empty($mensagem)) echo 'style="display:block;"'; ?>>
                 <?php echo $mensagem ?? ''; ?>
@@ -252,8 +272,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             valor = (parseInt(valor, 10) / 100).toFixed(2);
             precoInput.value = valor.replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         });
+
+        // Preview da imagem
+        const inputImagem = document.querySelector('input[name="imagem"]');
+        const previewImg = document.getElementById('preview');
+
+        inputImagem.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewImg.style.display = "none";
+                previewImg.src = "#";
+            }
+        });
     });
     </script>
 </body>
-
 </html>
