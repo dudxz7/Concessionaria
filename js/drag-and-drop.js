@@ -3,6 +3,7 @@ const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
 const preview = document.getElementById('preview');
 const dropText = document.getElementById('drop-text');
+const fileNameDisplay = document.getElementById('file-name'); // <- adiciona isso
 
 dropZone.addEventListener('click', () => fileInput.click());
 
@@ -37,5 +38,8 @@ function handleFile() {
             dropText.style.display = 'none';
         };
         reader.readAsDataURL(file);
+
+        // ATUALIZA O NOME DO ARQUIVO NA TELA
+        fileNameDisplay.textContent = file.name;
     }
 }

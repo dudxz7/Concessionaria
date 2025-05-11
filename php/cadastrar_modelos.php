@@ -132,6 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Cadastrar Modelo</title>
     <link rel="stylesheet" href="../css/registro.css">
     <link rel="stylesheet" href="../css/checkbox-cor-veiculos.css">
+    <link rel="stylesheet" href="../css/drag-and-drop.css">
     <link rel="icon" href="../img/logos/logoofcbmw.png">
     <style>
     input#input-fabricante[readonly],
@@ -143,54 +144,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     .input-group {
         cursor: not-allowed;
-    }
-
-    .drop-zone {
-        border: 2px dashed rgb(0, 0, 0);
-        border-radius: 8px;
-        padding: 40px;
-        text-align: center;
-        cursor: pointer;
-        position: relative;
-        transition: border-color 0.3s ease;
-        background-color: #f2f2f2;
-    }
-
-    .drop-zone:hover {
-        border-color: #2f4eda;
-    }
-
-    #drop-zone input[type="file"] {
-        display: none;
-    }
-
-    #drop-text {
-        color: #555;
-        font-size: 16px;
-        margin-bottom: 10px;
-    }
-
-    .browse-btn {
-        color: #0071c5;
-        text-decoration: underline;
-        cursor: pointer;
-    }
-
-    .upload-icon {
-        width: 48px;
-        height: 48px;
-        margin-bottom: 10px;
-    }
-
-    #preview {
-        max-width: 100%;
-        max-height: 100px;
-        border-radius: 6px;
-        margin-top: 0px;
-        display: none;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
     }
     </style>
 </head>

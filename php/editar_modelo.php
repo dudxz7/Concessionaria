@@ -142,6 +142,7 @@ $conn->close();
     <title>Editar Modelo</title>
     <link rel="stylesheet" href="../css/registro.css">
     <link rel="stylesheet" href="../css/checkbox-cor-veiculos.css">
+    <link rel="stylesheet" href="../css/drag-and-drop.css">
     <link rel="icon" href="../img/logos/logoofcbmw.png">
 </head>
 
@@ -202,45 +203,27 @@ $conn->close();
                 </div>
             </div>
 
-            <!-- Imagem Atual -->
+            <!-- Imagem Atual / Pré-visualização com Upload -->
             <div class="input-group">
-                <label>Imagem Atual</label>
-                <div class="input-wrapper">
+                <label>Imagem Atual / Alterar Imagem</label>
+                <div class="drop-zone" id="drop-zone">
                     <?php if (!empty($modelo['imagem'])) : ?>
-                    <!-- Exibe o nome do arquivo de imagem se houver -->
-                    <p><?php echo htmlspecialchars($modelo['imagem']); ?></p>
+                    <img id="preview" src="../img/modelos/<?php echo htmlspecialchars($modelo['imagem']); ?>"
+                        alt="Pré-visualização">
+                    <p id="file-name" style="margin-top: 10px; color: #333;">
+                        <?php echo htmlspecialchars($modelo['imagem']); ?></p>
                     <?php else : ?>
-                    <!-- Caso não tenha imagem cadastrada -->
-                    <p>Sem imagem cadastrada.</p>
+                    <img src="../img/upload-na-nuvem.png" alt="Ícone Upload" class="upload-icon" id="upload-icon">
+                    <p id="drop-text">Arraste uma imagem aqui ou <span class="browse-btn">selecione um arquivo</span>
+                    </p>
+                    <img id="preview" src="#" alt="Pré-visualização" style="display: none;">
+                    <p id="file-name" style="margin-top: 10px; color: #333;"></p>
                     <?php endif; ?>
+                    <input type="file" name="imagem" accept="image/*" id="file-input">
+                    <p id="file-name" style="margin-top: 10px; color: ;"></p>
                 </div>
             </div>
 
-            <div class="input-group">
-                <label>Alterar Imagem</label>
-                <div class="input-wrapper">
-                    <input type="file" name="imagem" accept="image/*">
-                </div>
-            </div>
-
-            <!-- Cores Disponíveis -->
-            <div class="input-group">
-                <label>Cores Disponíveis</label>
-                <div class="checkbox-group">
-                    <?php
-                    $cores_disponiveis = ["Preto", "Branco", "Azul", "Prata", "Verde", "Vermelho"];
-                    $cores_atual = explode(',', $modelo['cor']);
-
-                    foreach ($cores_disponiveis as $cor) {
-                        $checked = in_array($cor, $cores_atual) ? 'checked' : '';
-                        echo '<label class="checkbox-field">
-                                <input type="checkbox" name="cor[]" value="'.$cor.'" '.$checked.'>
-                                <div class="checkmark"></div> 
-                                </label>';
-                    }
-                    ?>
-                </div>
-            </div>
 
             <!-- Mensagem de erro ou sucesso -->
             <div id="error-message" class="<?php echo !empty($mensagem) ? $mensagem_tipo : ''; ?>"
@@ -255,6 +238,7 @@ $conn->close();
         </form>
     </div>
 
+    <script src="../js/drag-and-drop.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         const precoInput = document.getElementById("preco");
@@ -272,4 +256,5 @@ $conn->close();
     });
     </script>
 </body>
+
 </html>
