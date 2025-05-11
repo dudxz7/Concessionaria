@@ -145,18 +145,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         cursor: not-allowed;
     }
 
-    .preview-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0px;
+    .drop-zone {
+        border: 2px dashed rgb(0, 0, 0);
+        border-radius: 8px;
+        padding: 40px;
+        text-align: center;
+        cursor: pointer;
+        position: relative;
+        transition: border-color 0.3s ease;
+        background-color: #f2f2f2;
+    }
+
+    .drop-zone:hover {
+        border-color: #2f4eda;
+    }
+
+    #drop-zone input[type="file"] {
+        display: none;
+    }
+
+    #drop-text {
+        color: #555;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .browse-btn {
+        color: #0071c5;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .upload-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 10px;
     }
 
     #preview {
-        display: none;
         max-width: 100%;
-        max-height: 170px;
+        max-height: 100px;
         border-radius: 6px;
+        margin-top: 0px;
+        display: none;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
     </style>
 </head>
@@ -213,19 +247,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
-            <!-- Imagem -->
+            <!-- Imagem com Drag and Drop -->
             <div class="input-group">
                 <label>Imagem Principal</label>
-                <div class="input-wrapper">
-                    <input type="file" name="imagem" accept="image/*" required>
-                    <img src="../img/veiculos/imagem.png" alt="Ícone imagem">
-                </div>
-            </div>
-
-            <!-- Pré-visualização da imagem -->
-            <div class="input-group preview-wrapper">
-                <div class="preview-container">
-                    <img id="preview" src="#" alt="Pré-visualização">
+                <div class="drop-zone" id="drop-zone">
+                    <img src="../img/upload-na-nuvem.png" alt="Ícone Upload" class="upload-icon" id="upload-icon">
+                    <p id="drop-text">Arraste uma imagem aqui ou <span class="browse-btn">selecione um arquivo</span>
+                    </p>
+                    <input type="file" name="imagem" accept="image/*" required id="file-input">
+                    <img id="preview" src="#" alt="Pré-visualização" style="display: none;">
+                    <p id="file-name" style="display: none; margin-top: 10px; color: #333;"></p>
                 </div>
             </div>
 
@@ -257,7 +288,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
         </form>
     </div>
-
+    <script src="../js/drag-and-drop.js"></script>
+    <script src="../js/esconder-icone.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         const precoInput = document.getElementById("preco");
