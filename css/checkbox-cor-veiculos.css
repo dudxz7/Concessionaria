@@ -111,10 +111,10 @@
     width: 0.25em;
     height: 0.5em;
     border: solid white;
-    border-width: 0 2px 2px 0;
+    border-width: 0 3px 3px 0;
     transform: rotate(45deg);
     left: 50%; /* Centraliza horizontalmente */
-    top: 50%;  /* Centraliza verticalmente */
+    top: 45%;  /* Centraliza verticalmente */
     transform: translate(-50%, -50%) rotate(45deg); /* Ajusta o ícone no centro */
 }
 

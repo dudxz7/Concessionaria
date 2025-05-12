@@ -115,58 +115,69 @@ $result = $stmt->get_result();
     <title>Consultar Modelos</title>
     <link rel="stylesheet" href="../css/consultar_clientes.css">
     <link rel="icon" href="../img/logos/logoofcbmw.png">
+    <style>
+    a {
+        text-decoration: none;
+    }
+
+    .btn-editar {
+        display: inline-block;
+    }
+    </style>
 </head>
 <body>
-<div class="container">
-    <!-- Sidebar -->
-    <div>
-        <?php include 'sidebar.php'; ?>
-    </div>
+    <div class="container">
+        <!-- Sidebar -->
+        <div>
+            <?php include 'sidebar.php'; ?>
+        </div>
 
-    <!-- Conteúdo -->
-    <div class="content">
-        <?php if ($cargo_usuario === 'Admin'): ?>
+        <!-- Conteúdo -->
+        <div class="content">
+            <?php if ($cargo_usuario === 'Admin'): ?>
             <a href="funcoes_admin.php" class="back-button">
                 <img src="../img/seta-esquerdabranca.png" alt="Voltar">
             </a>
-        <?php endif; ?>
-        <h2 class="btn-shine">Consulta de Modelos</h2>
+            <?php endif; ?>
+            <h2 class="btn-shine">Consulta de Modelos</h2>
 
-        <?php if ($cargo_usuario === 'Gerente' || $cargo_usuario === 'Admin'): ?>
+            <?php if ($cargo_usuario === 'Gerente' || $cargo_usuario === 'Admin'): ?>
             <a href="cadastrar_modelos.php" class="btn-novo-cliente">
                 <img src="../img/engrenagem.png" alt="Cadastrar Modelo" class="img-btn">
                 Cadastrar Modelo
             </a>
-        <?php endif; ?>
+            <?php endif; ?>
 
-        <form method="GET" action="">
-            <input type="text" name="search" class="input" placeholder="Buscar por modelo ou fabricante..." value="<?php echo htmlspecialchars($filtro); ?>">
-            <button type="submit"><img src="../img/lupa.png" class="icone-lupa"></button>
-        </form>
+            <form method="GET" action="">
+                <input type="text" name="search" class="input" placeholder="Buscar por modelo ou fabricante..."
+                    value="<?php echo htmlspecialchars($filtro); ?>">
+                <button type="submit"><img src="../img/lupa.png" class="icone-lupa"></button>
+            </form>
 
-        <div class="letras-filtro">
-            <?php foreach (range('A', 'Z') as $letra): ?>
-                <a href="?letra=<?php echo $letra; ?>" <?php echo ($letra == $letra_filtro) ? 'class="selected"' : ''; ?>>
+            <div class="letras-filtro">
+                <?php foreach (range('A', 'Z') as $letra): ?>
+                <a href="?letra=<?php echo $letra; ?>"
+                    <?php echo ($letra == $letra_filtro) ? 'class="selected"' : ''; ?>>
                     <?php echo $letra; ?>
                 </a>
-            <?php endforeach; ?>
-        </div>
+                <?php endforeach; ?>
+            </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Modelo</th>
-                    <th>Fabricante</th>
-                    <th>Ano</th>
-                    <th>Preço</th>
-                    <th>Cor</th>
-                    <th>Estoque</th> <!-- Coluna para Estoque -->
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $result->fetch_assoc()): ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Modelo</th>
+                        <th>Fabricante</th>
+                        <th>Ano</th>
+                        <th>Preço</th>
+                        <th>Cor</th>
+                        <th>Estoque</th> <!-- Coluna para Estoque -->
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($row = $result->fetch_assoc()): ?>
                     <tr>
                         <td><?php echo $row['modelo_id']; ?></td>
                         <td><?php echo $row['modelo']; ?></td>
@@ -179,26 +190,32 @@ $result = $stmt->get_result();
                             <a class="a-btn" href="editar_modelo.php?id=<?php echo $row['modelo_id']; ?>">
                                 <img src="../img/editar.png" alt="Editar" class="btn-editar">
                             </a>
+                            <a class="a-btn"
+                                href="cadastrar_imagens_secundarias.php?modelo_id=<?php echo $row['modelo_id']; ?>">
+                                <img src="../img/envio.png" alt="Upload Imagens" class="btn-editar">
+                            </a>
                         </td>
                     </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
 
-        <div class="paginacao">
-            <span>Página <?php echo $pagina_atual; ?> de <?php echo $total_paginas; ?></span>
-            <?php if ($pagina_atual > 1): ?>
-                <a href="?pagina=<?php echo $pagina_atual - 1; ?>&search=<?php echo urlencode($filtro); ?>&letra=<?php echo urlencode($letra_filtro); ?>">
+            <div class="paginacao">
+                <span>Página <?php echo $pagina_atual; ?> de <?php echo $total_paginas; ?></span>
+                <?php if ($pagina_atual > 1): ?>
+                <a
+                    href="?pagina=<?php echo $pagina_atual - 1; ?>&search=<?php echo urlencode($filtro); ?>&letra=<?php echo urlencode($letra_filtro); ?>">
                     <img src="../img/setinha-esquerda.png" class="seta-img">
                 </a>
-            <?php endif; ?>
-            <?php if ($pagina_atual < $total_paginas): ?>
-                <a href="?pagina=<?php echo $pagina_atual + 1; ?>&search=<?php echo urlencode($filtro); ?>&letra=<?php echo urlencode($letra_filtro); ?>">
+                <?php endif; ?>
+                <?php if ($pagina_atual < $total_paginas): ?>
+                <a
+                    href="?pagina=<?php echo $pagina_atual + 1; ?>&search=<?php echo urlencode($filtro); ?>&letra=<?php echo urlencode($letra_filtro); ?>">
                     <img src="../img/setinha.png" class="seta-img">
                 </a>
-            <?php endif; ?>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>
