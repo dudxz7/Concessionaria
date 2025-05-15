@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+// Verificar se o usuário está logado
 $usuarioLogado = isset($_SESSION['usuarioLogado']) && $_SESSION['usuarioLogado'] === true;
 
 // Nome do usuário (primeiro nome)
@@ -17,12 +19,33 @@ if ($usuarioLogado && isset($_SESSION['usuarioAdmin']) && $_SESSION['usuarioAdmi
 
 // Mapeamento das capitais
 $capitais = [
-    "AC" => "Rio Branco", "AL" => "Maceió", "AM" => "Manaus", "AP" => "Macapá", "BA" => "Salvador",
-    "CE" => "Fortaleza", "DF" => "Brasília", "ES" => "Vitória", "GO" => "Goiânia", "MA" => "São Luís",
-    "MG" => "Belo Horizonte", "MS" => "Campo Grande", "MT" => "Cuiabá", "PA" => "Belém", "PB" => "João Pessoa",
-    "PE" => "Recife", "PI" => "Teresina", "PR" => "Curitiba", "RJ" => "Rio de Janeiro", "RN" => "Natal",
-    "RO" => "Porto Velho", "RR" => "Boa Vista", "RS" => "Porto Alegre", "SC" => "Florianópolis",
-    "SE" => "Aracaju", "SP" => "São Paulo", "TO" => "Palmas"
+    "AC" => "Rio Branco",
+    "AL" => "Maceió",
+    "AM" => "Manaus",
+    "AP" => "Macapá",
+    "BA" => "Salvador",
+    "CE" => "Fortaleza",
+    "DF" => "Brasília",
+    "ES" => "Vitória",
+    "GO" => "Goiânia",
+    "MA" => "São Luís",
+    "MG" => "Belo Horizonte",
+    "MS" => "Campo Grande",
+    "MT" => "Cuiabá",
+    "PA" => "Belém",
+    "PB" => "João Pessoa",
+    "PE" => "Recife",
+    "PI" => "Teresina",
+    "PR" => "Curitiba",
+    "RJ" => "Rio de Janeiro",
+    "RN" => "Natal",
+    "RO" => "Porto Velho",
+    "RR" => "Boa Vista",
+    "RS" => "Porto Alegre",
+    "SC" => "Florianópolis",
+    "SE" => "Aracaju",
+    "SP" => "São Paulo",
+    "TO" => "Palmas"
 ];
 
 $estado = $_SESSION['usuarioEstado'] ?? "";
@@ -45,10 +68,11 @@ $precoOriginal = 0;
 $precoComDesconto = 0;
 $temPromocao = false;
 $dataFimPromo = null;
+$modelo_slug = '';
 
 // Dados do modelo atual
 if ($id_modelo > 0) {
-    // Imagem
+    // Imagem principal
     $sqlImg = "SELECT imagem FROM detalhes_modelos WHERE modelo_id = ?";
     $stmt = $conn->prepare($sqlImg);
     $stmt->bind_param("i", $id_modelo);
@@ -70,6 +94,9 @@ if ($id_modelo > 0) {
         $anoModelo = ($anoBanco - 1) . "/" . $anoBanco;
         $cores_atual = explode(",", $corBanco);
         $precoOriginal = $precoBanco;
+
+        // Slug para caminho de imagem
+        $modelo_slug = preg_replace('/[^a-z0-9\-]/i', '-', strtolower($modelo));
     }
     $stmt->close();
 
@@ -92,8 +119,8 @@ if ($id_modelo > 0) {
         SELECT m.id, m.modelo, m.preco, d.imagem
         FROM modelos m
         LEFT JOIN detalhes_modelos d ON m.id = d.modelo_id
-        WHERE m.id != ?
-        ORDER BY ABS(m.preco - ?) ASC
+        WHERE m.id != ? 
+        ORDER BY ABS(m.preco - ?) ASC 
         LIMIT 3
     ";
     $stmt = $conn->prepare($sqlRecomendados);
@@ -108,11 +135,45 @@ if ($id_modelo > 0) {
     $stmt->close();
 }
 
-// Funcionários (caso necessário)
-$sql = "SELECT id, nome_completo FROM clientes WHERE cargo = 'Funcionario'";
-$result = $conn->query($sql);
-?>
+// Buscar clientes com cargo "Funcionario"
+$sqlFuncionarios = "SELECT id, nome_completo FROM clientes WHERE cargo = 'Funcionario'";
+$resultFuncionarios = $conn->query($sqlFuncionarios);
 
+$funcionarios = [];
+if ($resultFuncionarios && $resultFuncionarios->num_rows > 0) {
+    while ($row = $resultFuncionarios->fetch_assoc()) {
+        $funcionarios[] = $row;
+    }
+} else {
+    $mensagemErroFuncionarios = "Nenhum funcionário encontrado.";
+}
+
+// Cor selecionada (via POST ou GET)
+$corSelecionada = $_POST['cor'] ?? $_GET['cor'] ?? '';
+
+// Preparar imagens secundárias filtradas
+$imagensSecundarias = [];
+$sqlImagensSecundarias = "SELECT imagem, cor FROM imagens_secundarias WHERE modelo_id = ?";
+$stmt = $conn->prepare($sqlImagensSecundarias);
+$stmt->bind_param("i", $id_modelo);
+$stmt->execute();
+$resultImagensSecundarias = $stmt->get_result();
+
+if ($resultImagensSecundarias && $resultImagensSecundarias->num_rows > 0) {
+    while ($row = $resultImagensSecundarias->fetch_assoc()) {
+        $corImagem = strtolower(trim($row['cor']));
+        $corSelecionadaLower = strtolower(trim($corSelecionada));
+
+        // Verifique se a cor corresponde ou se está vazia
+        if (empty($corSelecionadaLower) || strpos($corImagem, $corSelecionadaLower) !== false) {
+            $cor_slug = preg_replace('/[^a-z0-9\-]/i', '-', $corImagem);
+            $imagemPath = "../img/modelos/cores/{$modelo_slug}/{$cor_slug}/" . $row['imagem'];
+            $imagensSecundarias[] = $imagemPath;
+        }
+    }
+}
+$stmt->close();
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -127,17 +188,17 @@ $result = $conn->query($sql);
     <link rel="stylesheet" href="../css/footer.css" />
     <link rel="stylesheet" href="../css/checkbox-cor-veiculos.css">
     <style>
-    .navbar {
-        background-color: black;
-        position: fixed;
-        z-index: 11;
-    }
+        .navbar {
+            background-color: black;
+            position: fixed;
+            z-index: 11;
+        }
 
-    .footer {
-        z-index: 1000;
-    }
+        .footer {
+            z-index: 1000;
+        }
 
-    /* img {
+        /* img {
         filter: hue-rotate(-210deg) brightness(1.2) saturate(1.5);
     } */
     </style>
@@ -168,17 +229,17 @@ $result = $conn->query($sql);
             </a>
             <div class="login">
                 <?php if ($usuarioLogado): ?>
-                <!-- Se o usuário estiver logado, mostra o nome -->
-                <a href="<?php echo $linkPerfil; ?>">
-                    <img src="../img/navbar/usercomcontorno.png" alt="Perfil">
-                </a>
-                <a href="<?php echo $linkPerfil; ?>"><span><?php echo htmlspecialchars($nomeUsuario); ?></span></a>
+                    <!-- Se o usuário estiver logado, mostra o nome -->
+                    <a href="<?php echo $linkPerfil; ?>">
+                        <img src="../img/navbar/usercomcontorno.png" alt="Perfil">
+                    </a>
+                    <a href="<?php echo $linkPerfil; ?>"><span><?php echo htmlspecialchars($nomeUsuario); ?></span></a>
                 <?php else: ?>
-                <!-- Se não estiver logado, mostra o link para login -->
-                <a href="login.html">
-                    <img src="img/navbar/usercomcontorno.png" alt="Login">
-                </a>
-                <a href="../login.html"><span>Entrar</span></a>
+                    <!-- Se não estiver logado, mostra o link para login -->
+                    <a href="login.html">
+                        <img src="../img/navbar/usercomcontorno.png" alt="Login">
+                    </a>
+                    <a href="../login.html"><span>Entrar</span></a>
                 <?php endif; ?>
             </div>
         </div>
@@ -201,15 +262,21 @@ $result = $conn->query($sql);
                 <img src="../img/new-arrow-slider-right.svg" alt="Seta direita" class="arrow-right">
             </div>
 
+            <!-- Exibição das miniaturas -->
             <div class="thumbnail-row">
                 <img src="../img/modelos/<?= htmlspecialchars($imagemCarro) ?>" alt="Imagem do modelo" class="thumb">
-                <img src="../img/modelos/detalhar-modelos/2.webp" alt="" class="thumb">
-                <img src="../img/modelos/detalhar-modelos/3.webp" alt="" class="thumb">
-                <img src="../img/modelos/detalhar-modelos/4.webp" alt="" class="thumb">
-                <img src="../img/modelos/detalhar-modelos/5.webp" alt="" class="thumb">
-                <img src="../img/modelos/detalhar-modelos/6.webp" alt="" class="thumb">
-                <img src="../img/modelos/detalhar-modelos/7.webp" alt="" class="thumb">
-                <img src="../img/modelos/detalhar-modelos/8.webp" alt="" class="thumb">
+
+                <?php if (!empty($imagensSecundarias)): ?>
+                    <?php
+                    // Limitar a exibição a 8 imagens
+                    $imagensLimitadas = array_slice($imagensSecundarias, 0, 8);
+
+                    foreach ($imagensLimitadas as $img): ?>
+                        <img src="<?= htmlspecialchars($img) ?>" alt="Imagem secundária" class="thumb">
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>Não há imagens secundárias disponíveis para a cor selecionada.</p>
+                <?php endif; ?>
             </div>
 
             <!-- Card lateral -->
@@ -253,33 +320,29 @@ $result = $conn->query($sql);
                         $cores_disponiveis = [];
                         if ($id_modelo > 0) {
                             // Consultar as cores diretamente da tabela 'modelos'
-                            $sqlCores = "SELECT cor FROM modelos WHERE id = ?"; // Usar 'id' como o identificador correto
+                            $sqlCores = "SELECT cor FROM modelos WHERE id = ?";
                             $stmt = $conn->prepare($sqlCores);
                             $stmt->bind_param("i", $id_modelo);
                             $stmt->execute();
                             $stmt->bind_result($corBanco);
                             while ($stmt->fetch()) {
-                                // Se as cores estiverem separadas por vírgula, você pode dividir em um array
-                                $cores_disponiveis = explode(',', $corBanco); // Caso as cores sejam armazenadas como string separada por vírgula
+                                $cores_disponiveis = explode(',', $corBanco);
                             }
                             $stmt->close();
                         }
 
-                        // Exibir as cores disponíveis para o modelo, sem nome
+                        // Exibir as cores disponíveis para o modelo
                         foreach ($cores_disponiveis as $cor) {
-                            $checked = ($cor == $cores_atual) ? 'checked' : '';
+                            $checked = in_array($cor, $cores_atual) ? 'checked' : '';
                             echo '<label class="checkbox-field">
-                                <input type="checkbox" name="cor[]" value="' . $cor . '" class="color-checkbox" ' . $checked . '>
-                                <div class="checkmark" style="background-color: ' . htmlspecialchars($cor) . ';"></div>
-                            </label>';
+                <input type="checkbox" name="cor[]" value="' . htmlspecialchars($cor) . '" class="color-checkbox" ' . $checked . ' data-cor="' . htmlspecialchars($cor) . '">
+                <div class="checkmark" style="background-color: ' . htmlspecialchars($cor) . ';"></div>
+            </label>';
                         }
-                        
                         ?>
                     </div>
                 </div>
 
-                </div>
-                </div>
 
 
                 <hr class="section-divider" />
@@ -287,28 +350,29 @@ $result = $conn->query($sql);
                 <select class="funcionario-select">
                     <option>Selecione um funcionário</option>
                     <?php
-                    if ($result && $result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            $nome = htmlspecialchars($row['nome_completo']); // Escapar por segurança
-                            echo "<option value='{$row['id']}'>$nome</option>";
+                    if (!empty($funcionarios)) {
+                        foreach ($funcionarios as $func) {
+                            $nome = htmlspecialchars($func['nome_completo']); // segurança
+                            echo "<option value='{$func['id']}'>$nome</option>";
                         }
                     } else {
-                        echo "<option disabled>Nenhum funcionário encontrado</option>";
+                        echo "<option disabled>" . ($mensagemErroFuncionarios ?? "Nenhum funcionário encontrado") . "</option>";
                     }
                     ?>
                 </select>
+
 
                 <hr class="section-divider" />
 
                 <div class="price-section">
                     <?php if ($temPromocao): ?>
-                    <p class="old-price">R$ <?= number_format($precoOriginal, 2, ',', '.') ?></p>
-                    <p class="new-price">
-                        R$ <?= number_format($precoComDesconto, 2, ',', '.') ?>
-                        <img src="../img/em-formacao.png" alt="Engrenagem" class="gear-icon" id="gearIcon">
-                    </p>
+                        <p class="old-price">R$ <?= number_format($precoOriginal, 2, ',', '.') ?></p>
+                        <p class="new-price">
+                            R$ <?= number_format($precoComDesconto, 2, ',', '.') ?>
+                            <img src="../img/em-formacao.png" alt="Engrenagem" class="gear-icon" id="gearIcon">
+                        </p>
                     <?php else: ?>
-                    <p class="new-price">R$ <?= number_format($precoOriginal, 2, ',', '.') ?></p>
+                        <p class="new-price">R$ <?= number_format($precoOriginal, 2, ',', '.') ?></p>
                     <?php endif; ?>
                     <a href="#" class="payment-link" id="abrirModal">Formas de pagamento</a>
                 </div>
@@ -358,10 +422,10 @@ $result = $conn->query($sql);
                     <span>4 portas</span>
                 </div>
                 <?php if (!empty($corBanco)): ?>
-                <div class="feature-box">
-                    <img src="../img/sobre-veiculos/cor-de-fabrica-sobre.svg" alt="Cor">
-                    <span><?= htmlspecialchars($corBanco) ?></span>
-                </div>
+                    <div class="feature-box">
+                        <img src="../img/sobre-veiculos/cor-de-fabrica-sobre.svg" alt="Cor">
+                        <span><?= htmlspecialchars($corBanco) ?></span>
+                    </div>
                 <?php endif; ?>
 
                 <div class="feature-box">
@@ -659,13 +723,13 @@ $result = $conn->query($sql);
             <h3>Você também pode gostar...</h3>
             <div class="carros-recomendados">
                 <?php foreach ($veiculosRecomendados as $veiculo): ?>
-                <div class="card-carro">
-                    <a href="pagina_veiculo.php?id=<?= $veiculo['id'] ?>">
-                        <img src="../img/modelos/<?= $veiculo['imagem'] ?>" alt="<?= $veiculo['modelo'] ?>">
-                        <h4><?= $veiculo['modelo'] ?></h4>
-                        <p>Preço: R$ <?= number_format($veiculo['preco'], 2, ',', '.') ?></p>
-                    </a>
-                </div>
+                    <div class="card-carro">
+                        <a href="pagina_veiculo.php?id=<?= $veiculo['id'] ?>">
+                            <img src="../img/modelos/<?= $veiculo['imagem'] ?>" alt="<?= $veiculo['modelo'] ?>">
+                            <h4><?= $veiculo['modelo'] ?></h4>
+                            <p>Preço: R$ <?= number_format($veiculo['preco'], 2, ',', '.') ?></p>
+                        </a>
+                    </div>
                 <?php endforeach; ?>
             </div>
         </section>
@@ -782,7 +846,6 @@ $result = $conn->query($sql);
         </div>
     </div>
 
-
     <script src="../js/veiculo-carrossel.js"></script>
     <script src="../js/only-one-selected.js"></script>
     <script src="../js/mostrar-mais.js"></script>
@@ -790,27 +853,64 @@ $result = $conn->query($sql);
     <script src="../js/corrigindo-aside.js"></script>
     <script src="../js/modal-payments.js"></script>
     <script src="../js/modal-cronometro.js"></script>
-
+    <script src="../js/variar-cores.js"></script>
+    <script src="../js/trocar-imagem-footer.js"></script>
     <script>
-    function trocarImagem(icone, srcHover) {
-        const img = icone.querySelector("img");
-        const originalSrc = img.src;
+        // Função para atualizar as imagens do carrossel com base na cor selecionada
+        function updateCarrossel(corSelecionada) {
+            const modeloSlug = '<?= $modelo_slug ?>'; // Slug do modelo passado via PHP
+            const caminhoBase = `../img/modelos/cores/${modeloSlug}/${corSelecionada.toLowerCase()}/`;
 
-        icone.addEventListener("mouseenter", () => {
-            img.src = srcHover;
+            // Seleciona todas as miniaturas (thumbnails)
+            const imagensSecundarias = document.querySelectorAll('.thumbnail-row img.thumb');
+
+            // Lista de extensões possíveis para tentar carregar
+            const extensoes = ['webp', 'png', 'jpg', 'jpeg'];
+
+            imagensSecundarias.forEach((img) => {
+                const nomeBase = img.getAttribute('src').split('/').pop().split('.')[0]; // Nome sem extensão
+                let encontrada = false;
+
+                // Tenta cada extensão até encontrar uma imagem válida
+                for (const ext of extensoes) {
+                    const novaImagem = caminhoBase + nomeBase + '.' + ext;
+
+                    const imgTeste = new Image();
+                    imgTeste.src = novaImagem;
+
+                    imgTeste.onload = function () {
+                        if (!encontrada) {
+                            img.setAttribute('src', novaImagem);
+                            encontrada = true;
+                        }
+                    };
+
+                    imgTeste.onerror = function () {
+                        console.warn(`Imagem não encontrada: ${novaImagem}`);
+                    };
+                }
+            });
+        }
+
+        // Função para carregar imagens secundárias da cor selecionada
+        function carregarImagensSecundarias(corSelecionada) {
+            updateCarrossel(corSelecionada);
+        }
+
+        // Evento de clique nos checkboxes de cor
+        document.querySelectorAll('.color-checkbox').forEach((checkbox) => {
+            checkbox.addEventListener('change', function () {
+                if (this.checked) {
+                    const corSelecionada = this.getAttribute('data-cor');
+                    carregarImagensSecundarias(corSelecionada);
+
+                    // Desmarca os outros checkboxes
+                    document.querySelectorAll('.color-checkbox').forEach((cb) => {
+                        if (cb !== this) cb.checked = false;
+                    });
+                }
+            });
         });
-
-        icone.addEventListener("mouseleave", () => {
-            img.src = originalSrc;
-        });
-    }
-
-    // Rodar só depois que carregar tudo
-    document.addEventListener("DOMContentLoaded", () => {
-        trocarImagem(document.querySelector(".instagram"), "../img/redes-sociais/insta-colorido.png");
-        trocarImagem(document.querySelector(".whatsapp"), "../img/redes-sociais/whatsapp-colorido.png");
-        trocarImagem(document.querySelector(".facebook"), "../img/redes-sociais/facebook-colorido.png");
-    });
     </script>
 </body>
 

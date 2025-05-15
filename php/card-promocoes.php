@@ -2,54 +2,49 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-require_once('conexao.php'); // Conexão com o banco de dados
+require_once('conexao.php');
 
-// --- Processa o clique no botão de favoritar ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['favoritar'])) {
-    $modeloId = $_POST['modelo_id'];
-    $usuarioId = $_SESSION['usuarioId'] ?? null;
-
-    if ($usuarioId) {
-        // Verifica se já é favorito
-        $stmt = $conn->prepare("SELECT * FROM favoritos WHERE usuario_id = ? AND modelo_id = ?");
-        $stmt->bind_param("ii", $usuarioId, $modeloId);
-        $stmt->execute();
-        $stmt->store_result();
-
-        if ($stmt->num_rows > 0) {
-            // Remove dos favoritos
-            $stmtDel = $conn->prepare("DELETE FROM favoritos WHERE usuario_id = ? AND modelo_id = ?");
-            $stmtDel->bind_param("ii", $usuarioId, $modeloId);
-            $stmtDel->execute();
-        } else {
-            // Adiciona aos favoritos
-            $stmtAdd = $conn->prepare("INSERT INTO favoritos (usuario_id, modelo_id) VALUES (?, ?)");
-            $stmtAdd->bind_param("ii", $usuarioId, $modeloId);
-            $stmtAdd->execute();
-        }
-    }
-
-    // No seu PHP
-    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
-    exit;
+if ($conn->connect_error) {
+    die("Erro na conexão com o banco: " . $conn->connect_error);
 }
 
-// --- Funções utilitárias ---
+// Evita funções duplicadas
+if (!function_exists('encontrarImagemVeiculo')) {
+    function encontrarImagemVeiculo($modelo, $cor, $nomeArquivoBase) {
+        $modeloFormatado = strtolower(str_replace(' ', '-', $modelo));
+        $pasta_fs = __DIR__ . "/../img/modelos/cores/{$modeloFormatado}/{$cor}/";
+        $pasta_web = "img/modelos/cores/{$modeloFormatado}/{$cor}/";
+
+        $extensao = pathinfo($nomeArquivoBase, PATHINFO_EXTENSION);
+
+        if ($extensao) {
+            if (file_exists($pasta_fs . $nomeArquivoBase)) {
+                return $pasta_web . $nomeArquivoBase;
+            }
+            return $pasta_web . $nomeArquivoBase;
+        } else {
+            $extensoes = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
+            foreach ($extensoes as $ext) {
+                $arquivo = $nomeArquivoBase . '.' . $ext;
+                if (file_exists($pasta_fs . $arquivo)) {
+                    return $pasta_web . $arquivo;
+                }
+            }
+            return $pasta_web . $nomeArquivoBase . '.jpg';
+        }
+    }
+}
+
 if (!function_exists('gerarAno')) {
-    function gerarAno(int $ano): string
-    {
+    function gerarAno($ano) {
         return ($ano - 1) . '/' . $ano;
     }
 }
 
 if (!function_exists('gerarRating')) {
-    function gerarRating(): array
-    {
-        $estrelasCheias = rand(3, 5);
-        $estrelas = [];
-        for ($i = 0; $i < $estrelasCheias; $i++) {
-            $estrelas[] = 'estrela.png';
-        }
+    function gerarRating() {
+        $cheias = rand(3, 5);
+        $estrelas = array_fill(0, $cheias, 'estrela.png');
         if (count($estrelas) < 5 && rand(0, 1)) {
             $estrelas[] = 'estrela-metade.png';
         }
@@ -61,74 +56,68 @@ if (!function_exists('gerarRating')) {
 }
 
 if (!function_exists('gerarNota')) {
-    function gerarNota(): int
-    {
+    function gerarNota() {
         return rand(1, 1500);
     }
 }
 
-// --- Consulta veículos com promoções ativas ---
 $sql = "
     SELECT 
         m.id,
         m.modelo,
         m.fabricante,
-        m.cor,
+        d.cor_principal,
         m.ano,
-        m.preco AS preco_original,
-        d.descricao,
-        d.imagem,
-        p.desconto,
+        m.preco as preco_original,
         p.preco_com_desconto,
-        p.data_limite
+        p.desconto,
+        p.data_limite,
+        d.descricao,
+        (
+            SELECT i.imagem 
+            FROM imagens_secundarias i 
+            WHERE i.modelo_id = m.id 
+                AND i.cor = d.cor_principal
+                AND i.ordem = 1
+            LIMIT 1
+        ) AS imagem_padrao
     FROM modelos m
+    INNER JOIN promocoes p ON m.id = p.modelo_id
     LEFT JOIN detalhes_modelos d ON m.id = d.modelo_id
-    LEFT JOIN promocoes p ON m.id = p.modelo_id
     WHERE p.status = 'Ativa' AND p.data_limite > NOW()
+    GROUP BY m.id
 ";
 
 $result = $conn->query($sql);
+if (!$result) {
+    die("Erro na consulta: " . $conn->error);
+}
 
-// --- Exibição dos cards ---
-if ($result && $result->num_rows > 0) {
+if ($result->num_rows > 0) {
     while ($carro = $result->fetch_assoc()) {
-        $imagemPath = 'img/modelos/' . htmlspecialchars($carro['imagem']);
-        $anoFormatado = gerarAno((int) $carro['ano']);
+        $imagemBase = $carro['imagem_padrao'] ?? 'padrao';
+        $imagemPath = encontrarImagemVeiculo($carro['modelo'], $carro['cor_principal'], $imagemBase);
+
+        $anoFormatado = gerarAno($carro['ano']);
         $rating = gerarRating();
         $nota = gerarNota();
 
-        $desconto = (float) $carro['desconto'];
-        $precoOriginal = (float) $carro['preco_original'];
-        $precoComDesconto = (float) $carro['preco_com_desconto'];
+        $precoOriginal = $carro['preco_original'];
+        $precoComDesconto = $carro['preco_com_desconto'];
+        $desconto = $carro['desconto'];
 
-        // Tempo restante
         $dataAtual = new DateTime();
         $dataLimite = new DateTime($carro['data_limite']);
-        $intervalo = $dataAtual->diff($dataLimite);
+        $diasRest = $dataAtual->diff($dataLimite)->days . ' dias';
 
-        if ($intervalo->days > 1) {
-            $diasRest = $intervalo->days . ' dias';
-        } elseif ($intervalo->days === 1) {
-            $diasRest = '1 dia';
-        } elseif ($intervalo->h >= 1) {
-            $diasRest = $intervalo->h . ' hora' . ($intervalo->h > 1 ? 's' : '');
-        } elseif ($intervalo->i >= 1) {
-            $diasRest = $intervalo->i . ' minuto' . ($intervalo->i > 1 ? 's' : '');
-        } else {
-            $diasRest = 'menos de 1 minuto';
-        }
-
-        // Verifica se já é favorito
         $favorito = false;
         if (isset($_SESSION['usuarioId'])) {
             $usuarioId = $_SESSION['usuarioId'];
-            $stmt_fav = $conn->prepare("SELECT * FROM favoritos WHERE usuario_id = ? AND modelo_id = ?");
-            $stmt_fav->bind_param("ii", $usuarioId, $carro['id']);
-            $stmt_fav->execute();
-            $stmt_fav->store_result();
-            if ($stmt_fav->num_rows > 0) {
-                $favorito = true;
-            }
+            $stmt_favorito = $conn->prepare("SELECT 1 FROM favoritos WHERE usuario_id = ? AND modelo_id = ?");
+            $stmt_favorito->bind_param("ii", $usuarioId, $carro['id']);
+            $stmt_favorito->execute();
+            $stmt_favorito->store_result();
+            $favorito = $stmt_favorito->num_rows > 0;
         }
 
         $coracaoImg = $favorito ? "coracao-salvo.png" : "coracao-nao-salvo.png";
@@ -154,7 +143,7 @@ if ($result && $result->num_rows > 0) {
                     </form>
                 </div>
 
-                <img src="' . $imagemPath . '" alt="' . htmlspecialchars($carro['modelo']) . '">
+                <img src="' . htmlspecialchars($imagemPath) . '" alt="' . htmlspecialchars($carro['modelo']) . '">
                 <h2>' . htmlspecialchars($carro['modelo']) . '</h2>
                 <p>' . htmlspecialchars($carro['descricao']) . '</p>
                 <p>
