@@ -45,6 +45,7 @@ $imagensJaCadastradas = 0;
 $limiteRestante = $limiteMaximo;
 
 if ($modelo_id_get) {
+    // Busca dados do modelo e cores disponíveis
     $stmt = $conn->prepare("SELECT modelo, cor FROM modelos WHERE id = ?");
     $stmt->bind_param("i", $modelo_id_get);
     $stmt->execute();
@@ -56,6 +57,7 @@ if ($modelo_id_get) {
     }
     $stmt->close();
 
+    // Busca cor principal atual no detalhes_modelos
     $stmt2 = $conn->prepare("SELECT cor_principal FROM detalhes_modelos WHERE modelo_id = ?");
     $stmt2->bind_param("i", $modelo_id_get);
     $stmt2->execute();
@@ -73,8 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cor_upload = $_POST['cor_upload'] ?? null;
     $imagens = $_FILES['imagens'] ?? null;
 
-    $quantidadeNovas = $imagens && !empty($imagens['name'][0]) ? count($imagens['name']) : 0;
+    $quantidadeNovas = ($imagens && !empty($imagens['name'][0])) ? count($imagens['name']) : 0;
 
+    // Validações básicas
     if (!$modelo_id || !$cor_principal) {
         $mensagem = "Preencha todos os campos obrigatórios.";
         $mensagem_tipo = "erro";
@@ -86,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mensagem = "Cor para upload inválida.";
             $mensagem_tipo = "erro";
         } else {
+            // Conta quantas imagens já existem para essa cor e modelo
             $stmt = $conn->prepare("SELECT COUNT(*) AS total FROM imagens_secundarias WHERE modelo_id = ? AND cor = ?");
             $stmt->bind_param("is", $modelo_id, $cor_upload);
             $stmt->execute();
@@ -97,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $limiteRestante = $limiteMaximo - $imagensJaCadastradas;
 
             if ($limiteRestante <= 0) {
-                $mensagem = "Você já cadastrou o limite de 9 imagens para esta cor.";
+                $mensagem = "Você já cadastrou o limite de $limiteMaximo imagens para esta cor.";
                 $mensagem_tipo = "erro";
             } elseif ($quantidadeNovas > $limiteRestante) {
                 $mensagem = "Você só pode enviar mais $limiteRestante imagem(ns) para esta cor.";
@@ -107,48 +111,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($mensagem)) {
+        // Atualiza cor principal, se já existir atualiza, senão insere
         $stmt = $conn->prepare("UPDATE detalhes_modelos SET cor_principal = ? WHERE modelo_id = ?");
         $stmt->bind_param("si", $cor_principal, $modelo_id);
         $stmt->execute();
 
+        // Se não atualizou nenhuma linha, só faz o INSERT se não existir
         if ($stmt->affected_rows === 0) {
             $stmt->close();
-            $stmt = $conn->prepare("INSERT INTO detalhes_modelos (modelo_id, cor_principal) VALUES (?, ?)");
-            $stmt->bind_param("is", $modelo_id, $cor_principal);
-            $stmt->execute();
-        }
-        $stmt->close();
-
-        if ($quantidadeNovas > 0) {
-            $stmt = $conn->prepare("SELECT modelo FROM modelos WHERE id = ?");
+            $stmt = $conn->prepare("SELECT COUNT(*) FROM detalhes_modelos WHERE modelo_id = ?");
             $stmt->bind_param("i", $modelo_id);
             $stmt->execute();
-            $res = $stmt->get_result();
-            if ($row = $res->fetch_assoc()) {
-                $modeloSelecionado = $row['modelo'];
-            }
+            $stmt->bind_result($existe);
+            $stmt->fetch();
             $stmt->close();
+            if ($existe == 0) {
+                $stmt = $conn->prepare("INSERT INTO detalhes_modelos (modelo_id, cor_principal) VALUES (?, ?)");
+                $stmt->bind_param("is", $modelo_id, $cor_principal);
+                $stmt->execute();
+                $stmt->close();
+            }
+        } else {
+            $stmt->close();
+        }
 
+        // Se tiver imagens para upload
+        if ($quantidadeNovas > 0) {
             $modelo_slug = preg_replace('/[^a-z0-9\-]/i', '-', strtolower($modeloSelecionado));
             $cor_slug = preg_replace('/[^a-z0-9\-]/i', '-', strtolower($cor_upload));
             $pasta_base = __DIR__ . "/../img/modelos/cores/{$modelo_slug}/{$cor_slug}/";
 
-            if (!is_dir($pasta_base)) {
-                if (!mkdir($pasta_base, 0777, true)) {
-                    $mensagem = "Erro ao criar a pasta.";
-                    $mensagem_tipo = "erro";
-                }
-            }
+            if (!is_dir($pasta_base) && !mkdir($pasta_base, 0777, true)) {
+                $mensagem = "Erro ao criar a pasta para upload.";
+                $mensagem_tipo = "erro";
+            } else {
+                $indice = $imagensJaCadastradas + 1;
 
-            if (empty($mensagem)) {
                 for ($i = 0; $i < $quantidadeNovas; $i++) {
                     if ($imagens['error'][$i] === UPLOAD_ERR_OK) {
                         $tmp_name = $imagens['tmp_name'][$i];
-                        $nome_arquivo = basename($imagens['name'][$i]);
+                        $extensao = strtolower(pathinfo($imagens['name'][$i], PATHINFO_EXTENSION));
+                        $nome_arquivo = "{$indice}.{$extensao}";
                         $destino = $pasta_base . $nome_arquivo;
 
                         if (move_uploaded_file($tmp_name, $destino)) {
-                            $ordem = $imagensJaCadastradas + $i + 1;
+                            $ordem = $indice; 
                             $stmt = $conn->prepare("INSERT INTO imagens_secundarias (modelo_id, imagem, cor, ordem) VALUES (?, ?, ?, ?)");
                             $stmt->bind_param("issi", $modelo_id, $nome_arquivo, $cor_upload, $ordem);
                             $stmt->execute();
@@ -158,6 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $mensagem_tipo = "erro";
                             break;
                         }
+                        $indice++;
                     } else {
                         $mensagem = "Erro no upload do arquivo: " . $imagens['name'][$i];
                         $mensagem_tipo = "erro";
@@ -183,7 +191,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -243,7 +250,7 @@ $conn->close();
                     <?php if (count($coresDisponiveis) === 1): ?>
                         <input type="text" name="cor_upload" value="<?= htmlspecialchars($coresDisponiveis[0]) ?>" readonly>
                     <?php else: ?>
-                        <select name="cor_upload" >
+                        <select name="cor_upload">
                             <option value="">Selecione uma cor para o upload</option>
                             <?php
                             $cor_upload_selecionada = $_POST['cor_upload'] ?? '';
@@ -262,8 +269,7 @@ $conn->close();
             <div class="custom-file-upload">
                 <button type="button" id="btn-upload">Selecionar arquivo</button>
                 <span id="file-names">Nenhum arquivo selecionado</span>
-                <input type="file" id="file-input" name="imagens[]" accept="image/*" multiple
-                    style="display:none;">
+                <input type="file" id="file-input" name="imagens[]" accept="image/*" multiple style="display:none;">
             </div>
 
             <div id="preview-container"></div>
@@ -288,7 +294,7 @@ $conn->close();
 
             <button type="submit" class="btn">
                 <img src="../img/registro/verifica.png" alt="Ícone de check">
-                Enviar Imagens e Definir Cor Principal
+                Salvar alterações
             </button>
         </form>
     </div>

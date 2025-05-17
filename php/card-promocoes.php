@@ -105,6 +105,7 @@ if ($result->num_rows > 0) {
         $precoOriginal = $carro['preco_original'];
         $precoComDesconto = $carro['preco_com_desconto'];
         $desconto = $carro['desconto'];
+        // $desconto = floatval(rtrim($carro['desconto'], '%')); se quiser remover o .00 extra  
 
         $dataAtual = new DateTime();
         $dataLimite = new DateTime($carro['data_limite']);

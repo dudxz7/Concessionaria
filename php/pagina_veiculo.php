@@ -4,7 +4,7 @@ session_start();
 // Verificar se o usuário está logado
 $usuarioLogado = isset($_SESSION['usuarioLogado']) && $_SESSION['usuarioLogado'] === true;
 
-// Nome do usuário (primeiro nome)
+// Nome do usuário
 $nomeUsuario = "";
 if ($usuarioLogado && isset($_SESSION['usuarioNome'])) {
     $nomes = explode(" ", trim($_SESSION['usuarioNome']));
@@ -55,35 +55,32 @@ $capital .= $estado ? " - $estado" : "";
 // Conexão com banco
 include 'conexao.php';
 
-// ID do modelo via GET
+// ID do modelo
 $id_modelo = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Variáveis padrão
-$imagemCarro = 'imagem-padrao.jpg';
+$imagemCarro = 'padrao.webp';
 $modelo = '';
+$modelo_slug = '';
 $anoModelo = 'Ano Indefinido';
 $quilometragem = '0 Km';
-$cores_atual = [];
+$cores_disponiveis = [];
 $precoOriginal = 0;
 $precoComDesconto = 0;
 $temPromocao = false;
 $dataFimPromo = null;
-$modelo_slug = '';
+$corPrincipal = '';
 
-// Dados do modelo atual
+$sql = "SELECT cor_principal FROM detalhes_modelos WHERE modelo_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id_modelo);
+$stmt->execute();
+$stmt->bind_result($corPrincipal);
+$stmt->fetch();
+$stmt->close();
+
 if ($id_modelo > 0) {
-    // Imagem principal
-    $sqlImg = "SELECT imagem FROM detalhes_modelos WHERE modelo_id = ?";
-    $stmt = $conn->prepare($sqlImg);
-    $stmt->bind_param("i", $id_modelo);
-    $stmt->execute();
-    $stmt->bind_result($imagemBanco);
-    if ($stmt->fetch() && !empty($imagemBanco)) {
-        $imagemCarro = $imagemBanco;
-    }
-    $stmt->close();
-
-    // Nome, ano, cor, preço
+    // Buscar dados do modelo
     $sqlModelo = "SELECT modelo, ano, cor, preco FROM modelos WHERE id = ?";
     $stmt = $conn->prepare($sqlModelo);
     $stmt->bind_param("i", $id_modelo);
@@ -92,11 +89,32 @@ if ($id_modelo > 0) {
     if ($stmt->fetch()) {
         $modelo = $modeloBanco;
         $anoModelo = ($anoBanco - 1) . "/" . $anoBanco;
-        $cores_atual = explode(",", $corBanco);
+        $cores_disponiveis = explode(",", $corBanco);
         $precoOriginal = $precoBanco;
-
-        // Slug para caminho de imagem
         $modelo_slug = preg_replace('/[^a-z0-9\-]/i', '-', strtolower($modelo));
+
+        // ✅ Coloca a cor principal no início
+        if (!empty($corPrincipal) && in_array($corPrincipal, $cores_disponiveis)) {
+            $cores_disponiveis = array_diff($cores_disponiveis, [$corPrincipal]);
+            array_unshift($cores_disponiveis, $corPrincipal);
+        }
+    }
+    $stmt->close();
+
+    // Imagem principal da cor principal
+    $sqlImg = "SELECT i.imagem, i.cor 
+               FROM imagens_secundarias i
+               INNER JOIN detalhes_modelos d ON i.modelo_id = d.modelo_id
+               WHERE i.modelo_id = ? AND i.cor = d.cor_principal
+               ORDER BY i.ordem ASC
+               LIMIT 1";
+    $stmt = $conn->prepare($sqlImg);
+    $stmt->bind_param("i", $id_modelo);
+    $stmt->execute();
+    $stmt->bind_result($imagemBanco, $corPrincipal);
+    if ($stmt->fetch() && !empty($imagemBanco)) {
+        $corPrincipalSlug = preg_replace('/[^a-z0-9\-]/i', '-', strtolower($corPrincipal));
+        $imagemCarro = "cores/{$modelo_slug}/{$corPrincipalSlug}/{$imagemBanco}";
     }
     $stmt->close();
 
@@ -113,16 +131,20 @@ if ($id_modelo > 0) {
     }
     $stmt->close();
 
-    // Recomendação com base no preço mais próximo
+    // Recomendação de veículos similares
     $precoReferencia = $temPromocao ? $precoComDesconto : $precoOriginal;
     $sqlRecomendados = "
-        SELECT m.id, m.modelo, m.preco, d.imagem
-        FROM modelos m
-        LEFT JOIN detalhes_modelos d ON m.id = d.modelo_id
-        WHERE m.id != ? 
-        ORDER BY ABS(m.preco - ?) ASC 
-        LIMIT 3
-    ";
+    SELECT 
+        m.id, 
+        m.modelo, 
+        m.preco,
+        d.cor_principal
+    FROM modelos m
+    LEFT JOIN detalhes_modelos d ON m.id = d.modelo_id
+    WHERE m.id != ?
+    ORDER BY ABS(m.preco - ?) ASC 
+    LIMIT 3
+";
     $stmt = $conn->prepare($sqlRecomendados);
     $stmt->bind_param("id", $id_modelo, $precoReferencia);
     $stmt->execute();
@@ -130,45 +152,81 @@ if ($id_modelo > 0) {
 
     $veiculosRecomendados = [];
     while ($row = $resultRecomendados->fetch_assoc()) {
-        $veiculosRecomendados[] = $row;
+        $idRec = $row['id'];
+        $modeloRec = $row['modelo'];
+        $precoRec = $row['preco'];
+        $corPrincipalRec = $row['cor_principal'];
+
+        $modeloSlugRec = preg_replace('/[^a-z0-9\-]/i', '-', strtolower($modeloRec));
+        $corSlugRec = preg_replace('/[^a-z0-9\-]/i', '-', strtolower($corPrincipalRec));
+        $imagemRec = 'padrao.webp'; // valor padrão
+
+        // Buscar imagem da cor principal (ordem 0 é a principal)
+        $sqlImg = "
+        SELECT imagem 
+        FROM imagens_secundarias 
+        WHERE modelo_id = ? AND cor = ? 
+        ORDER BY ordem ASC 
+        LIMIT 1
+    ";
+        $stmtImg = $conn->prepare($sqlImg);
+        $stmtImg->bind_param("is", $idRec, $corPrincipalRec);
+        $stmtImg->execute();
+        $stmtImg->bind_result($imagemBanco);
+        if ($stmtImg->fetch() && !empty($imagemBanco)) {
+            $imagemRec = "../img/modelos/cores/{$modeloSlugRec}/{$corSlugRec}/{$imagemBanco}";
+        } else {
+            $imagemRec = "../img/modelos/padrao.webp"; // fallback real
+        }
+        $stmtImg->close();
+
+        $veiculosRecomendados[] = [
+            'id' => $idRec,
+            'modelo' => $modeloRec,
+            'preco' => $precoRec,
+            'imagem_path' => $imagemRec,
+            'cor' => $corPrincipalRec
+        ];
     }
     $stmt->close();
 }
 
-// Buscar clientes com cargo "Funcionario"
-$sqlFuncionarios = "SELECT id, nome_completo FROM clientes WHERE cargo = 'Funcionario'";
-$resultFuncionarios = $conn->query($sqlFuncionarios);
-
-$funcionarios = [];
-if ($resultFuncionarios && $resultFuncionarios->num_rows > 0) {
-    while ($row = $resultFuncionarios->fetch_assoc()) {
-        $funcionarios[] = $row;
+// Cor selecionada, via POST ou GET, ou cor principal por padrão
+$corSelecionada = '';
+if (!empty($_POST['cor'])) {
+    // Pode vir como array (checkbox múltiplo), pegar o primeiro
+    if (is_array($_POST['cor'])) {
+        $corSelecionada = trim($_POST['cor'][0]);
+    } else {
+        $corSelecionada = trim($_POST['cor']);
     }
-} else {
-    $mensagemErroFuncionarios = "Nenhum funcionário encontrado.";
+} elseif (!empty($_GET['cor'])) {
+    $corSelecionada = trim($_GET['cor']);
 }
+if (empty($corSelecionada)) {
+    $corSelecionada = $corPrincipal; // padrão para cor principal
+}
+$corSelecionadaLower = strtolower($corSelecionada);
 
-// Cor selecionada (via POST ou GET)
-$corSelecionada = $_POST['cor'] ?? $_GET['cor'] ?? '';
-
-// Preparar imagens secundárias filtradas
-$imagensSecundarias = [];
-$sqlImagensSecundarias = "SELECT imagem, cor FROM imagens_secundarias WHERE modelo_id = ?";
-$stmt = $conn->prepare($sqlImagensSecundarias);
+$imagens = [];
+$sqlImagens = "SELECT imagem, cor, ordem FROM imagens_secundarias WHERE modelo_id = ? ORDER BY ordem ASC";
+$stmt = $conn->prepare($sqlImagens);
 $stmt->bind_param("i", $id_modelo);
 $stmt->execute();
-$resultImagensSecundarias = $stmt->get_result();
+$resultImagens = $stmt->get_result();
 
-if ($resultImagensSecundarias && $resultImagensSecundarias->num_rows > 0) {
-    while ($row = $resultImagensSecundarias->fetch_assoc()) {
-        $corImagem = strtolower(trim($row['cor']));
-        $corSelecionadaLower = strtolower(trim($corSelecionada));
+while ($row = $resultImagens->fetch_assoc()) {
+    // Filtrar por cor, se quiser (pode ignorar ou ajustar conforme sua lógica)
+    $corImagem = strtolower(trim($row['cor']));
+    if (empty($corSelecionadaLower) || $corImagem === $corSelecionadaLower) {
+        $cor_slug = preg_replace('/[^a-z0-9\-]/i', '-', $corImagem);
+        $imagemPath = "../img/modelos/cores/{$modelo_slug}/{$cor_slug}/" . $row['imagem'];
 
-        // Verifique se a cor corresponde ou se está vazia
-        if (empty($corSelecionadaLower) || strpos($corImagem, $corSelecionadaLower) !== false) {
-            $cor_slug = preg_replace('/[^a-z0-9\-]/i', '-', $corImagem);
-            $imagemPath = "../img/modelos/cores/{$modelo_slug}/{$cor_slug}/" . $row['imagem'];
-            $imagensSecundarias[] = $imagemPath;
+        if (file_exists($imagemPath)) {
+            $imagens[] = [
+                'path' => $imagemPath,
+                'ordem' => $row['ordem']
+            ];
         }
     }
 }
@@ -200,7 +258,7 @@ $stmt->close();
 
         /* img {
         filter: hue-rotate(-210deg) brightness(1.2) saturate(1.5);
-    } */
+        } */
     </style>
 </head>
 
@@ -245,38 +303,31 @@ $stmt->close();
         </div>
     </nav>
 
-    <!-- Conteúdo Principal -->
     <main class="container">
 
         <!-- Seção da Imagem e Carrossel -->
         <section class="car-section">
-            <img src="../img/modelos/<?= htmlspecialchars($imagemCarro); ?>" alt="BMW" class="car-image">
+            <!-- Imagem principal grande -->
+            <img id="imagem-principal" src="../img/modelos/<?= htmlspecialchars($imagemCarro); ?>" alt="BMW"
+                class="car-image" />
 
-            <!-- Imagem âncora à esquerda -->
+            <!-- Setas do carrossel -->
             <div class="anchor-left">
-                <img src="../img/new-arrow-slider-left.svg" alt="Seta esquerda" class="arrow-left">
+                <img src="../img/new-arrow-slider-left.svg" alt="Seta esquerda" class="arrow-left" />
             </div>
-
-            <!-- Imagem âncora à direita -->
             <div class="anchor-right">
-                <img src="../img/new-arrow-slider-right.svg" alt="Seta direita" class="arrow-right">
+                <img src="../img/new-arrow-slider-right.svg" alt="Seta direita" class="arrow-right" />
             </div>
 
-            <!-- Exibição das miniaturas -->
             <div class="thumbnail-row">
-                <img src="../img/modelos/<?= htmlspecialchars($imagemCarro) ?>" alt="Imagem do modelo" class="thumb">
-
-                <?php if (!empty($imagensSecundarias)): ?>
+                <?php foreach ($imagens as $img): ?>
                     <?php
-                    // Limitar a exibição a 8 imagens
-                    $imagensLimitadas = array_slice($imagensSecundarias, 0, 8);
-
-                    foreach ($imagensLimitadas as $img): ?>
-                        <img src="<?= htmlspecialchars($img) ?>" alt="Imagem secundária" class="thumb">
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>Não há imagens secundárias disponíveis para a cor selecionada.</p>
-                <?php endif; ?>
+                    // Evita erro se path ou cor estiverem ausentes
+                    $path = isset($img['path']) ? htmlspecialchars($img['path']) : '';
+                    $cor = isset($img['cor']) ? strtolower(trim($img['cor'])) : '';
+                    ?>
+                    <img src="<?= $path ?>" alt="Imagem do modelo" class="thumb" data-cor="<?= $cor ?>" />
+                <?php endforeach; ?>
             </div>
 
             <!-- Card lateral -->
@@ -313,26 +364,11 @@ $stmt->close();
                 <div class="input-group">
                     <div class="checkbox-group">
                         <?php
-                        // Definindo a variável para cores atuais. Pode vir do POST ou ser um array vazio inicialmente.
                         $cores_atual = isset($_POST['cor']) ? $_POST['cor'] : [];
 
-                        // Recuperar as cores disponíveis para este modelo
-                        $cores_disponiveis = [];
-                        if ($id_modelo > 0) {
-                            // Consultar as cores diretamente da tabela 'modelos'
-                            $sqlCores = "SELECT cor FROM modelos WHERE id = ?";
-                            $stmt = $conn->prepare($sqlCores);
-                            $stmt->bind_param("i", $id_modelo);
-                            $stmt->execute();
-                            $stmt->bind_result($corBanco);
-                            while ($stmt->fetch()) {
-                                $cores_disponiveis = explode(',', $corBanco);
-                            }
-                            $stmt->close();
-                        }
-
-                        // Exibir as cores disponíveis para o modelo
+                        // Exibir as cores disponíveis (já ordenadas, com a principal primeiro)
                         foreach ($cores_disponiveis as $cor) {
+                            $cor = trim($cor);
                             $checked = in_array($cor, $cores_atual) ? 'checked' : '';
                             echo '<label class="checkbox-field">
                 <input type="checkbox" name="cor[]" value="' . htmlspecialchars($cor) . '" class="color-checkbox" ' . $checked . ' data-cor="' . htmlspecialchars($cor) . '">
@@ -342,25 +378,6 @@ $stmt->close();
                         ?>
                     </div>
                 </div>
-
-
-
-                <hr class="section-divider" />
-
-                <select class="funcionario-select">
-                    <option>Selecione um funcionário</option>
-                    <?php
-                    if (!empty($funcionarios)) {
-                        foreach ($funcionarios as $func) {
-                            $nome = htmlspecialchars($func['nome_completo']); // segurança
-                            echo "<option value='{$func['id']}'>$nome</option>";
-                        }
-                    } else {
-                        echo "<option disabled>" . ($mensagemErroFuncionarios ?? "Nenhum funcionário encontrado") . "</option>";
-                    }
-                    ?>
-                </select>
-
 
                 <hr class="section-divider" />
 
@@ -610,13 +627,10 @@ $stmt->close();
                 </div>
             </div>
 
-
-
             <!-- Botão fora da div de acessórios -->
             <a href="#" class="more"><strong>Mostrar mais</strong>
                 <img src="../img/seta-para-baixo.png" class="arrow-icon">
             </a>
-
 
         </section>
 
@@ -725,7 +739,7 @@ $stmt->close();
                 <?php foreach ($veiculosRecomendados as $veiculo): ?>
                     <div class="card-carro">
                         <a href="pagina_veiculo.php?id=<?= $veiculo['id'] ?>">
-                            <img src="../img/modelos/<?= $veiculo['imagem'] ?>" alt="<?= $veiculo['modelo'] ?>">
+                            <img src="<?= $veiculo['imagem_path'] ?>" alt="<?= $veiculo['modelo'] ?>">
                             <h4><?= $veiculo['modelo'] ?></h4>
                             <p>Preço: R$ <?= number_format($veiculo['preco'], 2, ',', '.') ?></p>
                         </a>
@@ -733,7 +747,6 @@ $stmt->close();
                 <?php endforeach; ?>
             </div>
         </section>
-
 
     </main>
     <footer class="footer">
@@ -856,59 +869,54 @@ $stmt->close();
     <script src="../js/variar-cores.js"></script>
     <script src="../js/trocar-imagem-footer.js"></script>
     <script>
-        // Função para atualizar as imagens do carrossel com base na cor selecionada
         function updateCarrossel(corSelecionada) {
-            const modeloSlug = '<?= $modelo_slug ?>'; // Slug do modelo passado via PHP
+            const modeloSlug = '<?= $modelo_slug ?>';
             const caminhoBase = `../img/modelos/cores/${modeloSlug}/${corSelecionada.toLowerCase()}/`;
 
-            // Seleciona todas as miniaturas (thumbnails)
+            // Troca as miniaturas
             const imagensSecundarias = document.querySelectorAll('.thumbnail-row img.thumb');
-
-            // Lista de extensões possíveis para tentar carregar
             const extensoes = ['webp', 'png', 'jpg', 'jpeg'];
 
-            imagensSecundarias.forEach((img) => {
-                const nomeBase = img.getAttribute('src').split('/').pop().split('.')[0]; // Nome sem extensão
+            imagensSecundarias.forEach((img, idx) => {
+                const nomeBase = img.getAttribute('src').split('/').pop().split('.')[0];
                 let encontrada = false;
-
-                // Tenta cada extensão até encontrar uma imagem válida
                 for (const ext of extensoes) {
                     const novaImagem = caminhoBase + nomeBase + '.' + ext;
-
                     const imgTeste = new Image();
                     imgTeste.src = novaImagem;
-
                     imgTeste.onload = function () {
                         if (!encontrada) {
                             img.setAttribute('src', novaImagem);
+                            // Troca a imagem principal pela primeira miniatura encontrada
+                            if (idx === 0) {
+                                document.getElementById('imagem-principal').src = novaImagem;
+                            }
                             encontrada = true;
                         }
-                    };
-
-                    imgTeste.onerror = function () {
-                        console.warn(`Imagem não encontrada: ${novaImagem}`);
                     };
                 }
             });
         }
 
-        // Função para carregar imagens secundárias da cor selecionada
-        function carregarImagensSecundarias(corSelecionada) {
-            updateCarrossel(corSelecionada);
-        }
-
-        // Evento de clique nos checkboxes de cor
+        // Troca a imagem principal ao clicar na cor
         document.querySelectorAll('.color-checkbox').forEach((checkbox) => {
             checkbox.addEventListener('change', function () {
                 if (this.checked) {
                     const corSelecionada = this.getAttribute('data-cor');
-                    carregarImagensSecundarias(corSelecionada);
+                    updateCarrossel(corSelecionada);
 
                     // Desmarca os outros checkboxes
                     document.querySelectorAll('.color-checkbox').forEach((cb) => {
                         if (cb !== this) cb.checked = false;
                     });
                 }
+            });
+        });
+
+        // Troca a imagem principal ao clicar na miniatura
+        document.querySelectorAll('.thumbnail-row img.thumb').forEach((img) => {
+            img.addEventListener('click', function () {
+                document.getElementById('imagem-principal').src = this.src;
             });
         });
     </script>

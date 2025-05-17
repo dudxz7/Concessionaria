@@ -42,7 +42,6 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
     <link rel="stylesheet" href="css/index.css">
     <link rel="icon" href="img/logos/logoofcbmw.png">
 </head>
-
 <body>
 
     <!-- Tela inicial com a imagem de fundo -->

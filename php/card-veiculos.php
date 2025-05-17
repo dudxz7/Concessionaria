@@ -162,7 +162,7 @@ if ($result->num_rows > 0) {
         echo '<span class="nota">(' . number_format($nota, 0, ',', '.') . ')</span>
                 </div>
                 <h2>R$ ' . number_format($carro['preco'], 2, ',', '.') . '</h2>
-                <a href="php/pagina_veiculo.php?id=' . $carro['id'] . '">
+                <a href="php/pagina_veiculo.php?id=' . $carro['id'] . '" class="btn-link">
                     <button class="btn-send">Estou interessado</button>
                 </a>
             </div>';

@@ -238,7 +238,7 @@ html, body {
     color: #000;
 }
 
-a {
+.btn-link{
     display: block;  /* Garante que o <a> seja um bloco e ocupe toda a largura disponível */
     width: 98%;      /* Garante que o <a> tenha a mesma largura do seu contêiner */
     text-decoration: none; /* Remove o sublinhado do link */
