@@ -17,7 +17,8 @@ html {
 }
 
 .navbar {
-    position: absolute; /*n sei se deixo fixed ou não*/
+    position: absolute;
+    /*n sei se deixo fixed ou não*/
     top: 0;
     left: 0;
     right: 0;
@@ -39,21 +40,50 @@ html {
 }
 
 .logo a {
-    text-decoration: none; /* Remove sublinhado */
-    color: inherit; /* Mantém a cor do texto */
+    text-decoration: none;
+    /* Remove sublinhado */
+    color: inherit;
+    /* Mantém a cor do texto */
 }
 
 .logo img {
-    width: 58px; /* Reduzindo o tamanho do logo */
+    width: 58px;
+    /* Reduzindo o tamanho do logo */
     height: auto;
 }
 
 #textlogo {
-    color: #fff;
-    font-size: 20px; /* Diminuindo a fonte */
+    font-size: 5vmin;
     font-weight: bold;
-    margin-left: 18px; /* Ajustando a margem */
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-left: 18px;
+    display: inline-block;
+    vertical-align: baseline;
+    user-select: none;
+    background-image: linear-gradient(120deg, #626262, #fff, #626262);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 4s ease-in-out infinite;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Efeito no hover com zoom suave e brilho */
+#textlogo:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.666));
+}
+
+/* Animação do reflexo passando */
+@keyframes shine {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /* Localização */
@@ -61,13 +91,17 @@ html {
     display: flex;
     align-items: center;
     gap: 5px;
-    font-size: 16px; /* Reduzindo o tamanho da fonte */
-    margin-left: auto; /* Mantém a localização à direita da barra */
-    margin-right: 120px; /* Ajustando para alinhar melhor */
+    font-size: 16px;
+    /* Reduzindo o tamanho da fonte */
+    margin-left: auto;
+    /* Mantém a localização à direita da barra */
+    margin-right: 120px;
+    /* Ajustando para alinhar melhor */
 }
 
 .location img {
-    width: 30px; /* Diminuindo o tamanho do ícone de localização */
+    width: 30px;
+    /* Diminuindo o tamanho do ícone de localização */
     height: auto;
 }
 
@@ -82,21 +116,25 @@ html {
 .nav-icons {
     display: flex;
     align-items: center;
-    gap: 18px; /* Diminuindo o espaçamento entre os ícones */
+    gap: 18px;
+    /* Diminuindo o espaçamento entre os ícones */
 }
 
 /* Ícones da direita (agora menores) */
 .nav-icons img {
-    width: 30px; /* Diminuindo o tamanho dos ícones */
+    width: 30px;
+    /* Diminuindo o tamanho dos ícones */
     height: auto;
     cursor: pointer;
 }
 
 /* Ícone de coração */
 .heart-icon-navbar {
-    margin-right: 65px; /* Ajuste fino do ícone */
+    margin-right: 65px;
+    /* Ajuste fino do ícone */
 }
-.heart-icon-navbar:hover{
+
+.heart-icon-navbar:hover {
     transform: scale(1.2);
 }
 
@@ -108,15 +146,18 @@ html {
 }
 
 .login img {
-    width: 35px; /* Diminuindo o tamanho do ícone de login */
+    width: 35px;
+    /* Diminuindo o tamanho do ícone de login */
     height: auto;
 }
 
 .login span {
-    font-size: 20px; /* Reduzindo a fonte do login */
+    font-size: 20px;
+    /* Reduzindo a fonte do login */
     color: rgb(175, 175, 175);
 }
-a{
+
+a {
     text-decoration: none;
 }
 
@@ -131,8 +172,10 @@ a{
     padding: 2px 6px;
     border-radius: 50%;
     font-family: 'Poppins', sans-serif;
-    width: 10px; /* Definindo largura fixa */
-    height: 20px; /* Definindo altura fixa */
+    width: 10px;
+    /* Definindo largura fixa */
+    height: 20px;
+    /* Definindo altura fixa */
     display: flex;
     align-items: center;
     justify-content: center;
