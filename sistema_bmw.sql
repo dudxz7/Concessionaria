@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 29/04/2025 às 10:52
+-- Tempo de geração: 18/05/2025 às 12:21
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -75,21 +75,21 @@ INSERT INTO `clientes` (`id`, `nome_completo`, `email`, `cpf`, `telefone`, `rg`,
 CREATE TABLE `detalhes_modelos` (
   `id` int(11) NOT NULL,
   `modelo_id` int(11) NOT NULL,
-  `descricao` varchar(62) DEFAULT NULL,
-  `imagem` varchar(255) DEFAULT NULL
+  `cor_principal` varchar(62) DEFAULT NULL,
+  `descricao` varchar(62) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `detalhes_modelos`
 --
 
-INSERT INTO `detalhes_modelos` (`id`, `modelo_id`, `descricao`, `imagem`) VALUES
-(1, 1, '1.5 12V GASOLINA SPORT GP STEPTRONIC', 'carro1.webp'),
-(2, 5, '2.0 16V TURBO GASOLINA M SPORT', 'carro5.webp'),
-(3, 2, '1.5 TWINTURBO GASOLINA GRAN COUPE M SPORT STEPTRONIC', 'carro2.webp'),
-(4, 3, '2.0 16V TURBO FLEX M SPORT 10TH ANNIVERSARY EDITION AUTOMÁTICO', 'carro3.webp'),
-(5, 4, '2.0 16V TURBO HÍBRIDO M SPORT', 'carro4.webp'),
-(6, 6, '2.0 16V GASOLINA CABRIO M SPORT', 'carro6.webp');
+INSERT INTO `detalhes_modelos` (`id`, `modelo_id`, `cor_principal`, `descricao`) VALUES
+(1, 1, 'Azul', '1.5 12V GASOLINA SPORT GP STEPTRONIC'),
+(2, 2, 'Preto', '1.5 TWINTURBO GASOLINA GRAN COUPE M SPORT STEPTRONIC'),
+(6, 3, 'Branco', '2.0 16V TURBO FLEX M SPORT 10TH ANNIVERSARY EDITION AUTOMÁTICO'),
+(7, 4, 'Azul', '2.0 16V TURBO HÍBRIDO M SPORT AUTOMÁTICO'),
+(8, 6, 'Azul', '2.0 16V GASOLINA CABRIO M SPORT STEPTRONIC'),
+(9, 5, 'Azul', '2.0 16V TURBO GASOLINA M SPORT AUTOMÁTICO');
 
 -- --------------------------------------------------------
 
@@ -126,6 +126,32 @@ INSERT INTO `estoque` (`id`, `veiculo_id`, `quantidade`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `favoritos`
+--
+
+CREATE TABLE `favoritos` (
+  `id` int(11) NOT NULL,
+  `usuario_id` int(11) NOT NULL,
+  `modelo_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `favoritos`
+--
+
+INSERT INTO `favoritos` (`id`, `usuario_id`, `modelo_id`) VALUES
+(5, 1, 1),
+(6, 1, 3),
+(44, 1, 5),
+(43, 1, 6),
+(4, 12, 5),
+(42, 34, 1),
+(48, 34, 2),
+(45, 34, 5);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `funcionarios`
 --
 
@@ -148,6 +174,107 @@ CREATE TABLE `funcionarios` (
 
 INSERT INTO `funcionarios` (`id`, `nome_completo`, `email`, `cpf`, `rg`, `telefone`, `pis`, `endereco`, `cidade`, `estado`) VALUES
 (1, 'a', 'a@gmail.com', '111.111.111', '1111111111-1', '(11) 11111-1111', '00000000001', 'Rua Fulano de Tal, numero 10', 'XIQUE XIQUE ', 'SP');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `imagens_secundarias`
+--
+
+CREATE TABLE `imagens_secundarias` (
+  `id` int(11) NOT NULL,
+  `modelo_id` int(11) NOT NULL,
+  `imagem` varchar(255) NOT NULL,
+  `cor` varchar(100) DEFAULT NULL,
+  `ordem` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `imagens_secundarias`
+--
+
+INSERT INTO `imagens_secundarias` (`id`, `modelo_id`, `imagem`, `cor`, `ordem`) VALUES
+(1, 1, '1.webp', 'Azul', 1),
+(2, 1, '2.webp', 'Azul', 2),
+(3, 1, '3.webp', 'Azul', 3),
+(4, 1, '4.webp', 'Azul', 4),
+(5, 1, '5.webp', 'Azul', 5),
+(6, 1, '6.webp', 'Azul', 6),
+(7, 1, '7.webp', 'Azul', 7),
+(8, 1, '8.webp', 'Azul', 8),
+(9, 1, '1.webp', 'Prata', 1),
+(10, 1, '2.webp', 'Prata', 2),
+(11, 1, '3.webp', 'Prata', 3),
+(12, 1, '4.png', 'Prata', 4),
+(13, 1, '5.webp', 'Prata', 5),
+(14, 1, '6.webp', 'Prata', 6),
+(15, 1, '7.webp', 'Prata', 7),
+(16, 1, '8.webp', 'Prata', 8),
+(17, 1, '9.webp', 'Prata', 9),
+(18, 1, '9.webp', 'Azul', 9),
+(22, 2, '1.webp', 'Preto', 1),
+(23, 2, '2.webp', 'Preto', 2),
+(24, 2, '3.webp', 'Preto', 3),
+(25, 2, '4.webp', 'Preto', 4),
+(26, 2, '5.webp', 'Preto', 5),
+(27, 2, '6.webp', 'Preto', 6),
+(28, 2, '7.webp', 'Preto', 7),
+(29, 2, '8.webp', 'Preto', 8),
+(30, 2, '9.webp', 'Preto', 9),
+(31, 4, '1.webp', 'Azul', 1),
+(32, 4, '2.webp', 'Azul', 2),
+(33, 4, '3.webp', 'Azul', 3),
+(34, 4, '4.webp', 'Azul', 4),
+(35, 4, '5.webp', 'Azul', 5),
+(36, 4, '6.webp', 'Azul', 6),
+(37, 4, '7.webp', 'Azul', 7),
+(38, 4, '8.webp', 'Azul', 8),
+(39, 4, '9.webp', 'Azul', 9),
+(40, 6, '1.webp', 'Azul', 1),
+(41, 6, '2.webp', 'Azul', 2),
+(42, 6, '3.webp', 'Azul', 3),
+(43, 6, '4.webp', 'Azul', 4),
+(44, 6, '5.webp', 'Azul', 5),
+(45, 6, '6.webp', 'Azul', 6),
+(46, 6, '7.webp', 'Azul', 7),
+(47, 6, '8.webp', 'Azul', 8),
+(48, 6, '9.webp', 'Azul', 9),
+(49, 5, '1.webp', 'Azul', 1),
+(50, 5, '2.webp', 'Azul', 2),
+(51, 5, '3.webp', 'Azul', 3),
+(52, 5, '4.webp', 'Azul', 4),
+(53, 5, '5.webp', 'Azul', 5),
+(54, 5, '6.webp', 'Azul', 6),
+(55, 5, '7.webp', 'Azul', 7),
+(56, 5, '8.webp', 'Azul', 8),
+(57, 5, '9.webp', 'Azul', 9),
+(58, 3, '1.webp', 'Branco', 1),
+(59, 3, '2.webp', 'Branco', 2),
+(60, 3, '3.webp', 'Branco', 3),
+(61, 3, '4.webp', 'Branco', 4),
+(62, 3, '5.webp', 'Branco', 5),
+(63, 3, '6.webp', 'Branco', 6),
+(64, 3, '7.webp', 'Branco', 7),
+(65, 3, '8.webp', 'Branco', 8),
+(66, 3, '9.webp', 'Branco', 9),
+(67, 3, '1.webp', 'Azul', 1),
+(68, 3, '2.webp', 'Azul', 2),
+(69, 3, '3.webp', 'Azul', 3),
+(70, 3, '4.webp', 'Azul', 4),
+(71, 3, '5.webp', 'Azul', 5),
+(72, 3, '6.webp', 'Azul', 6),
+(73, 3, '7.webp', 'Azul', 7),
+(74, 3, '8.webp', 'Azul', 8),
+(75, 3, '9.webp', 'Azul', 9),
+(76, 3, '1.webp', 'Prata', 1),
+(77, 3, '2.webp', 'Prata', 2),
+(78, 3, '3.webp', 'Prata', 3),
+(79, 3, '4.webp', 'Prata', 4),
+(80, 3, '5.webp', 'Prata', 5),
+(81, 3, '6.webp', 'Prata', 6),
+(82, 3, '7.webp', 'Prata', 7),
+(83, 3, '8.webp', 'Prata', 8),
+(84, 3, '9.webp', 'Prata', 9);
 
 -- --------------------------------------------------------
 
@@ -188,7 +315,7 @@ CREATE TABLE `promocoes` (
   `modelo_id` int(11) NOT NULL,
   `desconto` decimal(5,2) NOT NULL,
   `preco_com_desconto` decimal(10,2) NOT NULL,
-  `data_limite` datetime DEFAULT NULL,
+  `data_limite` datetime NOT NULL DEFAULT current_timestamp(),
   `ativo` tinyint(1) DEFAULT 1,
   `status` enum('Ativa','Inativa') DEFAULT 'Ativa'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -198,11 +325,9 @@ CREATE TABLE `promocoes` (
 --
 
 INSERT INTO `promocoes` (`id`, `modelo_id`, `desconto`, `preco_com_desconto`, `data_limite`, `ativo`, `status`) VALUES
-(1, 1, 10.00, 187178.04, '2025-04-29 01:00:00', 1, 'Inativa'),
-(2, 2, 20.00, 256760.00, '2025-04-30 00:00:00', 1, 'Ativa'),
-(3, 3, 10.00, 371655.00, '2025-04-28 00:00:00', 1, 'Inativa'),
-(4, 6, 50.00, 251975.00, '2025-05-01 00:00:00', 1, 'Ativa'),
-(5, 4, 15.00, 386707.50, '2025-04-30 07:00:00', 1, 'Ativa');
+(1, 4, 10.00, 409455.00, '2025-05-13 10:27:00', 1, 'Ativa'),
+(2, 2, 10.00, 288855.00, '2025-05-23 22:01:00', 1, 'Ativa'),
+(3, 3, 10.00, 371655.00, '2025-04-09 22:01:00', 1, 'Inativa');
 
 -- --------------------------------------------------------
 
@@ -256,7 +381,7 @@ ALTER TABLE `clientes`
 --
 ALTER TABLE `detalhes_modelos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `modelo_id` (`modelo_id`);
+  ADD UNIQUE KEY `modelo_id` (`modelo_id`);
 
 --
 -- Índices de tabela `estoque`
@@ -266,6 +391,14 @@ ALTER TABLE `estoque`
   ADD KEY `veiculo_id` (`veiculo_id`);
 
 --
+-- Índices de tabela `favoritos`
+--
+ALTER TABLE `favoritos`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `usuario_id` (`usuario_id`,`modelo_id`),
+  ADD KEY `modelo_id` (`modelo_id`);
+
+--
 -- Índices de tabela `funcionarios`
 --
 ALTER TABLE `funcionarios`
@@ -273,6 +406,13 @@ ALTER TABLE `funcionarios`
   ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `cpf` (`cpf`),
   ADD UNIQUE KEY `pis` (`pis`);
+
+--
+-- Índices de tabela `imagens_secundarias`
+--
+ALTER TABLE `imagens_secundarias`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `modelo_id` (`modelo_id`);
 
 --
 -- Índices de tabela `modelos`
@@ -309,7 +449,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de tabela `detalhes_modelos`
 --
 ALTER TABLE `detalhes_modelos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de tabela `estoque`
@@ -318,10 +458,22 @@ ALTER TABLE `estoque`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
+-- AUTO_INCREMENT de tabela `favoritos`
+--
+ALTER TABLE `favoritos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+
+--
 -- AUTO_INCREMENT de tabela `funcionarios`
 --
 ALTER TABLE `funcionarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de tabela `imagens_secundarias`
+--
+ALTER TABLE `imagens_secundarias`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT de tabela `modelos`
@@ -333,7 +485,7 @@ ALTER TABLE `modelos`
 -- AUTO_INCREMENT de tabela `promocoes`
 --
 ALTER TABLE `promocoes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `veiculos`
@@ -356,6 +508,19 @@ ALTER TABLE `detalhes_modelos`
 --
 ALTER TABLE `estoque`
   ADD CONSTRAINT `estoque_ibfk_1` FOREIGN KEY (`veiculo_id`) REFERENCES `veiculos` (`id`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `favoritos`
+--
+ALTER TABLE `favoritos`
+  ADD CONSTRAINT `favoritos_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `clientes` (`id`),
+  ADD CONSTRAINT `favoritos_ibfk_2` FOREIGN KEY (`modelo_id`) REFERENCES `modelos` (`id`);
+
+--
+-- Restrições para tabelas `imagens_secundarias`
+--
+ALTER TABLE `imagens_secundarias`
+  ADD CONSTRAINT `imagens_secundarias_ibfk_1` FOREIGN KEY (`modelo_id`) REFERENCES `modelos` (`id`) ON DELETE CASCADE;
 
 --
 -- Restrições para tabelas `promocoes`
