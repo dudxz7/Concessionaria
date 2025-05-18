@@ -265,7 +265,7 @@ $conn->close();
                 </div>
             </div>
 
-            <label>Imagens:</label>
+            <label class="img-label">Imagens:</label>
             <div class="custom-file-upload">
                 <button type="button" id="btn-upload">Selecionar arquivo</button>
                 <span id="file-names">Nenhum arquivo selecionado</span>
