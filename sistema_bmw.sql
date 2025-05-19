@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 18/05/2025 às 12:21
+-- Tempo de geração: 19/05/2025 às 10:54
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -146,7 +146,7 @@ INSERT INTO `favoritos` (`id`, `usuario_id`, `modelo_id`) VALUES
 (43, 1, 6),
 (4, 12, 5),
 (42, 34, 1),
-(48, 34, 2),
+(51, 34, 2),
 (45, 34, 5);
 
 -- --------------------------------------------------------
@@ -257,24 +257,15 @@ INSERT INTO `imagens_secundarias` (`id`, `modelo_id`, `imagem`, `cor`, `ordem`) 
 (64, 3, '7.webp', 'Branco', 7),
 (65, 3, '8.webp', 'Branco', 8),
 (66, 3, '9.webp', 'Branco', 9),
-(67, 3, '1.webp', 'Azul', 1),
-(68, 3, '2.webp', 'Azul', 2),
-(69, 3, '3.webp', 'Azul', 3),
-(70, 3, '4.webp', 'Azul', 4),
-(71, 3, '5.webp', 'Azul', 5),
-(72, 3, '6.webp', 'Azul', 6),
+(67, 3, '2.webp', 'Azul', 2),
+(68, 3, '3.webp', 'Azul', 3),
+(69, 3, '1.webp', 'Azul', 1),
+(70, 3, '6.webp', 'Azul', 6),
+(71, 3, '4.webp', 'Azul', 4),
+(72, 3, '5.webp', 'Azul', 5),
 (73, 3, '7.webp', 'Azul', 7),
 (74, 3, '8.webp', 'Azul', 8),
-(75, 3, '9.webp', 'Azul', 9),
-(76, 3, '1.webp', 'Prata', 1),
-(77, 3, '2.webp', 'Prata', 2),
-(78, 3, '3.webp', 'Prata', 3),
-(79, 3, '4.webp', 'Prata', 4),
-(80, 3, '5.webp', 'Prata', 5),
-(81, 3, '6.webp', 'Prata', 6),
-(82, 3, '7.webp', 'Prata', 7),
-(83, 3, '8.webp', 'Prata', 8),
-(84, 3, '9.webp', 'Prata', 9);
+(75, 3, '9.webp', 'Azul', 9);
 
 -- --------------------------------------------------------
 
@@ -461,7 +452,7 @@ ALTER TABLE `estoque`
 -- AUTO_INCREMENT de tabela `favoritos`
 --
 ALTER TABLE `favoritos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT de tabela `funcionarios`
@@ -473,7 +464,7 @@ ALTER TABLE `funcionarios`
 -- AUTO_INCREMENT de tabela `imagens_secundarias`
 --
 ALTER TABLE `imagens_secundarias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT de tabela `modelos`
