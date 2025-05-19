@@ -402,7 +402,7 @@ $stmt->close();
                     <a href="#" class="payment-link" id="abrirModal">Formas de pagamento</a>
                 </div>
 
-                <button class="buy-button" onclick="window.location.href='pagamento.php?id=<?= $id_modelo ?>'">Compre agora</button>
+                <button class="buy-button" id="btn-comprar" data-id="<?= $id_modelo ?>">Compre agora</button>
                 <button class="visit-button">Agendar visita</button>
             </aside>
 
@@ -927,6 +927,20 @@ $stmt->close();
                 document.getElementById('imagem-principal').src = this.src;
             });
         });
+
+        // Envia a cor selecionada para a página de pagamento
+        const btnComprar = document.getElementById('btn-comprar');
+        if (btnComprar) {
+            btnComprar.addEventListener('click', function() {
+                // Pega a cor selecionada (primeiro checkbox marcado)
+                const corSelecionada = document.querySelector('.color-checkbox:checked');
+                const cor = corSelecionada ? encodeURIComponent(corSelecionada.value) : '';
+                const id = btnComprar.getAttribute('data-id');
+                let url = `pagamento.php?id=${id}`;
+                if (cor) url += `&cor=${cor}`;
+                window.location.href = url;
+            });
+        }
     </script>
 </body>
 

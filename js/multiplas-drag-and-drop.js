@@ -8,25 +8,35 @@ const ordemCampos = document.getElementById("ordem-campos");
 const fileNamesSpan = document.getElementById("file-names");
 const form = document.querySelector("form");
 
+let allFiles = [];
+
 fileInput.addEventListener("change", () => {
+  // Adiciona novos arquivos sem remover os anteriores
+  const newFiles = Array.from(fileInput.files);
+  // Evita arquivos duplicados pelo nome e tamanho
+  newFiles.forEach(f => {
+    if (!allFiles.some(existing => existing.name === f.name && existing.size === f.size)) {
+      allFiles.push(f);
+    }
+  });
   updatePreviews();
+  // Limpa o input para permitir selecionar o mesmo arquivo novamente
+  fileInput.value = "";
 });
 
 function updatePreviews() {
   container.innerHTML = "";
   ordemCampos.innerHTML = "";
 
-  const files = Array.from(fileInput.files);
-
-  if (files.length === 0) {
+  if (allFiles.length === 0) {
     fileNamesSpan.textContent = "Nenhum arquivo selecionado";
-  } else if (files.length === 1) {
-    fileNamesSpan.textContent = files[0].name;
+  } else if (allFiles.length === 1) {
+    fileNamesSpan.textContent = allFiles[0].name;
   } else {
-    fileNamesSpan.textContent = files.length + " arquivos selecionados";
+    fileNamesSpan.textContent = allFiles.length + " arquivos selecionados";
   }
 
-  files.forEach((file, index) => {
+  allFiles.forEach((file, index) => {
     const reader = new FileReader();
     const box = document.createElement("div");
     box.classList.add("preview-box");
@@ -91,6 +101,17 @@ function updateOrderFields() {
   });
 }
 
+// Remove arquivo ao clicar com botão direito
+container.addEventListener("contextmenu", function(e) {
+  e.preventDefault();
+  const box = e.target.closest(".preview-box");
+  if (box) {
+    const idx = Number(box.dataset.index);
+    allFiles.splice(idx, 1);
+    updatePreviews();
+  }
+});
+
 // *** AQUI A MÁGICA PARA REORDENAR OS ARQUIVOS DO INPUT FILE ANTES DE ENVIAR ***
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -99,11 +120,9 @@ form.addEventListener("submit", (e) => {
     .map(input => Number(input.value));
 
   const dt = new DataTransfer();
-  const files = Array.from(fileInput.files);
-
   orderIndexes.forEach(idx => {
-    if (files[idx]) {
-      dt.items.add(files[idx]);
+    if (allFiles[idx]) {
+      dt.items.add(allFiles[idx]);
     }
   });
 

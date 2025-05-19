@@ -49,11 +49,16 @@ if ($tem_promocao) {
     $total = $preco;
 }
 
+$cor_param = isset($_GET['cor']) ? trim($_GET['cor']) : null;
+if ($cor_param) {
+    $cor_principal = $cor_param;
+}
+
 // Criar slug do modelo (exemplo simples)
 $modelo_slug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', $dados['modelo']));
 $cor_principal_slug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', $cor_principal));
 
-// Buscar imagem principal da cor principal, ordem = 0
+// Buscar imagem principal da cor escolhida, ordem = 1
 $sql_img = "
     SELECT imagem 
     FROM imagens_secundarias 
@@ -85,7 +90,7 @@ if ($result_img->num_rows > 0) {
     <link rel="stylesheet" href="../css/payment.css" />
     <title>Pagamento</title>
 </head>
-<body>
+<body data-total="<?= htmlspecialchars($total) ?>">
     <div class="container">
         <!-- Parte superior: imagem e dados -->
         <div class="superior">
@@ -213,5 +218,6 @@ if ($result_img->num_rows > 0) {
         <script src="../js/payment-main.js" type="module"></script>
         <script src="../js/habilita-botao-payment.js"></script>
         <script src="../js/toggle-campos-cartao.js"></script>
+        <script src="../js/parcelamento-payment.js"></script>
 </body>
 </html>
