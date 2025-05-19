@@ -57,7 +57,7 @@ $cor_principal_slug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', $cor_princip
 $sql_img = "
     SELECT imagem 
     FROM imagens_secundarias 
-    WHERE modelo_id = ? AND cor = ? AND ordem = 0
+    WHERE modelo_id = ? AND cor = ? AND ordem = 1
     LIMIT 1
 ";
 
@@ -72,7 +72,6 @@ if ($result_img->num_rows > 0) {
     $imagem = "../img/modelos/cores/{$modelo_slug}/{$cor_principal_slug}/{$row_img['imagem']}";
 } else {
     $imagem = "../img/modelos/padrao.webp";
-    // $imagem = "../img/modelos/cores/{$modelo_slug}/{$cor_principal_slug}/imagem-nao-encontrada.webp";
 }
 
 ?>
