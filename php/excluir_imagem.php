@@ -57,10 +57,26 @@ if (!$imagemData) {
 
 $nomeArquivo = $imagemData['imagem'];
 
-// Caminho completo da imagem (ajuste conforme seu projeto)
+// Busca o nome do modelo para montar o caminho
+$stmtModelo = $conn->prepare("SELECT modelo FROM modelos WHERE id = ?");
+$stmtModelo->bind_param("i", $modelo_id);
+$stmtModelo->execute();
+$resModelo = $stmtModelo->get_result();
+$modeloRow = $resModelo->fetch_assoc();
+$stmtModelo->close();
+
+if (!$modeloRow) {
+    echo "Modelo não encontrado.";
+    exit;
+}
+$modeloNome = $modeloRow['modelo'];
+$modeloSlug = strtolower(preg_replace('/[^a-z0-9\-]/i', '-', $modeloNome));
+$corSlug = strtolower(preg_replace('/[^a-z0-9\-]/i', '-', $cor));
+
+// Caminho completo da imagem
 $caminhoImagem = __DIR__ . "/../img/modelos/cores/" 
-    . strtolower(preg_replace('/[^a-z0-9\-]/i', '-', $_GET['modelo'])) . "/" 
-    . strtolower(preg_replace('/[^a-z0-9\-]/i', '-', $cor)) . "/" 
+    . $modeloSlug . "/" 
+    . $corSlug . "/" 
     . $nomeArquivo;
 
 // Remove a imagem do banco

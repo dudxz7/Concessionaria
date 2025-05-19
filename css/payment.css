@@ -1,0 +1,282 @@
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: #d3d3d3;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background: transparent;
+            /* Para que o fundo do body apareça entre as seções */
+            max-width: 450px;
+            margin: auto;
+            border-radius: 20px;
+        }
+
+        .inferior {
+            background: #fafafa;
+            padding: 20px;
+            margin-top: 10px;
+            /* Cria o espaço visual */
+            border-radius: 20px;
+            /* Deixa arredondado como um cartão separado */
+        }
+
+        .superior {
+            background: white;
+            border-radius: 20px;
+        }
+
+        .topo {
+            background: #111;
+            padding: 10px;
+            height: 109px;
+            position: relative;
+            text-align: center;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .voltar {
+            position: absolute;
+            left: 15px;
+            top: 1rem;
+            font-size: 13px;
+            background: #222;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            border: 1px solid #fff;
+            width: 70px;
+            height: 25px;
+        }
+
+        .voltar img {
+            width: 10px;
+            margin-right: 0px;
+            background: transparent;
+            margin-top: 0px;
+        }
+
+        .voltar:hover {
+            background: rgb(82, 82, 82);
+            color: white;
+        }
+
+        .dados {
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .dados p {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .forma-pagamento h4 {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .formas {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .formas input {
+            display: none;
+        }
+
+        .formas label {
+            flex: 1;
+            background: white;
+            border: 2px solid #ccc;
+            border-radius: 16px;
+            padding: 10px 0;
+            text-align: center;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .formas input:checked+label {
+            border-color: #2f4eda;
+            background: #f2f2f2;
+        }
+
+        .formas img {
+            width: 40px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"] {
+            padding: 12px;
+            border: 1.5px solid #000;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        select#parcelamento {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #000;
+            border-radius: 12px;
+            font-size: 14px;
+            background-color: #fff;
+            color: #222;
+            margin-top: 2px;
+            margin-bottom: 10px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            transition: border 0.2s;
+            box-sizing: border-box;
+        }
+
+        #campo-parcelamento label {
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #222;
+        }
+
+        #campo-parcelamento {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .linha-dupla {
+            display: flex;
+            gap: 10px;
+        }
+
+        .linha-dupla input {
+            flex: 1;
+        }
+
+        .linha-dupla input {
+            width: 200px;
+        }
+
+        .linha-dupla>div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .linha-dupla>div>label {
+            margin-bottom: 5px;
+        }
+
+        .campo-form {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .campo-form label {
+            margin-bottom: 5px;
+        }
+
+        .campo-cartao-numero {
+            position: relative;
+        }
+
+        .campo-cartao-numero img#bandeira-cartao {
+            position: absolute;
+            left: 12px;
+            width: 48px;
+            height: 32px;
+            object-fit: contain;
+            transition: 0.2s;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .campo-cartao-numero input#numero_cartao {
+            padding-left: 60px;
+            height: 48px;
+            line-height: 48px;
+            margin-bottom: 10px;
+        }
+
+        .termos {
+            font-size: 11px;
+            color: #444;
+            margin-top: 5px;
+        }
+
+        .termos a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+
+        .botao {
+            background: linear-gradient(to right, #0a1e3f, #004080);
+            color: white;
+            padding: 14px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .botao:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 12px #022850, 0 0 20px rgba(0, 122, 255, 0.3);
+        }
+
+        .carro {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 20px;
+            z-index: 2;
+            width: 150px;
+            text-align: center;
+        }
+
+        .car-img {
+            width: 100px;
+            height: auto;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .car-img:hover {
+            transform: scale(1.05);
+        }
+
+        input.input-vazio {
+            border: 1.5px solid rgb(2, 17, 151) !important;
+        }
+
+        .input-erro {
+            border: 2px solid red !important;
+            background-color: #fff0f0;
+        }

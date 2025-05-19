@@ -809,7 +809,7 @@ body {
 
 .card {
   width: 120px;
-  background-color: #f1f1f1; /* fundo claro */
+  background-color: #f2f2f2; /* fundo claro */
   border-radius: 10px;
   padding: 15px 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -847,7 +847,7 @@ body {
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: #fff;
   border-radius: 20px;
   padding: 40px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
@@ -908,7 +908,7 @@ body {
 }
 
 .close:hover {
-  transform: scale(1.2) rotate(90deg);
+  transform: scale(1.2);
 }
 .recomendados .card-carro a {
   text-decoration: none !important;

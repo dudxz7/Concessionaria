@@ -125,9 +125,12 @@ if ($id_modelo > 0) {
     $stmt->execute();
     $stmt->bind_result($precoDesconto, $dataLimite);
     if ($stmt->fetch()) {
-        $temPromocao = true;
-        $precoComDesconto = $precoDesconto;
-        $dataFimPromo = $dataLimite;
+        $hoje = date('Y-m-d');
+        if ($dataLimite >= $hoje) {
+            $temPromocao = true;
+            $precoComDesconto = $precoDesconto;
+            $dataFimPromo = $dataLimite;
+        }
     }
     $stmt->close();
 
@@ -230,6 +233,11 @@ while ($row = $resultImagens->fetch_assoc()) {
         }
     }
 }
+
+// Extrai só o "último ano " ex a var $anoModelo = "2022/2023" vira "2023" tlgd só isso mrm 
+$anos = explode('/', $anoModelo);
+$anoFinal = $anos[1];
+
 $stmt->close();
 ?>
 
@@ -239,7 +247,7 @@ $stmt->close();
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BMW 118i 2024: Preço, versões e mais! Bmw motors</title>
+    <title><?php echo $modelo; ?> <?php echo $anoFinal ?>: Preço, versões e mais! Bmw motors</title>
     <link rel="icon" href="../img/logos/logoofcbmw.png" />
     <link rel="stylesheet" href="../css/pagina-veiculo.css" />
     <link rel="stylesheet" href="../css/navbar.css" />
@@ -394,7 +402,7 @@ $stmt->close();
                     <a href="#" class="payment-link" id="abrirModal">Formas de pagamento</a>
                 </div>
 
-                <button class="buy-button">Compre agora</button>
+                <button class="buy-button" onclick="window.location.href='pagamento.php?id=<?= $id_modelo ?>'">Compre agora</button>
                 <button class="visit-button">Agendar visita</button>
             </aside>
 
@@ -833,15 +841,15 @@ $stmt->close();
 
             <div class="cards-pagamento">
                 <div class="card">
-                    <img src="../img/formas-de-pagamento/icons8-foto-240.png" alt="Pix">
+                    <img src="../img/formas-de-pagamento/icons8-foto-500.png" alt="Pix">
                     <p>Pix</p>
                 </div>
                 <div class="card">
-                    <img src="../img/formas-de-pagamento/boleto_mb.png" alt="Boleto">
+                    <img src="../img/formas-de-pagamento/boletov2.png" alt="Boleto">
                     <p>Boleto Bancário</p>
                 </div>
                 <div class="card">
-                    <img src="../img/formas-de-pagamento/creditcard_mb.png" alt="Cartão">
+                    <img src="../img/formas-de-pagamento/cartao-do-banco.png" alt="Cartão">
                     <p>Cartão de Crédito</p>
                 </div>
             </div>
