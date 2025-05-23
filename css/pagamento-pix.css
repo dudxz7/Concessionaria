@@ -1,0 +1,183 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background: #d3d3d3;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100vw;
+}
+
+.pix-container {
+    max-width: 500px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    justify-content: center;
+}
+
+.pix-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.pix-logo {
+    width: 40px;
+}
+
+.titulo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.linha-preco-temporizador {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.total {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.rs {
+    color: #0f62fe;
+    margin-right: 4px;
+}
+
+.temporizador span {
+    font-size: 12px;
+    display: block;
+    text-align: right;
+    margin-bottom: 1px;
+}
+
+.contador {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.contador img {
+    width: 16px;
+}
+
+.contador span {
+    margin-right: 6px;
+}
+
+.qr-instru,
+.copiar-instru,
+.finaliza {
+    text-align: center;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.qrcode-box {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.qrcode-img {
+    margin-top: 10px;
+    width: 220px;
+    height: 220px;
+    border: 1px dashed #000;
+    border-radius: 0px;
+    background: #fafafa;
+    box-sizing: border-box;
+    padding: 15px; /* se quiser mecher no tamanho da borda modifque isso */
+}
+
+.pagador {
+    text-align: center;
+    font-size: 13px;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.copiar-box {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 20px;
+}
+
+.copiar-box input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+    font-family: monospace;
+    font-size: 12px;
+    border-right: none;
+}
+
+.copiar-btn {
+    padding: 8.2px 14px;
+    background: #fff;
+    color: black;
+    border: 1px solid black;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+}
+
+.copiar-btn img {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+.passos {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.passo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0;
+}
+
+.passo-numero {
+    background-color: #0f62fe;
+    color: white;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+    font-size: 11px;
+    min-width: 55px;
+    height: 20px;
+}
+
+.passo-texto {
+    font-size: 12px;
+    margin: 0;
+}
+
+.finaliza {
+    text-align: left;
+    font-size: 13px;
+    margin: 10px 0 10px 0;
+}

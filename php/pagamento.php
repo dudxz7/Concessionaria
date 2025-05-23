@@ -1,9 +1,61 @@
 <?php
+session_start();
 require_once 'conexao.php';
 
+// Função para gerar uma chave única para cada tentativa de pagamento
+function gerarChavePagamento($id_veiculo, $cor, $usuarioId) {
+    return 'pagamento_' . $usuarioId . '_' . $id_veiculo . '_' . md5(strtolower($cor));
+}
+
 $modelo_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-if ($modelo_id <= 0) {
-    die("ID do modelo inválido.");
+$cor_param = (isset($_GET['cor']) && trim($_GET['cor']) !== '') ? trim($_GET['cor']) : null;
+$cor_principal = $cor_param;
+$usuarioId = isset($_SESSION['usuarioId']) ? $_SESSION['usuarioId'] : null;
+$redir = isset($_GET['redir']) ? intval($_GET['redir']) : 0;
+
+// Só faz redirect automático se redir=1, cor válida e cor EXISTE no banco para o modelo
+$cor_existe = false;
+if ($modelo_id > 0 && $cor_param && trim($cor_param) !== '' && $usuarioId && $redir === 1) {
+    // Verifica se a cor existe para o modelo
+    $sqlCor = "SELECT 1 FROM modelos WHERE id = ? AND FIND_IN_SET(?, cor) > 0";
+    $stmtCor = $conn->prepare($sqlCor);
+    $stmtCor->bind_param("is", $modelo_id, $cor_param);
+    $stmtCor->execute();
+    $stmtCor->store_result();
+    if ($stmtCor->num_rows > 0) {
+        $cor_existe = true;
+    }
+    $stmtCor->close();
+
+    if ($cor_existe) {
+        $sqlPix = "SELECT expira_em FROM pagamentos_pix_pendentes WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? LIMIT 1";
+        $stmtPix = $conn->prepare($sqlPix);
+        $stmtPix->bind_param("iis", $usuarioId, $modelo_id, $cor_param);
+        $stmtPix->execute();
+        $stmtPix->bind_result($expira_em_pix);
+        $temPixValido = false;
+        if ($stmtPix->fetch()) {
+            $agora = time();
+            if ($expira_em_pix > $agora) {
+                $temPixValido = true;
+            }
+        }
+        $stmtPix->close();
+        // Só executa o DELETE depois de fechar o statement
+        if (isset($expira_em_pix) && $expira_em_pix <= $agora) {
+            $conn->query("DELETE FROM pagamentos_pix_pendentes WHERE usuario_id = $usuarioId AND veiculo_id = $modelo_id AND cor = '" . $conn->real_escape_string($cor_param) . "'");
+        }
+        if ($temPixValido) {
+            // Recria sessão de autorização para o Pix pendente
+            $chave = gerarChavePagamento($modelo_id, $cor_param, $usuarioId);
+            $_SESSION[$chave] = [ 'expira_em' => $expira_em_pix ];
+            $_SESSION['pagamento_autorizado'] = true;
+            $_SESSION['pagamento_id'] = $modelo_id;
+            $_SESSION['pagamento_cor'] = $cor_param;
+            header('Location: realizar_pagamento_pix.php?id=' . $modelo_id . '&cor=' . urlencode($cor_param));
+            exit;
+        }
+    }
 }
 
 $sql = "
@@ -78,7 +130,6 @@ if ($result_img->num_rows > 0) {
 } else {
     $imagem = "../img/modelos/padrao.webp";
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -91,133 +142,183 @@ if ($result_img->num_rows > 0) {
     <title>Pagamento</title>
 </head>
 <body data-total="<?= htmlspecialchars($total) ?>">
-    <div class="container">
-        <!-- Parte superior: imagem e dados -->
-        <div class="superior">
-            <div class="topo">
-                <button class="voltar" onclick="history.back(); return false;">
-                    <img src="../img/seta-branca-left.png" alt="Voltar" />
-                    Voltar
-                </button>
+    <div class=" container">
+    <!-- Parte superior: imagem e dados -->
+    <div class="superior">
+        <div class="topo">
+            <button class="voltar" onclick="history.back(); return false;">
+                <img src="../img/seta-branca-left.png" alt="Voltar" />
+                Voltar
+            </button>
+        </div>
+
+        <div class="carro">
+            <img src="<?= htmlspecialchars($imagem) ?>" alt="Carro" class="car-img" />
+        </div>
+
+        <div class="dados">
+            <p><span>Preço</span><span>R$ <?= number_format($preco, 2, ',', '.') ?></span></p>
+            <p><span>Desconto aplicado</span><span><?= $desconto > 0 ? "-" . $desconto . "%" : "0%" ?></span></p>
+            <p><span>Total</span><span>R$ <?= number_format($total, 2, ',', '.') ?></span></p>
+            <p><span>Cor</span><span><?= htmlspecialchars($cor_principal) ?></span></p>
+        </div>
+
+
+        <!-- Parte inferior: formas de pagamento e formulário -->
+        <div class="inferior">
+            <div class="forma-pagamento">
+                <h4>Escolha uma das formas de pagamento abaixo</h4>
+                <div class="formas">
+                    <input type="radio" id="pix" name="forma" checked />
+                    <label for="pix">
+                        <img src="../img/formas-de-pagamento/icons8-foto-240.png" alt="Pix" />
+                        Pix
+                    </label>
+
+                    <input type="radio" id="boleto" name="forma" />
+                    <label for="boleto">
+                        <img src="../img/formas-de-pagamento/boletov2.png" alt="Boleto" />
+                        Boleto
+                    </label>
+
+                    <input type="radio" id="cartao" name="forma" />
+                    <label for="cartao">
+                        <img src="../img/formas-de-pagamento/creditcard_mb.png" alt="Cartão" />
+                        Cartão
+                    </label>
+                </div>
             </div>
 
-            <div class="carro">
-                <img src="<?= htmlspecialchars($imagem) ?>" alt="Carro" class="car-img" />
-            </div>
-
-            <div class="dados">
-                <p><span>Preço</span><span>R$ <?= number_format($preco, 2, ',', '.') ?></span></p>
-                <p><span>Desconto aplicado</span><span><?= $desconto > 0 ? "-" . $desconto . "%" : "0%" ?></span></p>
-                <p><span>Total</span><span>R$ <?= number_format($total, 2, ',', '.') ?></span></p>
-                <p><span>Cor</span><span><?= htmlspecialchars($cor_principal) ?></span></p>
-            </div>
-
-
-            <!-- Parte inferior: formas de pagamento e formulário -->
-            <div class="inferior">
-                <div class="forma-pagamento">
-                    <h4>Escolha uma das formas de pagamento abaixo</h4>
-                    <div class="formas">
-                        <input type="radio" id="pix" name="forma" checked />
-                        <label for="pix">
-                            <img src="../img/formas-de-pagamento/icons8-foto-240.png" alt="Pix" />
-                            Pix
-                        </label>
-
-                        <input type="radio" id="boleto" name="forma" />
-                        <label for="boleto">
-                            <img src="../img/formas-de-pagamento/boletov2.png" alt="Boleto" />
-                            Boleto
-                        </label>
-
-                        <input type="radio" id="cartao" name="forma" />
-                        <label for="cartao">
-                            <img src="../img/formas-de-pagamento/creditcard_mb.png" alt="Cartão" />
-                            Cartão
-                        </label>
+            <form>
+                <!-- Campos de cartão, inicialmente ocultos, mas no topo do formulário -->
+                <div id="campos-cartao" style="display:none;">
+                    <div class="campo-form campo-cartao-numero" style="position: relative;">
+                        <label for="numero_cartao">Número do cartão</label>
+                        <img id="bandeira-cartao" src="../img/formas-de-pagamento/creditcard_mb.png"
+                            alt="Bandeira do cartão"
+                            style="position: absolute; left: 8px; top: 35px; width: 48px; height: 32px; object-fit: contain; transition: 0.2s;" />
+                        <input type="text" id="numero_cartao" name="numero_cartao" placeholder="Número do cartão"
+                            maxlength="19" style="padding-left: 60px;" />
+                    </div>
+                    <div class="linha-dupla">
+                        <div>
+                            <label for="validade">Validade</label>
+                            <input type="text" id="validade" name="validade" placeholder="MM/AA" maxlength="5" />
+                        </div>
+                        <div>
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" name="cvv" placeholder="CVV" maxlength="4" />
+                        </div>
                     </div>
                 </div>
 
-                <form>
-                    <!-- Campos de cartão, inicialmente ocultos, mas no topo do formulário -->
-                    <div id="campos-cartao" style="display:none;">
-                        <div class="campo-form campo-cartao-numero" style="position: relative;">
-                            <label for="numero_cartao">Número do cartão</label>
-                            <img id="bandeira-cartao" src="../img/formas-de-pagamento/creditcard_mb.png"
-                                alt="Bandeira do cartão"
-                                style="position: absolute; left: 8px; top: 35px; width: 48px; height: 32px; object-fit: contain; transition: 0.2s;" />
-                            <input type="text" id="numero_cartao" name="numero_cartao" placeholder="Número do cartão"
-                                maxlength="19" style="padding-left: 60px;" />
-                        </div>
-                        <div class="linha-dupla">
-                            <div>
-                                <label for="validade">Validade</label>
-                                <input type="text" id="validade" name="validade" placeholder="MM/AA" maxlength="5" />
-                            </div>
-                            <div>
-                                <label for="cvv">CVV</label>
-                                <input type="text" id="cvv" name="cvv" placeholder="CVV" maxlength="4" />
-                            </div>
-                        </div>
+                <div class="campo-form">
+                    <label for="nome">Nome completo</label>
+                    <input type="text" id="nome" name="nome" placeholder="Nome completo" required />
+                </div>
+
+                <div class="campo-form">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Email" required />
+                </div>
+
+                <div class="linha-dupla">
+                    <div>
+                        <label for="cpf">CPF</label>
+                        <input type="text" id="cpf" name="cpf" placeholder="CPF" required />
                     </div>
 
-                    <div class="campo-form">
-                        <label for="nome">Nome completo</label>
-                        <input type="text" id="nome" name="nome" placeholder="Nome completo" required />
+                    <div>
+                        <label for="data_nasc">Data de nascimento</label>
+                        <input type="text" id="data_nasc" name="data_nasc" placeholder="DD/MM/AA" required />
                     </div>
+                </div>
 
-                    <div class="campo-form">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Email" required />
-                    </div>
+                <div class="campo-form">
+                    <label for="telefone">Número de telefone</label>
+                    <input type="text" id="telefone" name="telefone" placeholder="Número de telefone" required />
+                </div>
 
-                    <div class="linha-dupla">
-                        <div>
-                            <label for="cpf">CPF</label>
-                            <input type="text" id="cpf" name="cpf" placeholder="CPF" required />
-                        </div>
+                <div class="campo-form" id="campo-parcelamento" style="margin-top: 10px; display: none;">
+                    <label for="parcelamento">Parcelamento</label>
+                    <select id="parcelamento" name="parcelamento">
+                        <option value="1">1 x R$ 209,99 = R$ 209,99</option>
+                        <option value="2">2 x R$ 105,00 = R$ 210,00</option>
+                        <option value="3">3 x R$ 70,00 = R$ 210,00</option>
+                        <option value="4">4 x R$ 54,33 = R$ 217,32 (Com juros)</option>
+                        <option value="5">5 x R$ 44,00 = R$ 220,00 (Com juros)</option>
+                        <option value="6">6 x R$ 37,00 = R$ 222,00 (Com juros)</option>
+                        <option value="7">7 x R$ 32,00 = R$ 224,00 (Com juros)</option>
+                        <option value="8">8 x R$ 28,00 = R$ 224,00 (Com juros)</option>
+                        <option value="9">9 x R$ 25,00 = R$ 225,00 (Com juros)</option>
+                        <option value="10">10 x R$ 22,50 = R$ 225,00 (Com juros)</option>
+                        <option value="11">11 x R$ 20,50 = R$ 225,50 (Com juros)</option>
+                        <option value="12">12 x R$ 19,00 = R$ 228,00 (Com juros)</option>
+                    </select>
+                </div>
 
-                        <div>
-                            <label for="data_nasc">Data de nascimento</label>
-                            <input type="text" id="data_nasc" name="data_nasc" placeholder="DD/MM/AA" required />
-                        </div>
-                    </div>
+                <p class="termos">
+                    Ao clicar em “Prosseguir para Pagamento”, declaro que li e concordo
+                    com os <a href="#">termos e condições</a> da Loja BMW Motors.
+                </p>
+                <button type="button" class="botao" id="botao-pagamento">Prosseguir para pagamento</button>
+            </form>
 
-                    <div class="campo-form">
-                        <label for="telefone">Número de telefone</label>
-                        <input type="text" id="telefone" name="telefone" placeholder="Número de telefone" required />
-                    </div>
-
-                    <div class="campo-form" id="campo-parcelamento" style="margin-top: 10px; display: none;">
-                        <label for="parcelamento">Parcelamento</label>
-                        <select id="parcelamento" name="parcelamento">
-                            <option value="1">1 x R$ 209,99 = R$ 209,99</option>
-                            <option value="2">2 x R$ 105,00 = R$ 210,00</option>
-                            <option value="3">3 x R$ 70,00 = R$ 210,00</option>
-                            <option value="4">4 x R$ 54,33 = R$ 217,32 (Com juros)</option>
-                            <option value="5">5 x R$ 44,00 = R$ 220,00 (Com juros)</option>
-                            <option value="6">6 x R$ 37,00 = R$ 222,00 (Com juros)</option>
-                            <option value="7">7 x R$ 32,00 = R$ 224,00 (Com juros)</option>
-                            <option value="8">8 x R$ 28,00 = R$ 224,00 (Com juros)</option>
-                            <option value="9">9 x R$ 25,00 = R$ 225,00 (Com juros)</option>
-                            <option value="10">10 x R$ 22,50 = R$ 225,00 (Com juros)</option>
-                            <option value="11">11 x R$ 20,50 = R$ 225,50 (Com juros)</option>
-                            <option value="12">12 x R$ 19,00 = R$ 228,00 (Com juros)</option>
-                        </select>
-                    </div>
-
-                    <p class="termos">
-                        Ao clicar em “Prosseguir para Pagamento”, declaro que li e concordo
-                        com os <a href="#">termos e condições</a> da Loja BMW Motors.
-                    </p>
-                    <button class="botao">Prosseguir para pagamento</button>
-                </form>
-
-            </div>
         </div>
-        <script src="../js/payment-main.js" type="module"></script>
-        <script src="../js/habilita-botao-payment.js"></script>
-        <script src="../js/toggle-campos-cartao.js"></script>
-        <script src="../js/parcelamento-payment.js"></script>
+    </div>
+    <script src="../js/payment-main.js" type="module"></script>
+    <script src="../js/habilita-botao-payment.js"></script>
+    <script src="../js/toggle-campos-cartao.js"></script>
+    <script src="../js/parcelamento-payment.js"></script>
+    <script src="../js/redirecionar-pagamento.js"></script>
+    <script>
+    document.getElementById('botao-pagamento').addEventListener('click', function() {
+        const forma = document.querySelector('input[name="forma"]:checked');
+        const total = document.body.getAttribute('data-total');
+        const id = "<?= $modelo_id ?>";
+        const cor = "<?= $cor_principal ?>";
+        // Validação dos campos obrigatórios
+        const camposObrigatorios = ['nome', 'email', 'cpf', 'data_nasc', 'telefone'];
+        let camposPreenchidos = true;
+        camposObrigatorios.forEach(function(campo) {
+            const el = document.getElementsByName(campo)[0];
+            if (el && !el.value.trim()) {
+                camposPreenchidos = false;
+            }
+        });
+        if (!camposPreenchidos) {
+            alert('Preencha todos os campos obrigatórios.');
+            return;
+        }
+        // Validação extra: não deixa prosseguir se a cor estiver vazia
+        if (!cor || cor.trim() === '') {
+            alert('Selecione uma cor antes de prosseguir para o pagamento.');
+            return;
+        }
+        // Se for Pix, seta a sessão via AJAX e redireciona
+        if (forma && forma.id === 'pix') {
+            fetch('../php/seta_pagamento_autorizado.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'id=' + encodeURIComponent(id) + '&cor=' + encodeURIComponent(cor)
+            })
+            .then(response => response.text())
+            .then(res => {
+                if (res.trim() === 'ok') {
+                    window.location.href = `../php/realizar_pagamento_pix.php?id=${encodeURIComponent(id)}&cor=${encodeURIComponent(cor)}`;
+                } else {
+                    alert('Erro ao iniciar pagamento Pix. Tente novamente.');
+                }
+            })
+            .catch(() => {
+                alert('Erro ao conectar com o servidor. Tente novamente.');
+            });
+        } else if (forma && forma.id === 'boleto') {
+            alert('Pagamento por boleto ainda não implementado.');
+        } else if (forma && forma.id === 'cartao') {
+            this.closest('form').submit();
+        }
+    });
+    </script>
 </body>
 </html>

@@ -239,6 +239,10 @@ $anos = explode('/', $anoModelo);
 $anoFinal = $anos[1];
 
 $stmt->close();
+
+// --- Pix session auto-redirect logic ---
+// REMOVIDO: Não redireciona mais automaticamente para o Pix aqui. O usuário deve clicar em 'Compre agora'.
+
 ?>
 
 <!DOCTYPE html>
@@ -936,9 +940,25 @@ $stmt->close();
                 const corSelecionada = document.querySelector('.color-checkbox:checked');
                 const cor = corSelecionada ? encodeURIComponent(corSelecionada.value) : '';
                 const id = btnComprar.getAttribute('data-id');
-                let url = `pagamento.php?id=${id}`;
-                if (cor) url += `&cor=${cor}`;
-                window.location.href = url;
+                if (!cor) {
+                    alert('Selecione uma cor antes de comprar!');
+                    return;
+                }
+                // Verifica se já existe sessão Pix válida para este veículo/cor
+                fetch('verifica_pix_session.php?id=' + encodeURIComponent(id) + '&cor=' + cor)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.pix_valido) {
+                            window.location.href = `realizar_pagamento_pix.php?id=${id}&cor=${cor}`;
+                        } else {
+                            // Sempre inclui &redir=1 ao redirecionar para pagamento.php
+                            window.location.href = `pagamento.php?id=${id}&cor=${cor}&redir=1`;
+                        }
+                    })
+                    .catch(() => {
+                        // fallback: vai para pagamento normal, sempre com &redir=1
+                        window.location.href = `pagamento.php?id=${id}&cor=${cor}&redir=1`;
+                    });
             });
         }
     </script>
