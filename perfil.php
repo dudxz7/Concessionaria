@@ -43,6 +43,11 @@ if ($stmt->num_rows > 0) {
     exit;
 }
 
+// Limpa pagamentos Pix pendentes expirados sempre que um funcionário acessar o perfil
+if ($conn) {
+    $conn->query("DELETE FROM pagamentos_pix_pendentes WHERE expira_em <= UNIX_TIMESTAMP()");
+}
+
 // Verificando se houve atualização no perfil
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $novoEstado = $_POST['estado'];
