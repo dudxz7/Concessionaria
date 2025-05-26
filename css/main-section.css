@@ -88,15 +88,17 @@ html, body {
 
 .filtros-container img {
     width: 14px;
-    /* Largura da imagem */
     height: 14px;
-    /* Ajuste a altura para o valor desejado */
+    cursor: pointer;
 }
-
 .filtros-container a {
     text-decoration: underline;
     color: #000;
     font-size: 16px;
+}
+
+.filtros-container strong,a:hover {
+    cursor: pointer;
 }
 
 .favorite-icon {

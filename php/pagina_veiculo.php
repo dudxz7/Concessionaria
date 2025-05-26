@@ -119,18 +119,15 @@ if ($id_modelo > 0) {
     $stmt->close();
 
     // Promoção
-    $sqlPromo = "SELECT preco_com_desconto, data_limite FROM promocoes WHERE modelo_id = ?";
+    $sqlPromo = "SELECT preco_com_desconto, data_limite FROM promocoes WHERE modelo_id = ? AND status = 'Ativa' AND data_limite >= CURDATE() ORDER BY data_limite DESC LIMIT 1";
     $stmt = $conn->prepare($sqlPromo);
     $stmt->bind_param("i", $id_modelo);
     $stmt->execute();
     $stmt->bind_result($precoDesconto, $dataLimite);
     if ($stmt->fetch()) {
-        $hoje = date('Y-m-d');
-        if ($dataLimite >= $hoje) {
-            $temPromocao = true;
-            $precoComDesconto = $precoDesconto;
-            $dataFimPromo = $dataLimite;
-        }
+        $temPromocao = true;
+        $precoComDesconto = $precoDesconto;
+        $dataFimPromo = $dataLimite;
     }
     $stmt->close();
 

@@ -64,25 +64,87 @@ function gerarNota()
 
 // --- FILTRO PHP PELO GET ---
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-
-$sql = "SELECT m.id, m.modelo, m.fabricante, d.cor_principal, m.ano, m.preco, d.descricao, (
-    SELECT i.imagem FROM imagens_secundarias i WHERE i.modelo_id = m.id AND i.cor = d.cor_principal AND i.ordem = 1 LIMIT 1
-) AS imagem_padrao FROM modelos m LEFT JOIN detalhes_modelos d ON m.id = d.modelo_id WHERE m.id NOT IN (
-    SELECT modelo_id FROM promocoes WHERE status = 'Ativa' AND data_limite > NOW()
-)";
+$cor = isset($_GET['cor']) ? trim($_GET['cor']) : '';
+$precoMin = (isset($_GET['preco_min']) && $_GET['preco_min'] !== '' && $_GET['preco_min'] !== '0') ? floatval($_GET['preco_min']) : null;
+$precoMax = (isset($_GET['preco_max']) && $_GET['preco_max'] !== '' && $_GET['preco_max'] !== '0') ? floatval($_GET['preco_max']) : null;
+$anoMin = (isset($_GET['ano_min']) && $_GET['ano_min'] !== '' && $_GET['ano_min'] !== '0') ? intval($_GET['ano_min']) : null;
+$anoMax = (isset($_GET['ano_max']) && $_GET['ano_max'] !== '' && $_GET['ano_max'] !== '0') ? intval($_GET['ano_max']) : null;
+$anoFiltro = (isset($_GET['ano']) && $_GET['ano'] !== '' && $_GET['ano'] !== '0') ? intval($_GET['ano']) : null;
 
 $params = [];
 $types = '';
+
+$sql = "SELECT m.id, m.modelo, m.fabricante, m.cor, d.cor_principal, m.ano, m.preco, d.descricao, (
+    SELECT i.imagem FROM imagens_secundarias i WHERE i.modelo_id = m.id AND i.cor = d.cor_principal AND i.ordem = 1 LIMIT 1
+) AS imagem_padrao FROM modelos m LEFT JOIN detalhes_modelos d ON m.id = d.modelo_id WHERE 1=1";
+
+// Excluir todos os modelos em promoção (qualquer cor), sempre!
+$sql .= " AND m.id NOT IN (
+    SELECT modelo_id FROM promocoes WHERE status = 'Ativa' AND data_limite > NOW()
+)";
+
+// Filtro de cor robusto para múltiplos valores (ex: "preto,branco")
+if ($cor !== '') {
+    $corList = array_map('trim', explode(',', strtolower($cor)));
+    $corConditions = [];
+    foreach ($corList as $corItem) {
+        $corItemNoSpace = str_replace(' ', '', $corItem);
+        $corConditions[] = "FIND_IN_SET(?, LOWER(REPLACE(REPLACE(m.cor, ', ', ','), ' ', '')))";
+
+        $params[] = $corItemNoSpace;
+        $types .= 's';
+        $corConditions[] = "FIND_IN_SET(?, LOWER(REPLACE(REPLACE(d.cor_principal, ', ', ','), ' ', '')))";
+
+        $params[] = $corItemNoSpace;
+        $types .= 's';
+        $corConditions[] = "LOWER(REPLACE(m.cor, ' ', '')) LIKE ?";
+
+        $params[] = "%$corItemNoSpace%";
+        $types .= 's';
+        $corConditions[] = "LOWER(REPLACE(d.cor_principal, ' ', '')) LIKE ?";
+
+        $params[] = "%$corItemNoSpace%";
+        $types .= 's';
+    }
+    $sql .= " AND (" . implode(' OR ', $corConditions) . ")";
+}
 if ($search !== '') {
     $sql .= " AND (m.modelo LIKE ? OR m.fabricante LIKE ?)";
     $params[] = "%$search%";
     $params[] = "%$search%";
     $types .= 'ss';
 }
+if (!is_null($precoMin)) {
+    $sql .= " AND m.preco >= ?";
+    $params[] = $precoMin;
+    $types .= 'd';
+}
+if (!is_null($precoMax)) {
+    $sql .= " AND m.preco <= ?";
+    $params[] = $precoMax;
+    $types .= 'd';
+}
+// Filtro de ano (faixa ou único)
+if (!is_null($anoFiltro) && is_null($anoMin) && is_null($anoMax)) {
+    $sql .= " AND m.ano = ?";
+    $params[] = $anoFiltro;
+    $types .= 'i';
+} else if (!is_null($anoMin) || !is_null($anoMax)) {
+    if (!is_null($anoMin)) {
+        $sql .= " AND m.ano >= ?";
+        $params[] = $anoMin;
+        $types .= 'i';
+    }
+    if (!is_null($anoMax)) {
+        $sql .= " AND m.ano <= ?";
+        $params[] = $anoMax;
+        $types .= 'i';
+    }
+}
 $sql .= " GROUP BY m.id";
 
 $stmt = $conn->prepare($sql);
-if ($params) {
+if (!empty($types) && count($params) === strlen($types)) {
     $stmt->bind_param($types, ...$params);
 }
 $stmt->execute();

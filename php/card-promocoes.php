@@ -61,8 +61,89 @@ if (!function_exists('gerarNota')) {
     }
 }
 
+// Handle filter parameters from POST (AJAX) ou GET (AJAX)
+function getFiltro($key, $default = null) {
+    if (isset($_GET[$key])) return trim($_GET[$key]);
+    if (isset($_POST[$key])) return trim($_POST[$key]);
+    return $default;
+}
+$modeloFiltro = getFiltro('modelo', '');
+$corFiltro = getFiltro('cor', '');
+$anoFiltro = getFiltro('ano', '');
+$anoMin = getFiltro('ano_min', null); $anoMin = ($anoMin !== null && $anoMin !== '' && $anoMin !== '0') ? intval($anoMin) : null;
+$anoMax = getFiltro('ano_max', null); $anoMax = ($anoMax !== null && $anoMax !== '' && $anoMax !== '0') ? intval($anoMax) : null;
+$precoMin = getFiltro('preco_min', null); $precoMin = ($precoMin !== null && $precoMin !== '') ? floatval($precoMin) : null;
+$precoMax = getFiltro('preco_max', null); $precoMax = ($precoMax !== null && $precoMax !== '') ? floatval($precoMax) : null;
+
+// Build dynamic WHERE clauses
+$where = ["p.status = 'Ativa'", "p.data_limite > NOW()"];
+$params = [];
+$types = '';
+
+if ($modeloFiltro !== '') {
+    $where[] = "(m.modelo LIKE ? OR m.abreviacao LIKE ?)";
+    $params[] = "%$modeloFiltro%";
+    $params[] = "%$modeloFiltro%";
+    $types .= 'ss';
+}
+if ($corFiltro !== '') {
+    // Corrige busca para múltiplas cores separadas por vírgula e ignora espaços
+    $corList = array_map('trim', explode(',', strtolower($corFiltro)));
+    $corConditions = [];
+    foreach ($corList as $corItem) {
+        $corItemNoSpace = str_replace(' ', '', $corItem);
+        $corConditions[] = "FIND_IN_SET(?, LOWER(REPLACE(REPLACE(d.cor_principal, ', ', ','), ' ', '')))";
+
+        $params[] = $corItemNoSpace;
+        $types .= 's';
+        $corConditions[] = "FIND_IN_SET(?, LOWER(REPLACE(REPLACE(m.cor, ', ', ','), ' ', '')))";
+
+        $params[] = $corItemNoSpace;
+        $types .= 's';
+        $corConditions[] = "LOWER(REPLACE(d.cor_principal, ' ', '')) LIKE ?";
+
+        $params[] = "%$corItemNoSpace%";
+        $types .= 's';
+        $corConditions[] = "LOWER(REPLACE(m.cor, ' ', '')) LIKE ?";
+
+        $params[] = "%$corItemNoSpace%";
+        $types .= 's';
+    }
+    $where[] = '(' . implode(' OR ', $corConditions) . ')';
+}
+if ($anoFiltro !== '' && is_null($anoMin) && is_null($anoMax)) {
+    $where[] = "m.ano = ?";
+    $params[] = $anoFiltro;
+    $types .= 'i';
+} else {
+    if (!is_null($anoMin)) {
+        $where[] = "m.ano >= ?";
+        $params[] = $anoMin;
+        $types .= 'i';
+    }
+    if (!is_null($anoMax)) {
+        $where[] = "m.ano <= ?";
+        $params[] = $anoMax;
+        $types .= 'i';
+    }
+}
+// ATENÇÃO: O filtro de preço abaixo já está correto, pois usa p.preco_com_desconto.
+// Mas para garantir, vamos forçar o valor a ser float e garantir que nunca caia para preco_original.
+if (!is_null($precoMin)) {
+    $where[] = "p.preco_com_desconto >= ?";
+    $params[] = (float)$precoMin;
+    $types .= 'd';
+}
+if (!is_null($precoMax)) {
+    $where[] = "p.preco_com_desconto <= ?";
+    $params[] = (float)$precoMax;
+    $types .= 'd';
+}
+
+$whereSql = count($where) ? ('WHERE ' . implode(' AND ', $where)) : '';
+
 $sql = "
-    SELECT 
+    SELECT DISTINCT
         m.id,
         m.modelo,
         m.fabricante,
@@ -84,14 +165,15 @@ $sql = "
     FROM modelos m
     INNER JOIN promocoes p ON m.id = p.modelo_id
     LEFT JOIN detalhes_modelos d ON m.id = d.modelo_id
-    WHERE p.status = 'Ativa' AND p.data_limite > NOW()
-    GROUP BY m.id
+    $whereSql
 ";
 
-$result = $conn->query($sql);
-if (!$result) {
-    die("Erro na consulta: " . $conn->error);
+$stmt = $conn->prepare($sql);
+if (!empty($types) && count($params) === strlen($types)) {
+    $stmt->bind_param($types, ...$params);
 }
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     while ($carro = $result->fetch_assoc()) {

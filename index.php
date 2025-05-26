@@ -77,7 +77,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
             </div>
 
             <div class="filtros-container">
-                <span class="filtro" id="abrir-modal-filtros"><strong>Filtros <img src="img/seta-para-baixo.png" alt=""></strong></span>
+                <span class="filtro" id="abrir-modal-filtros"><strong>Filtros <img src="img/seta-para-baixo-preta.png" alt="" class="img-filtros"></strong></span>
                 <a class="limpar-filtros" id="limpar-filtros">Limpar Filtros</a>
             </div>
         </div>
@@ -105,6 +105,10 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
                     <div class="campo-modal-filtros">
                         <label for="filtro-preco-max">Preço máximo</label>
                         <input type="number" id="filtro-preco-max" name="preco_max" min="0" step="1000" placeholder="Ex: 300000">
+                    </div>
+                    <div class="campo-modal-filtros">
+                        <label for="filtro-cor">Cor</label>
+                        <input type="text" id="filtro-cor" name="cor" placeholder="Ex: Preto, Branco, Azul...">
                     </div>
                     <button type="submit" class="btn-aplicar-filtros">Aplicar Filtros</button>
                 </form>
