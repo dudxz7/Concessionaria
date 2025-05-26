@@ -9,14 +9,16 @@
             background: #d3d3d3;
             padding: 20px;
             display: flex;
+            align-items: center;
             justify-content: center;
+            min-height: 100vh;
         }
 
         .container {
             background: transparent;
             /* Para que o fundo do body apareça entre as seções */
             max-width: 450px;
-            margin: auto;
+            margin: 0 auto;
             border-radius: 20px;
         }
 
@@ -74,6 +76,7 @@
         .dados {
             padding: 20px;
             font-size: 14px;
+            margin-top: -100px;
         }
 
         .dados p {
@@ -214,10 +217,11 @@
         }
 
         .campo-cartao-numero input#numero_cartao {
-            padding-left: 60px;
+            padding-left: 75px; /* Aumentado para garantir que o texto nunca fique sob a imagem */
             height: 48px;
             line-height: 48px;
             margin-bottom: 10px;
+            box-sizing: border-box;
         }
 
         .termos {
@@ -249,8 +253,8 @@
         }
 
         .carro {
-            position: absolute;
-            top: 60px;
+            position: relative;
+            top: -60px;
             left: 50%;
             transform: translateX(-50%);
             background-color: white;
@@ -270,10 +274,6 @@
 
         .car-img:hover {
             transform: scale(1.05);
-        }
-
-        input.input-vazio {
-            border: 1.5px solid rgb(2, 17, 151) !important;
         }
 
         .input-erro {

@@ -132,6 +132,8 @@ html {
 .heart-icon-navbar {
     margin-right: 65px;
     /* Ajuste fino do ícone */
+    position: relative; /* Para o contador ser absoluto em relação ao ícone */
+    display: inline-block; /* Garante contexto para o contador */
 }
 
 .heart-icon-navbar:hover {
@@ -163,8 +165,8 @@ a {
 
 .heart-counter {
     position: absolute;
-    top: 23px;
-    right: 190px;
+    top: -6px;
+    right: 50px;
     background-color: #2f4eda;
     color: white;
     font-size: 12px;
@@ -172,14 +174,14 @@ a {
     padding: 2px 6px;
     border-radius: 50%;
     font-family: 'Poppins', sans-serif;
-    width: 10px;
-    /* Definindo largura fixa */
-    height: 20px;
-    /* Definindo altura fixa */
+    width: 14px;
+    height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    z-index: 2;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
 }
 
 .heart-counter.oculto {

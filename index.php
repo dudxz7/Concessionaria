@@ -34,7 +34,6 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,7 +42,6 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
     <link rel="icon" href="img/logos/logoofcbmw.png">
 </head>
 <body>
-
     <!-- Tela inicial com a imagem de fundo -->
     <div class="hero-section">
         <header>
@@ -51,7 +49,6 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
                 <?php include 'php/navbar.php'; ?>
             </div>
         </header>
-
         <div class="hero-content">
             <h1>O auge da engenharia alemã, feito para você.</h1>
             <p>Experimente o equilíbrio perfeito entre luxo, potência e inovação. Seu BMW espera por você.</p>
@@ -80,8 +77,37 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
             </div>
 
             <div class="filtros-container">
-                <span class="filtro"><strong>Filtros <img src="img/seta-para-baixo.png" alt=""></strong></span>
-                <a class="limpar-filtros">Limpar Filtros</a>
+                <span class="filtro" id="abrir-modal-filtros"><strong>Filtros <img src="img/seta-para-baixo.png" alt=""></strong></span>
+                <a class="limpar-filtros" id="limpar-filtros">Limpar Filtros</a>
+            </div>
+        </div>
+
+        <!-- Modal de Filtros -->
+        <div id="modal-filtros" class="modal-filtros" style="display:none;">
+            <div class="modal-filtros-content">
+                <button class="fechar-modal-filtros" title="Fechar" aria-label="Fechar">
+                    <img src="img/x-fechar.png" alt="Fechar" style="width:22px;height:22px;" />
+                </button>
+                <h3 class="titulo-modal-filtros">Filtrar veículos</h3>
+                <form id="form-filtros">
+                    <div class="campo-modal-filtros">
+                        <label for="filtro-ano-min">Ano mínimo</label>
+                        <input type="number" id="filtro-ano-min" name="ano_min" min="1900" max="2025" placeholder="Ex: 2018">
+                    </div>
+                    <div class="campo-modal-filtros">
+                        <label for="filtro-ano-max">Ano máximo</label>
+                        <input type="number" id="filtro-ano-max" name="ano_max" min="1900" max="2025" placeholder="Ex: 2024">
+                    </div>
+                    <div class="campo-modal-filtros">
+                        <label for="filtro-preco-min">Preço mínimo</label>
+                        <input type="number" id="filtro-preco-min" name="preco_min" min="0" step="1000" placeholder="Ex: 100000">
+                    </div>
+                    <div class="campo-modal-filtros">
+                        <label for="filtro-preco-max">Preço máximo</label>
+                        <input type="number" id="filtro-preco-max" name="preco_max" min="0" step="1000" placeholder="Ex: 300000">
+                    </div>
+                    <button type="submit" class="btn-aplicar-filtros">Aplicar Filtros</button>
+                </form>
             </div>
         </div>
 
@@ -92,7 +118,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
         </div>
 
         <div class="view-all">
-            <button>Ver todos os modelos</button>
+            <a href="todos-modelos.php"><button>Ver todos os modelos</button></a>
         </div>
 
         <!-- Promoções -->
@@ -111,7 +137,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
         </div>
 
         <div class="view-all">
-            <button>Ver todas as ofertas</button>
+            <a href="todas-ofertas.php"><button>Ver todas as ofertas</button></a>
         </div>
 
     </div>
@@ -230,6 +256,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
 
     <?php include "php/footer.php"; ?>
     
+    <script src="js/navbar-favoritos.js" defer></script>
+    <script src="js/favoritar-card.js" defer></script>
     <script src="js/index.js" type="module"></script>
-
 </html>

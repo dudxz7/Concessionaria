@@ -39,11 +39,9 @@ if (isset($_SESSION['usuarioId'])) {
     </div>
 
     <div class="nav-icons">
-        <div class="nav-icons">
-            <div class="heart-container">
-                <img src="img/navbar/heart.png" class="heart-icon-navbar" alt="Favoritos">
-                <span class="heart-counter <?php echo ($favoritoCount == 0) ? 'oculto' : ''; ?>"><?php echo $favoritoCount; ?></span> <!-- valor dinâmico via PHP -->
-            </div>
+        <div class="heart-container" style="position: relative; display: inline-block;">
+            <img src="img/navbar/heart.png" class="heart-icon-navbar" alt="Favoritos">
+            <span class="heart-counter <?php echo ($favoritoCount == 0) ? 'oculto' : ''; ?>"><?php echo $favoritoCount; ?></span>
         </div>
 
         <div class="login">

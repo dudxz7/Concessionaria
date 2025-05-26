@@ -4,3 +4,6 @@ import './liquid-button.js';
 import './blur-cards.js';
 import './faq-section.js';
 import './footer.js';
+import './modal-filtros.js';
+import './limpar-filtros.js';
+import './busca-modelos.js';

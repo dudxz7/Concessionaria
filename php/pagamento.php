@@ -141,7 +141,7 @@ if ($result_img->num_rows > 0) {
     <link rel="stylesheet" href="../css/payment.css" />
     <title>Pagamento</title>
 </head>
-<body data-total="<?= htmlspecialchars($total) ?>">
+<body data-total="<?= htmlspecialchars($total) ?>" data-id="<?= $modelo_id ?>" data-cor="<?= htmlspecialchars($cor_principal) ?>">
     <div class=" container">
     <!-- Parte superior: imagem e dados -->
     <div class="superior">
@@ -219,7 +219,7 @@ if ($result_img->num_rows > 0) {
 
                 <div class="campo-form">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Email" required />
+                    <input type="email" id="email" name="email" placeholder="Email" required pattern="[^@\s]+@[^@\s]+\.[^@\s]+" />
                 </div>
 
                 <div class="linha-dupla">
@@ -230,7 +230,7 @@ if ($result_img->num_rows > 0) {
 
                     <div>
                         <label for="data_nasc">Data de nascimento</label>
-                        <input type="text" id="data_nasc" name="data_nasc" placeholder="DD/MM/AA" required />
+                        <input type="text" id="data_nasc" name="data_nasc" placeholder="DD/MM/AAAA" required />
                     </div>
                 </div>
 
@@ -271,54 +271,8 @@ if ($result_img->num_rows > 0) {
     <script src="../js/toggle-campos-cartao.js"></script>
     <script src="../js/parcelamento-payment.js"></script>
     <script src="../js/redirecionar-pagamento.js"></script>
-    <script>
-    document.getElementById('botao-pagamento').addEventListener('click', function() {
-        const forma = document.querySelector('input[name="forma"]:checked');
-        const total = document.body.getAttribute('data-total');
-        const id = "<?= $modelo_id ?>";
-        const cor = "<?= $cor_principal ?>";
-        // Validação dos campos obrigatórios
-        const camposObrigatorios = ['nome', 'email', 'cpf', 'data_nasc', 'telefone'];
-        let camposPreenchidos = true;
-        camposObrigatorios.forEach(function(campo) {
-            const el = document.getElementsByName(campo)[0];
-            if (el && !el.value.trim()) {
-                camposPreenchidos = false;
-            }
-        });
-        if (!camposPreenchidos) {
-            alert('Preencha todos os campos obrigatórios.');
-            return;
-        }
-        // Validação extra: não deixa prosseguir se a cor estiver vazia
-        if (!cor || cor.trim() === '') {
-            alert('Selecione uma cor antes de prosseguir para o pagamento.');
-            return;
-        }
-        // Se for Pix, seta a sessão via AJAX e redireciona
-        if (forma && forma.id === 'pix') {
-            fetch('../php/seta_pagamento_autorizado.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'id=' + encodeURIComponent(id) + '&cor=' + encodeURIComponent(cor)
-            })
-            .then(response => response.text())
-            .then(res => {
-                if (res.trim() === 'ok') {
-                    window.location.href = `../php/realizar_pagamento_pix.php?id=${encodeURIComponent(id)}&cor=${encodeURIComponent(cor)}`;
-                } else {
-                    alert('Erro ao iniciar pagamento Pix. Tente novamente.');
-                }
-            })
-            .catch(() => {
-                alert('Erro ao conectar com o servidor. Tente novamente.');
-            });
-        } else if (forma && forma.id === 'boleto') {
-            alert('Pagamento por boleto ainda não implementado.');
-        } else if (forma && forma.id === 'cartao') {
-            this.closest('form').submit();
-        }
-    });
-    </script>
+    <script src="../js/validacao-payment.js"></script>
+    <script src="../js/ajuste-data-nascimento.js"></script>
+    <script src="../js/payment-submit.js"></script>
 </body>
 </html>

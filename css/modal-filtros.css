@@ -1,0 +1,183 @@
+/* Modal de filtros de veículos - BMW Premium Style */
+.modal-filtros {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 34, 54, 0.48);
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.2s;
+    backdrop-filter: blur(3px);
+}
+.modal-filtros-content {
+    background: #fafdff;
+    background: linear-gradient(120deg, #fafdff 80%, #e3e8ee 100%);
+    padding: 2.8rem 2.7rem 2.2rem 2.7rem;
+    border-radius: 22px;
+    border: 1.5px solid #e3e8ee;
+    box-shadow: 0 8px 32px rgba(10,34,54,0.13), 0 1.5px 0 #fff inset;
+    min-width: 370px;
+    max-width: 98vw;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    animation: modalShow 0.25s cubic-bezier(.4,1.4,.6,1);
+    align-items: stretch;
+    font-family: 'Poppins', 'Inter', Arial, sans-serif;
+}
+@keyframes modalShow {
+    from { transform: translateY(-40px) scale(0.98); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+/* Modal de filtros de veículos - botão de fechar BMW refinado e discreto */
+.fechar-modal-filtros {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    width: 26px;
+    height: 26px;
+    background: none;
+    border: none;
+    color: #0a2236;
+    box-shadow: none;
+    z-index: 2;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+.fechar-modal-filtros span {
+    font-size: 1.18rem;
+    color: #0a2236;
+    font-family: 'Poppins', 'Inter', Arial, sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    user-select: none;
+    line-height: 1;
+    transition: color 0.15s;
+}
+.fechar-modal-filtros:hover {
+    background: #f0f6fa;
+    color: #2f4eda;
+    box-shadow: 0 2px 8px rgba(47,78,218,0.08);
+}
+.fechar-modal-filtros:hover span {
+    color: #2f4eda;
+}
+.fechar-modal-filtros img {
+    width: 22px;
+    height: 22px;
+    display: block;
+    filter: brightness(0) invert(0.25);
+    transition: filter 0.2s, transform 0.2s;
+}
+.fechar-modal-filtros:hover img {
+    filter: brightness(0) invert(0.5) drop-shadow(0 0 2px #2f4eda);
+    transform: scale(1.13);
+}
+.titulo-modal-filtros {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #0a2236;
+    margin-bottom: 1.1rem;
+    text-align: center;
+    letter-spacing: 0.7px;
+    font-family: 'Poppins', 'Inter', Arial, sans-serif;
+    text-shadow: 0 1px 0 #fff, 0 2px 8px #e3e8ee;
+}
+.campo-modal-filtros {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin-bottom: 0.9rem;
+}
+.campo-modal-filtros label {
+    font-weight: 600;
+    color: #0a2236;
+    margin-bottom: 0.1rem;
+    font-size: 1.09rem;
+    font-family: 'Poppins', 'Inter', Arial, sans-serif;
+    letter-spacing: 0.2px;
+}
+.campo-modal-filtros input {
+    padding: 0.8rem 1.2rem;
+    border: 1.5px solid #cfd8dc;
+    border-radius: 10px;
+    font-size: 1.15rem;
+    outline: none;
+    background: #fafdff;
+    transition: border 0.2s, box-shadow 0.2s;
+    font-family: 'Poppins', 'Inter', Arial, sans-serif;
+    box-shadow: 0 1px 4px rgba(10,34,54,0.04);
+}
+.campo-modal-filtros input:focus {
+    border: 1.5px solid #2f4eda;
+    background: #f0f6fa;
+    box-shadow: 0 2px 8px rgba(47,78,218,0.10);
+}
+.btn-aplicar-filtros {
+    background: linear-gradient(to right, #0a1e3f 70%, #004080 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.7rem 1.3rem;
+    font-size: 1.01rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 2.2rem;
+    margin-bottom: 0.2rem;
+    transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+    box-shadow: 0 4px 18px rgba(10,34,54,0.13);
+    display: block;
+    align-self: center;
+    font-family: 'Poppins', 'Inter', Arial, sans-serif;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+}
+.btn-aplicar-filtros::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(0, 132, 255, 0.22), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 0;
+    border-radius: 50%;
+}
+.btn-aplicar-filtros:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 0 12px #022850, 0 0 20px rgba(0, 122, 255, 0.18);
+}
+.btn-aplicar-filtros:hover::before {
+    opacity: 1;
+}
+.btn-aplicar-filtros span, .btn-aplicar-filtros {
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 600px) {
+    .modal-filtros-content {
+        min-width: 98vw;
+        padding: 1.2rem 0.3rem;
+    }
+    .btn-aplicar-filtros {
+        width: 100%;
+        font-size: 0.98rem;
+        padding: 0.7rem 0;
+    }
+}
