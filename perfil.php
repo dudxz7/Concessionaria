@@ -100,33 +100,39 @@ $conn->close();
                     <img src="img/usersembarra.png" alt="Minha Conta">
                     <span>Minha conta</span>
                 </div>
+                <?php if ($cargo === 'Cliente'): ?>
+                <div class="icon-item" onclick="window.location.href='php/favoritos.php'">
+                    <img src="img/coracoes/coracao.png" alt="Favoritos">
+                    <span>Favoritos</span>
+                </div>
+                <?php endif; ?>
                 <div class="icon-item" onclick="window.location.href='php/redefinir_a_senha.php'">
                     <img src="img/ajudando.png" alt="Esqueceu a Senha">
                     <span>Esqueceu a Senha</span>
                 </div>
-                <?php if ($cargo !== 'Cliente' ): ?>
-                <div class="icon-item" onclick="window.location.href='php/consultar_clientes.php'">
-                    <img src="img/lupa.png" alt="Consultar clientes">
-                    <span>Consultar Clientes</span>
-                </div>
-                <?php if ($cargo === 'Gerente' || $cargo === 'Admin' ): ?>
-                <div class="icon-item" onclick="window.location.href='php/consultar_func_gerente.php'">
-                    <img src="img/homem-de-negocios.png" alt="Consultar Funcionários e Gerentes">
-                    <span>Consultar Funcionários</span>
-                </div>
-                <?php endif; ?>
-                <div class="icon-item" onclick="window.location.href='php/consultar_modelos.php'">
-                    <img src="img/referencia.png" alt="Consultar Modelos">
-                    <span>Consultar Modelos</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='php/consultar_veiculos.php'">
-                    <img src="img/carro_de_frente.png" alt="Consultar Veículos">
-                    <span>Consultar Veículos</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='php/consultar_promocoes.php'">
-                    <img src="img/promocoes.png" alt="Consultar promoções">
-                    <span>Consultar Promoções</span>
-                </div>
+                <?php if ($cargo !== 'Cliente'): ?>
+                    <div class="icon-item" onclick="window.location.href='php/consultar_clientes.php'">
+                        <img src="img/lupa.png" alt="Consultar clientes">
+                        <span>Consultar Clientes</span>
+                    </div>
+                    <?php if ($cargo === 'Gerente' || $cargo === 'Admin'): ?>
+                        <div class="icon-item" onclick="window.location.href='php/consultar_func_gerente.php'">
+                            <img src="img/homem-de-negocios.png" alt="Consultar Funcionários e Gerentes">
+                            <span>Consultar Funcionários</span>
+                        </div>
+                    <?php endif; ?>
+                    <div class="icon-item" onclick="window.location.href='php/consultar_modelos.php'">
+                        <img src="img/referencia.png" alt="Consultar Modelos">
+                        <span>Consultar Modelos</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='php/consultar_veiculos.php'">
+                        <img src="img/carro_de_frente.png" alt="Consultar Veículos">
+                        <span>Consultar Veículos</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='php/consultar_promocoes.php'">
+                        <img src="img/promocoes.png" alt="Consultar promoções">
+                        <span>Consultar Promoções</span>
+                    </div>
                 <?php endif; ?>
                 <div class="icon-item" onclick="window.location.href='php/logout.php'">
                     <img src="img/sairr.png" alt="Sair">
@@ -142,13 +148,14 @@ $conn->close();
 
             <h2>Meus dados</h2>
             <p id="descricao">Campos com (*) não podem ser alterados</p>
-            
+
             <form method="POST" action="">
                 <div class="form-grid">
                     <div class="left-column">
                         <div class="input-container">
                             <label for="nome">Nome*</label>
-                            <input type="text" id="nome" value="<?php echo $nome_completo; ?>" readonly class="com-asterisco">
+                            <input type="text" id="nome" value="<?php echo $nome_completo; ?>" readonly
+                                class="com-asterisco">
                         </div>
                         <div class="input-container">
                             <label for="email">Email*</label>
@@ -168,7 +175,8 @@ $conn->close();
                         </div>
                         <div class="input-container">
                             <label for="telefone">Telefone*</label>
-                            <input type="text" id="telefone" value="<?php echo $telefone; ?>" readonly class="com-asterisco">
+                            <input type="text" id="telefone" value="<?php echo $telefone; ?>" readonly
+                                class="com-asterisco">
                         </div>
                     </div>
                     <div class="right-column">
@@ -177,24 +185,28 @@ $conn->close();
                             <input type="text" id="cargo" value="<?php echo $cargo; ?>" readonly class="com-asterisco">
                         </div>
                         <?php if ($cargo !== 'Cliente'): ?>
-                        <div class="input-container">
-                            <label for="pis">Pis*</label>
-                            <input type="text" id="pis" name="pis" value="<?php echo $pis; ?>" readonly class="com-asterisco">
-                        </div>
+                            <div class="input-container">
+                                <label for="pis">Pis*</label>
+                                <input type="text" id="pis" name="pis" value="<?php echo $pis; ?>" readonly
+                                    class="com-asterisco">
+                            </div>
                         <?php endif; ?>
                         <div class="input-container">
                             <label for="estado">Estado</label>
-                            <input type="text" id="estado" name="estado" value="<?php echo $estado; ?>" maxlength="2" required>
+                            <input type="text" id="estado" name="estado" value="<?php echo $estado; ?>" maxlength="2"
+                                required>
                         </div>
                         <div class="input-container">
                             <label for="cidade">Cidade</label>
-                            <input type="text" id="cidade" name="cidade" value="<?php echo $cidade; ?>" maxlength="28" required>
+                            <input type="text" id="cidade" name="cidade" value="<?php echo $cidade; ?>" maxlength="28"
+                                required>
                         </div>
                         <?php if ($cargo !== 'Cliente'): ?>
-                        <div class="input-container">
-                            <label for="endereco">Endereço</label>
-                            <input type="text" id="endereco" name="endereco" value="<?php echo $endereco; ?>" maxlength="100">
-                        </div>
+                            <div class="input-container">
+                                <label for="endereco">Endereço</label>
+                                <input type="text" id="endereco" name="endereco" value="<?php echo $endereco; ?>"
+                                    maxlength="100">
+                            </div>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -216,8 +228,6 @@ $conn->close();
             </form>
         </div>
     </div>
-
     <script src="js/function-perfil.js"></script>
-
 </body>
 </html>

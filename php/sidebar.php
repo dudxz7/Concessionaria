@@ -11,7 +11,6 @@ $cargo_usuario = $_SESSION['usuarioCargo'] ?? 'Cliente'; // Se o cargo não esti
 $nome_completo = $_SESSION['usuarioNome'] ?? 'Usuário';
 $email = $_SESSION['usuarioEmail'] ?? '';
 ?>
-
 <div class="sidebar">
     <?php if ($cargo_usuario === 'Admin'): ?>
         <video autoplay loop muted>
@@ -21,7 +20,6 @@ $email = $_SESSION['usuarioEmail'] ?? '';
         <div class="profile-icon"><?php echo strtoupper(substr($nome_completo, 0, 1)); ?></div>
         <p><strong><?php echo htmlspecialchars($nome_completo); ?></strong></p>
         <p><?php echo htmlspecialchars($email); ?></p>
-
         <div class="icons">
             <div class="icon-item" onclick="window.location.href='admin_dashboard.php'">
                 <img src="../img/casa.png" alt="Dashboard">
@@ -44,7 +42,32 @@ $email = $_SESSION['usuarioEmail'] ?? '';
                 <span>Sair</span>
             </div>
         </div>
-
+    <?php elseif ($cargo_usuario === 'Cliente'): ?>
+        <video autoplay loop muted>
+            <source src="../videos/overlay_azul.mp4" type="video/mp4">
+            Seu navegador não suporta vídeos.
+        </video>
+        <div class="profile-icon"><?php echo strtoupper(substr($nome_completo, 0, 1)); ?></div>
+        <p><strong><?php echo htmlspecialchars($nome_completo); ?></strong></p>
+        <p><?php echo htmlspecialchars($email); ?></p>
+        <div class="icons">
+            <div class="icon-item" onclick="window.location.href='../perfil.php'">
+                <img src="../img/usersembarra.png" alt="Minha Conta">
+                <span>Minha conta</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='favoritos.php'">
+                <img src="../img/navbar/heart.png" alt="Favoritos">
+                <span>Favoritos</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='redefinir_a_senha.php'">
+                <img src="../img/ajudando.png" alt="Esqueceu a Senha">
+                <span>Esqueceu a Senha</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='logout.php'">
+                <img src="../img/sairr.png" alt="Sair">
+                <span>Sair</span>
+            </div>
+        </div>
     <?php else: ?>
         <video autoplay loop muted>
             <source src="../videos/overlay_azul.mp4" type="video/mp4">
@@ -53,7 +76,6 @@ $email = $_SESSION['usuarioEmail'] ?? '';
         <div class="profile-icon"><?php echo strtoupper(substr($nome_completo, 0, 1)); ?></div>
         <p><strong><?php echo htmlspecialchars($nome_completo); ?></strong></p>
         <p><?php echo htmlspecialchars($email); ?></p>
-
         <div class="icons">
             <div class="icon-item" onclick="window.location.href='../perfil.php'">
                 <img src="../img/usersembarra.png" alt="Minha Conta">

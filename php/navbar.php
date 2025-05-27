@@ -39,7 +39,7 @@ if (isset($_SESSION['usuarioId'])) {
     </div>
 
     <div class="nav-icons">
-        <div class="heart-container" style="position: relative; display: inline-block;">
+        <div class="heart-container" style="position: relative; display: inline-block; cursor:pointer;" onclick="window.location.href='php/favoritos.php'">
             <img src="img/navbar/heart.png" class="heart-icon-navbar" alt="Favoritos">
             <span class="heart-counter <?php echo ($favoritoCount == 0) ? 'oculto' : ''; ?>"><?php echo $favoritoCount; ?></span>
         </div>
