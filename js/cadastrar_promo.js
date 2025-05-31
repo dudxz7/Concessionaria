@@ -38,7 +38,23 @@ $(function() {
             width: '100%',
             minimumResultsForSearch: Infinity // Remove barra de pesquisa
         })
-        .on('change', atualizar)
+        .on('change', function(e) {
+            let values = select.val() || [];
+            // Se selecionar "Selecionar todos os modelos"
+            if (values.includes('all')) {
+                // Seleciona todos os modelos exceto o 'all'
+                let allIds = Object.keys(precoOriginal);
+                select.val(allIds).trigger('change.select2');
+                return;
+            }
+            // Se todos os modelos estiverem selecionados manualmente, marca o 'all' visualmente
+            let allIds = Object.keys(precoOriginal);
+            if (values.length === allIds.length && !values.includes('all')) {
+                select.val(['all', ...allIds]).trigger('change.select2');
+                return;
+            }
+            atualizar();
+        })
         .on('select2:opening', function() {
             // Impede digitação no campo de busca interno
             setTimeout(() => {

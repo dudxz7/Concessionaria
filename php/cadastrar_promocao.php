@@ -128,39 +128,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .select2-container--default .select2-selection--multiple .select2-selection__choice {
-        background-color: #2f4eda;
+        background-color: #1a237e; /* Azul escuro BMW */
         border: none;
-        color: white;
+        color: #fff;
         font-weight: 500;
         margin: 4px 6px 4px 0;
         border-radius: 30px;
-        transition: background 0.3s ease;
+        transition: background 0.3s;
+        font-family: 'Instrument Sans', Arial, sans-serif;
     }
 
     .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-        color: white;
+        color: #fff;
         margin-right: 6px;
         font-weight: bold;
+        background: transparent;
+        border-radius: 50%;
+        transition: background 0.2s, color 0.2s;
     }
 
     .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
-        color: #ff4d4d;
-        background-color: black;
+        color: #1a237e;
+        background-color: #e3e6f3;
     }
 
     .select2-results__option {
-        background-color: #ffffff;
-        color: #666666;
+        color: #222;
+        font-family: 'Instrument Sans', Arial, sans-serif;
+        font-size: 16px;
+        border-radius: 8px;
+        margin: 2px 0;
+        transition: background 0.2s, color 0.2s;
     }
 
     .select2-results__option--selected {
-        background-color: #8b8b8b !important;
-        color: white;
+        background-color: #1a237e !important;
+        color: #fff !important;
     }
 
     .select2-results__option--selectable:hover {
-        background-color: #f0f0f0;
-        color: #000000;
+        background-color: #e3e6f3;
+        color: #1a237e;
+    }
+
+    .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+        color: #1a237e;
     }
     </style>
 </head>
@@ -192,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="input-group">
                 <label for="desconto">Desconto (%)</label>
                 <div class="input-wrapper">
-                    <input type="number" placeholder="digite a porcentagem" name="desconto" id="desconto" min="0" max="100" step="1" required>
+                    <input type="number" placeholder="digite a porcentagem" name="desconto" id="desconto" min="0" max="100" step="1" required oninput="if(this.value>100)this.value=100;if(this.value<0)this.value=0;">
                     <img src="../img/preco.png" alt="Ícone desconto">
                 </div>
             </div>
@@ -223,5 +235,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script src="../js/cadastrar_promo.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#modelo_id').select2({
+            placeholder: "Selecione os modelos",
+            width: '100%',
+            closeOnSelect: false,
+            allowClear: true,
+            language: "pt-BR"
+        });
+    });
+    </script>
 </body>
 </html>
