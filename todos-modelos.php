@@ -45,6 +45,7 @@ $estado = isset($_SESSION['usuarioEstado']) ? $_SESSION['usuarioEstado'] : "";
 $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "Cidade - Estado";
 ?><!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,7 +56,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
 
     <script src="js/navbar-favoritos.js" defer></script>
     <script src="js/favoritar-card.js" defer></script>
-        <script src="js/favoritar.js" defer></script>
+    <script src="js/favoritar.js" defer></script>
     <style>
         .navbar {
             background-color: black;

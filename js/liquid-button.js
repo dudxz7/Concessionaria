@@ -12,16 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         botaoSuperior.addEventListener("click", (event) => {
             event.preventDefault(); // Previne o comportamento padrão do botão
-
-            const isMobile = window.matchMedia("(max-width: 767px)").matches;
-
-            if (isMobile) {
-                setTimeout(() => {
-                    window.open("SEU LINK AQUI", "_blank");
-                }, 700);
-            } else {
-                window.open("SEU LINK AQUI", "_blank");
-            }
         });
     });
 });

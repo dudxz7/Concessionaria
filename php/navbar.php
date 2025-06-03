@@ -45,10 +45,29 @@ if (isset($_SESSION['usuarioId'])) {
         </div>
 
         <div class="login">
+            <?php
+            // Recupera a foto de perfil do usuário logado
+            $fotoPerfilNavbar = null;
+            if (isset($_SESSION['usuarioId'])) {
+                $usuarioId = $_SESSION['usuarioId'];
+                $stmtFoto = $conn->prepare("SELECT foto_perfil FROM clientes WHERE id = ?");
+                $stmtFoto->bind_param("i", $usuarioId);
+                $stmtFoto->execute();
+                $stmtFoto->bind_result($fotoPerfilTmp);
+                if ($stmtFoto->fetch() && !empty($fotoPerfilTmp)) {
+                    $fotoPerfilNavbar = $fotoPerfilTmp;
+                }
+                $stmtFoto->close();
+            }
+            ?>
             <?php if ($usuarioLogado): ?>
                 <!-- Se o usuário estiver logado, mostra o nome -->
                 <a href="<?php echo $linkPerfil; ?>">
-                    <img src="img/navbar/usercomcontorno.png" alt="Perfil">
+                    <?php if (!empty($fotoPerfilNavbar) && file_exists(__DIR__ . '/../' . $fotoPerfilNavbar)): ?>
+                        <img src="<?php echo $fotoPerfilNavbar; ?>" alt="Perfil" style="width:32px;height:32px;object-fit:cover;border-radius:50%;vertical-align:middle;" />
+                    <?php else: ?>
+                        <img src="img/navbar/usercomcontorno.png" alt="Perfil">
+                    <?php endif; ?>
                 </a>
                 <a href="<?php echo $linkPerfil; ?>"><span><?php echo htmlspecialchars($nomeUsuario); ?></span></a>
             <?php else: ?>

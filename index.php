@@ -54,11 +54,11 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
             <p>Experimente o equilíbrio perfeito entre luxo, potência e inovação. Seu BMW espera por você.</p>
             <div class="botoes-container">
                 <div class="containerBotoes">
-                    <button class="botaoSuperior">COMEÇAR AGORA</button>
-                    <button class="botaoInferior">COMEÇAR AGORA</button>
+                    <button class="botaoSuperior" type="button" id="btn-scroll-main">COMEÇAR AGORA</button>
+                    <button class="botaoInferior" type="button" id="btn-scroll-main2">COMEÇAR AGORA</button>
                 </div>
                 <div class="buttonSaibaMais">
-                    <button class="saibaMais">Saiba mais</button>
+                    <button class="saibaMais" type="button" id="btn-scroll-main3">Saiba mais</button>
                 </div>
             </div>
         </div>
@@ -263,4 +263,25 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
     <script src="js/navbar-favoritos.js" defer></script>
     <script src="js/favoritar-card.js" defer></script>
     <script src="js/index.js" type="module"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    function scrollToMain() {
+        var main = document.getElementById('main');
+        if (main) {
+            main.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+    var btn1 = document.getElementById('btn-scroll-main');
+    var btn2 = document.getElementById('btn-scroll-main2');
+    var btn3 = document.getElementById('btn-scroll-main3');
+    if (btn1) btn1.addEventListener('click', scrollToMain);
+    if (btn2) btn2.addEventListener('click', scrollToMain);
+    if (btn3) btn3.addEventListener('click', function() {
+        var main2 = document.getElementById('buywithus');
+        if (main2) {
+            main2.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+});
+</script>
 </html>

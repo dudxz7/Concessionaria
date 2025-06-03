@@ -1,4 +1,3 @@
-/* Adiciona o link para a fonte Poppins do Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
 body {
@@ -175,7 +174,7 @@ body {
   color: #004aad;
 }
 
-.favorite {
+.btn-favoritar {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -189,7 +188,7 @@ body {
   padding: 0;
 }
 
-.favorite-icon {
+.btn-favoritar img {
   width: 24px;
   /* ou ajuste conforme o tamanho desejado */
   height: auto;

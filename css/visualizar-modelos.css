@@ -54,7 +54,7 @@
 }
 
 .card-simples .heart-icon:hover {
-    filter: brightness(1.2) drop-shadow(0 0 4px #0071e3);
+    filter: brightness(1.2) drop-shadow(0 0 4px #d6084d);
 }
 
 @media (max-width: 1100px) {

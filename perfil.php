@@ -20,16 +20,16 @@ if ($conn->connect_error) {
     die("Falha na conexão: " . $conn->connect_error);
 }
 
-// Buscar os dados do usuário
+// Buscar os dados do usuário (agora incluindo foto_perfil)
 $id = $_SESSION['usuarioId'];
-$sql = "SELECT nome_completo, email, cpf, rg, cidade, estado, telefone, cnh, cargo, endereco, pis FROM clientes WHERE id = ?";
+$sql = "SELECT nome_completo, email, cpf, rg, cidade, estado, telefone, cnh, cargo, endereco, pis, foto_perfil FROM clientes WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $stmt->store_result();
 
 if ($stmt->num_rows > 0) {
-    $stmt->bind_result($nome_completo, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $cargo, $endereco, $pis);
+    $stmt->bind_result($nome_completo, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $cargo, $endereco, $pis, $foto_perfil);
     $stmt->fetch();
 
     // Se o usuário for Admin, redireciona para o painel de admin
@@ -48,16 +48,63 @@ if ($conn) {
     $conn->query("DELETE FROM pagamentos_pix_pendentes WHERE expira_em <= UNIX_TIMESTAMP()");
 }
 
-// Verificando se houve atualização no perfil
+// Verificando se houve atualização no perfil OU upload de imagem
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $novoEstado = $_POST['estado'];
     $novaCidade = $_POST['cidade'];
     $novoEndereco = $_POST['endereco'];
+    $novoCaminhoFoto = $foto_perfil; // valor padrão
 
-    // Atualizar os dados no banco de dados
-    $updateSql = "UPDATE clientes SET estado = ?, cidade = ?, endereco = ? WHERE id = ?";
+    // Se enviou imagem de perfil
+    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
+        $file = $_FILES['profile_image'];
+        $extensoes_permitidas = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+        $tipos_mime_permitidos = [
+            'image/jpeg',
+            'image/png',
+            'image/webp',
+            'image/gif'
+        ];
+        $max_tamanho = 2 * 1024 * 1024; // 2MB
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        
+        // Verifica extensão
+        if (in_array($ext, $extensoes_permitidas) && $file['size'] <= $max_tamanho) {
+            // Verifica MIME real
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime_type = finfo_file($finfo, $file['tmp_name']);
+            finfo_close($finfo);
+            if (in_array($mime_type, $tipos_mime_permitidos)) {
+                $novo_nome = 'perfil_' . $id . '_' . time() . '.' . $ext;
+                $destino = 'img/perfis/' . $novo_nome;
+
+                // Remove imagem anterior se existir
+                if (!empty($foto_perfil) && file_exists($foto_perfil)) {
+                    unlink($foto_perfil);
+                }
+                if (move_uploaded_file($file['tmp_name'], $destino)) {
+                    $novoCaminhoFoto = $destino;
+                }
+            } else {
+                $_SESSION['mensagemSucesso'] = "Arquivo de imagem inválido! Apenas JPG, PNG, WEBP ou GIF são permitidos.";
+                header("Location: perfil.php");
+                exit;
+            }
+        } else if (!in_array($ext, $extensoes_permitidas)) {
+            $_SESSION['mensagemSucesso'] = "Extensão de arquivo não permitida! Apenas JPG, PNG, WEBP ou GIF.";
+            header("Location: perfil.php");
+            exit;
+        } else if ($file['size'] > $max_tamanho) {
+            $_SESSION['mensagemSucesso'] = "Arquivo muito grande! O limite é 2MB.";
+            header("Location: perfil.php");
+            exit;
+        }
+    }
+
+    // Atualizar os dados no banco de dados (incluindo foto_perfil)
+    $updateSql = "UPDATE clientes SET estado = ?, cidade = ?, endereco = ?, foto_perfil = ? WHERE id = ?";
     $updateStmt = $conn->prepare($updateSql);
-    $updateStmt->bind_param("sssi", $novoEstado, $novaCidade, $novoEndereco, $id);
+    $updateStmt->bind_param("ssssi", $novoEstado, $novaCidade, $novoEndereco, $novoCaminhoFoto, $id);
     $updateStmt->execute();
 
     // Atualizando a sessão com os novos dados
@@ -84,6 +131,27 @@ $conn->close();
     <title>Perfil BMW</title>
     <link rel="stylesheet" href="css/perfil.css">
     <link rel="icon" href="img/logos/logoofcbmw.png">
+    <style>
+    /* Aura azul ao passar o mouse na imagem de perfil */
+    .profile-icon.has-image:hover .profile-upload-icon {
+        box-shadow: 0 0 0 5px #2196f3, 0 0 20px 10px #2196f3aa;
+        transition: box-shadow 0.3s;
+    }
+    /* Partículas */
+    .profile-particle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 8px;
+        height: 8px;
+        background: #2196f3;
+        border-radius: 50%;
+        pointer-events: none;
+        opacity: 0.8;
+        z-index: 10;
+        /* Removendo animation fixa, será inline */
+    }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -92,7 +160,16 @@ $conn->close();
                 <source src="videos/overlay_azul.mp4" type="video/mp4">
                 Seu navegador não suporta vídeos.
             </video>
-            <div class="profile-icon"><?php echo strtoupper(substr($nome_completo, 0, 1)); ?></div>
+            <div class="profile-icon<?php if (!empty($foto_perfil) && file_exists($foto_perfil)) echo ' has-image'; ?>" style="position:relative; cursor:pointer;"<?php if (!empty($foto_perfil) && file_exists($foto_perfil)) echo ' class="profile-icon has-image"'; ?>>
+                <?php if (!empty($foto_perfil) && file_exists($foto_perfil)): ?>
+                    <img class="profile-upload-icon" src="<?php echo $foto_perfil; ?>" alt="Foto de perfil" style="display:block;position:absolute;width:90px;height:90px;object-fit:cover;top:-5px;left:-5px;border-radius:50%;" />
+                    <span class="profile-letter" style="display:none;"></span>
+                <?php else: ?>
+                    <span class="profile-letter"><?php echo strtoupper(substr($nome_completo, 0, 1)); ?></span>
+                    <img class="profile-upload-icon" src="img/pasta.png" alt="Upload" style="display:block;position:absolute;width:32px;height:32px;object-fit:cover;cursor:pointer;opacity:0;transition:opacity 0.2s;" />
+                <?php endif; ?>
+                <input type="file" id="profile-image-input" name="profile_image" accept="image/*" style="display:none;" form="form-perfil" />
+            </div>
             <p><strong><?php echo $nome_completo; ?></strong></p>
             <p><?php echo $email; ?></p>
             <div class="icons">
@@ -149,7 +226,7 @@ $conn->close();
             <h2>Meus dados</h2>
             <p id="descricao">Campos com (*) não podem ser alterados</p>
 
-            <form method="POST" action="">
+            <form method="POST" action="" enctype="multipart/form-data" id="form-perfil">
                 <div class="form-grid">
                     <div class="left-column">
                         <div class="input-container">
@@ -213,21 +290,126 @@ $conn->close();
 
                 <!-- Mensagem de sucesso (se presente) -->
                 <?php if (isset($_SESSION['mensagemSucesso'])): ?>
-                    <div class="alert-success">
+                    <div class="mensagem-tratamento">
                         <?php
-                        echo $_SESSION['mensagemSucesso'];
-                        unset($_SESSION['mensagemSucesso']); // Limpa a mensagem após exibição
+                        $msg = $_SESSION['mensagemSucesso'];
+                        $icone = '';
+                        // Detecta tipo de mensagem
+                        if (strpos($msg, 'sucesso') !== false || strpos($msg, 'atualizados') !== false) {
+                            $icone = '<img src="videos/escudo.gif" alt="Sucesso" style="width:30px;height:30px;vertical-align:middle;margin-right:7px;">';
+                        } else {
+                            $icone = '<img src="videos/alarme.gif" alt="Erro" style="width:30px;height:30px;vertical-align:middle;margin-right:7px;">';
+                        }
+                        echo $icone . htmlspecialchars($msg);
+                        unset($_SESSION['mensagemSucesso']);
                         ?>
                     </div>
                 <?php endif; ?>
 
                 <!-- Botão de salvar alterações -->
                 <div class="button-container">
-                    <button type="submit" class="salvar-btn">Salvar alterações</button>
+                    <button type="submit" class="salvar-btn" id="btn-salvar" disabled>Salvar alterações</button>
                 </div>
             </form>
         </div>
     </div>
     <script src="js/function-perfil.js"></script>
+    <script src="js/mudar-letra.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    var icon = document.querySelector('.profile-icon');
+    var uploadIcon = icon.querySelector('.profile-upload-icon');
+    var letter = icon.querySelector('.profile-letter');
+    var fileInput = icon.querySelector('#profile-image-input');
+    var btnSalvar = document.getElementById('btn-salvar');
+    var campos = [
+        document.getElementById('estado'),
+        document.getElementById('cidade'),
+        document.getElementById('endereco')
+    ].filter(Boolean); // só campos existentes
+
+    // Efeito partículas ao passar mouse na imagem de perfil (em todas as direções)
+    if (icon.classList.contains('has-image')) {
+        icon.addEventListener('mouseenter', function() {
+            for (let i = 0; i < 12; i++) {
+                let particle = document.createElement('div');
+                particle.className = 'profile-particle';
+                let angle = Math.random() * 2 * Math.PI; // 0 a 2PI radianos
+                let distance = 60 + Math.random() * 30; // 60 a 90px
+                let x = Math.cos(angle) * distance;
+                let y = Math.sin(angle) * distance;
+                particle.style.background = '#2196f3';
+                particle.style.transition = 'transform 1.5s cubic-bezier(.22,1.02,.36,.99), opacity 1.5s';
+                particle.style.transform = 'translate(-50%, -50%) scale(1)';
+                icon.appendChild(particle);
+                setTimeout(() => {
+                    particle.style.transform = `translate(${x}px, ${y}px) scale(0.5)`;
+                    particle.style.opacity = '0';
+                }, 10);
+                setTimeout(() => {
+                    particle.remove();
+                }, 1550);
+            }
+        });
+    }
+
+    // só mostra ícone de upload se não houver imagem de perfil e esconde a letra
+    icon.addEventListener('mouseover', function() {
+        if (uploadIcon.src.includes('img/pasta.png')) {
+            uploadIcon.style.opacity = '1';
+            letter.style.display = 'none';
+        }
+    });
+    icon.addEventListener('mouseout', function() {
+        if (uploadIcon.src.includes('img/pasta.png')) {
+            uploadIcon.style.opacity = '0';
+            letter.style.display = '';
+        }
+    });
+
+    // Clique: abre seletor de arquivo
+    icon.addEventListener('click', function(e) {
+        fileInput.click();
+    });
+
+    // Habilita botão se trocar imagem
+    fileInput.addEventListener('change', function(e) {
+        if (fileInput.files && fileInput.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+                uploadIcon.src = ev.target.result;
+                uploadIcon.style.opacity = '1';
+                uploadIcon.style.width = '90px';
+                uploadIcon.style.height = '90px';
+                uploadIcon.style.top = '-5px';
+                uploadIcon.style.left = '-5px';
+                uploadIcon.style.transform = '';
+                uploadIcon.style.borderRadius = '50%';
+                letter.style.display = 'none';
+                // Habilita o botão após o preview
+                btnSalvar.disabled = false;
+                btnSalvar.classList.remove('disabled');
+                btnSalvar.style.opacity = '1';
+                btnSalvar.style.pointerEvents = 'auto';
+                btnSalvar.style.filter = 'none';
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+            // Fallback: habilita o botão imediatamente também
+            btnSalvar.disabled = false;
+            btnSalvar.classList.remove('disabled');
+            btnSalvar.style.opacity = '1';
+            btnSalvar.style.pointerEvents = 'auto';
+            btnSalvar.style.filter = 'none';
+        }
+    });
+
+    // Habilita botão se alterar qualquer campo editável
+    campos.forEach(function(campo) {
+        campo.addEventListener('input', function() {
+            btnSalvar.disabled = false;
+        });
+    });
+});
+</script>
 </body>
 </html>

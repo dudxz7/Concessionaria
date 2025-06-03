@@ -1,4 +1,4 @@
-<section class="porque-comprar">
+<section class="porque-comprar" id="buywithus">
         <h2>Porque comprar conosco?</h2>
         <div class="beneficios-container">
             <div class="beneficio">

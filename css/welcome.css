@@ -68,48 +68,33 @@ body.scrolled .hero-section {
 }
 
 .saibaMais {
-width: 230px;
-height: 60px;
-cursor: pointer;
-position: relative;
-padding: 10px 24px;
-font-size: 18px;
-color: rgb(16, 83, 185);
-border: 2px solid rgb(23, 36, 209);
-border-radius: 34px;
-background-color: transparent;
-font-weight: 600;
-transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
-overflow: hidden;
-}
-
-.saibaMais::before {
-content: '';
-position: absolute;
-inset: 0;
-margin: auto;
-width: 200px;
-height: 60px;
-border-radius: inherit;
-scale: 0;
-z-index: -1;
-background-color: rgb(255, 255, 255);
-transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
-}
-
-.saibaMais:hover::before {
-scale: 3;
+    cursor: pointer;
+    padding: 1.4em;
+    font-size: 1em;
+    width: 12em;
+    color: white;
+    background: #212121;
+    background-size: cover;
+    background-blend-mode: overlay;
+    border-radius: 50px;
+    outline: 0.1em solid #353535;
+    border: 0;
+    box-shadow: 0 0 1em 1em rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    position: relative;
 }
 
 .saibaMais:hover {
-color: #212121;
-scale: 1.1;
-box-shadow: 0 0px 20px rgba(107, 107, 107, 0.4);
-
-}
-
-.saibaMais:active {
-scale: 1;
+    transform: scale(1.1);
+    border: none; 
+    box-shadow: 0 0 1em 0.45em rgba(0, 0, 0, 0.1);
+    background: linear-gradient(45deg, #212121, #252525);
+    background: radial-gradient(
+    circle at bottom,
+    rgba(50, 100, 180, 0.5) 10%,
+    #212121 70%
+    );
+    outline: 0;
 }
 
 

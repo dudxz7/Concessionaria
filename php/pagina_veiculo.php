@@ -240,11 +240,41 @@ $stmt->close();
 // --- Pix session auto-redirect logic ---
 // REMOVIDO: Não redireciona mais automaticamente para o Pix aqui. O usuário deve clicar em 'Compre agora'.
 
-?>
+$favorito = false;
+$coracaoImg = "coracao-nao-salvo.png";
+if (isset($_SESSION['usuarioId']) && $id_modelo > 0) {
+    $usuarioId = $_SESSION['usuarioId'];
+    $stmt_favorito = $conn->prepare("SELECT 1 FROM favoritos WHERE usuario_id = ? AND modelo_id = ?");
+    $stmt_favorito->bind_param("ii", $usuarioId, $id_modelo);
+    $stmt_favorito->execute();
+    $stmt_favorito->store_result();
+    $favorito = $stmt_favorito->num_rows > 0;
+    $stmt_favorito->close();
+    $coracaoImg = $favorito ? "coracao-salvo.png" : "coracao-nao-salvo.png";
+}
 
+// Buscar foto de perfil do usuário se logado
+$fotoPerfilUsuario = '';
+if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
+    $idUser = $_SESSION['usuarioId'];
+    $sqlFoto = "SELECT foto_perfil FROM clientes WHERE id = ? LIMIT 1";
+    $stmtFoto = $conn->prepare($sqlFoto);
+    $stmtFoto->bind_param("i", $idUser);
+    $stmtFoto->execute();
+    $stmtFoto->bind_result($fotoPerfilUsuario);
+    $stmtFoto->fetch();
+    $stmtFoto->close();
+    // Ajusta caminho se necessário
+    if (!empty($fotoPerfilUsuario) && !file_exists($fotoPerfilUsuario)) {
+        // Tenta caminho relativo a partir da pasta php
+        if (file_exists("../" . $fotoPerfilUsuario)) {
+            $fotoPerfilUsuario = "../" . $fotoPerfilUsuario;
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -268,6 +298,31 @@ $stmt->close();
         /* img {
         filter: hue-rotate(-210deg) brightness(1.2) saturate(1.5);
         } */
+
+        .heart-counter-navbar {
+            position: absolute;
+            top: -6px;
+            right: 50px;
+            background-color: #2f4eda;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-family: 'Poppins', sans-serif;
+            width: 14px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 2;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .heart-counter-navbar.oculto {
+            display: none;
+        }
     </style>
 </head>
 
@@ -291,14 +346,35 @@ $stmt->close();
         </div>
 
         <div class="nav-icons">
-            <a href="../carrinho.php">
+            <a href="favoritos.php" style="position:relative;">
                 <img src="../img/navbar/heart.png" alt="Favoritos" class="heart-icon-navbar">
+                <?php
+                // Heart counter igual ao index.php
+                if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
+                    $idUser = $_SESSION['usuarioId'];
+                    $sqlFav = "SELECT COUNT(*) FROM favoritos WHERE usuario_id = ?";
+                    $stmtFav = $conn->prepare($sqlFav);
+                    $stmtFav->bind_param("i", $idUser);
+                    $stmtFav->execute();
+                    $stmtFav->bind_result($qtdFav);
+                    $stmtFav->fetch();
+                    $stmtFav->close();
+                    if ($qtdFav > 0) {
+                        echo '<span class="heart-counter-navbar">' . $qtdFav . '</span>';
+                    }
+                }
+                ?>
             </a>
             <div class="login">
                 <?php if ($usuarioLogado): ?>
-                    <!-- Se o usuário estiver logado, mostra o nome -->
+                    <!-- Se o usuário estiver logado, mostra a foto de perfil se existir -->
                     <a href="<?php echo $linkPerfil; ?>">
-                        <img src="../img/navbar/usercomcontorno.png" alt="Perfil">
+                        <?php if (!empty($fotoPerfilUsuario) && file_exists($fotoPerfilUsuario)): ?>
+                            <img src="<?php echo $fotoPerfilUsuario; ?>" alt="Perfil"
+                                style="width:38px;height:38px;object-fit:cover;border-radius:50%;vertical-align:middle;">
+                        <?php else: ?>
+                            <img src="../img/navbar/usercomcontorno.png" alt="Perfil">
+                        <?php endif; ?>
                     </a>
                     <a href="<?php echo $linkPerfil; ?>"><span><?php echo htmlspecialchars($nomeUsuario); ?></span></a>
                 <?php else: ?>
@@ -343,10 +419,9 @@ $stmt->close();
             <aside class="side-card">
                 <div class="header">
                     <h2><span><?= htmlspecialchars($modelo) ?></span></h2>
-                    <button class="favorite">
-                        <img src="../img/coracoes/coracao-nao-salvo.png" alt="Favorito" class="favorite-icon" />
-                        Favoritar
-                    </button>
+                    <button type="button" class="btn-favoritar" data-modelo-id="<?= (int)$id_modelo ?>" style="background:none;border:none;padding:0;cursor:pointer;">
+                            <img src="../img/coracoes/<?= $coracaoImg ?>" alt="Favoritar" class="heart-icon" draggable="false"> Favoritar
+                        </button>
 
                 </div>
 
@@ -932,7 +1007,7 @@ $stmt->close();
         // Envia a cor selecionada para a página de pagamento
         const btnComprar = document.getElementById('btn-comprar');
         if (btnComprar) {
-            btnComprar.addEventListener('click', function() {
+            btnComprar.addEventListener('click', function () {
                 // Pega a cor selecionada (primeiro checkbox marcado)
                 const corSelecionada = document.querySelector('.color-checkbox:checked');
                 const cor = corSelecionada ? encodeURIComponent(corSelecionada.value) : '';
