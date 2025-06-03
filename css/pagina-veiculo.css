@@ -494,8 +494,7 @@ body {
   padding: 25px;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 1200px;
-  margin: 30px auto;
+  max-width: 1030px !important;
 }
 
 .certificado-topo {
@@ -591,11 +590,12 @@ body {
 }
 
 .container-visita {
+  max-width: 1050px !important; 
+  width: 100%;
+  box-sizing: border-box;
   padding: 20px;
   font-family: 'Poppins', Arial, sans-serif;
   text-align: left;
-  width: 65%;
-  margin: 0px 0; /* Tira o auto que centraliza horizontalmente */
 }
 
 .container-visita h2 {
@@ -715,9 +715,12 @@ body {
 }
 
 .carros-recomendados {
-  display: flex;
-  gap: 170px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .card-carro {
@@ -912,4 +915,87 @@ body {
 .recomendados .card-carro a {
   text-decoration: none !important;
   color: inherit !important;
+}
+
+.features,
+.certificado-container,
+.qualidade-box,
+.recomendados,
+.container-visita {
+  max-width: 1200px;
+  width: 100%;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+.carros-recomendados {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .features,
+  .certificado-container,
+  .qualidade-box,
+  .recomendados,
+  .container-visita {
+    max-width: 100%;
+  }
+  .carros-recomendados {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .features,
+  .certificado-container,
+  .qualidade-box,
+  .recomendados,
+  .container-visita {
+    max-width: 100%;
+    padding-left: 2vw;
+    padding-right: 2vw;
+  }
+  .carros-recomendados {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* Garante que as seções principais fiquem empilhadas verticalmente */
+.certificado-e-visita-wrapper {
+  display: block;
+  width: 100%;
+}
+
+@media (min-width: 901px) {
+  .certificado-e-visita-wrapper {
+    display: block;
+  }
+  .certificado-e-visita-wrapper > .certificado-container,
+  .certificado-e-visita-wrapper > .container-visita {
+    display: block;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    float: none;
+  }
+}
+
+@media (min-width: 1800px) {
+  .certificado-container {
+    max-width: 1200px !important; /* Altere para o valor desejado */
+  }
+  .container-visita {
+    max-width: 1220px !important; /* Altere para o valor desejado */
+  }
+  .recomendados {
+    max-width: 1450px !important; /* Altere para o valor desejado */
+    padding-left: 0;
+    padding-right: 0;
+  }
 }

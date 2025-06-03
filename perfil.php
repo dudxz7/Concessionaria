@@ -285,6 +285,9 @@ $conn->close();
                                     maxlength="100">
                             </div>
                         <?php endif; ?>
+                        <div class="button-container">
+                            <button type="submit" class="salvar-btn" id="btn-salvar" disabled>Salvar alterações</button>
+                        </div>
                     </div>
                 </div>
 
@@ -306,10 +309,6 @@ $conn->close();
                     </div>
                 <?php endif; ?>
 
-                <!-- Botão de salvar alterações -->
-                <div class="button-container">
-                    <button type="submit" class="salvar-btn" id="btn-salvar" disabled>Salvar alterações</button>
-                </div>
             </form>
         </div>
     </div>
