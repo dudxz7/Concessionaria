@@ -44,7 +44,9 @@ if ($usuario_id) {
                 </span>
                 <img class="profile-upload-icon" src="../img/pasta.png" alt="Upload" style="display:block;position:absolute;width:32px;height:32px;object-fit:cover;cursor:pointer;opacity:0;transition:opacity 0.2s;top:29px;left:29px;z-index:2;" />
             <?php endif; ?>
-            <input type="file" id="sidebar-profile-image-input" name="profile_image" accept="image/*" style="display:none;" />
+            <?php if ($cargo_usuario === 'Admin'): ?>
+                <input type="file" id="sidebar-profile-image-input" name="profile_image" accept="image/*" style="display:none;" />
+            <?php endif; ?>
         </div>
         <p><strong><?php echo htmlspecialchars($nome_completo); ?></strong></p>
         <p><?php echo htmlspecialchars($email); ?></p>
@@ -85,7 +87,6 @@ if ($usuario_id) {
                 </span>
                 <img class="profile-upload-icon" src="../img/pasta.png" alt="Upload" style="display:block;position:absolute;width:32px;height:32px;object-fit:cover;cursor:pointer;opacity:0;transition:opacity 0.2s;top:29px;left:29px;z-index:2;" />
             <?php endif; ?>
-            <input type="file" id="sidebar-profile-image-input" name="profile_image" accept="image/*" style="display:none;" />
         </div>
         <p><strong><?php echo htmlspecialchars($nome_completo); ?></strong></p>
         <p><?php echo htmlspecialchars($email); ?></p>
@@ -122,7 +123,7 @@ if ($usuario_id) {
                 </span>
                 <img class="profile-upload-icon" src="../img/pasta.png" alt="Upload" style="display:block;position:absolute;width:32px;height:32px;object-fit:cover;cursor:pointer;opacity:0;transition:opacity 0.2s;top:29px;left:29px;z-index:2;" />
             <?php endif; ?>
-            <input type="file" id="sidebar-profile-image-input" name="profile_image" accept="image/*" style="display:none;" />
+            <!-- Removido input file para usuários não-Admin -->
         </div>
         <p><strong><?php echo htmlspecialchars($nome_completo); ?></strong></p>
         <p><?php echo htmlspecialchars($email); ?></p>
@@ -164,6 +165,7 @@ if ($usuario_id) {
         </div>
     <?php endif; ?>
 </div>
+<?php if ($cargo_usuario === 'Admin'): ?>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var icon = document.getElementById('sidebar-profile-icon');
@@ -181,6 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 let distance = 60 + Math.random() * 30;
                 let x = Math.cos(angle) * distance;
                 let y = Math.sin(angle) * distance;
+                // Cor dinâmica conforme cargo
                 particle.style.background = 'rgb(243, 33, 33)';
                 particle.style.transition = 'transform 1.5s cubic-bezier(.22,1.02,.36,.99), opacity 1.5s';
                 particle.style.transform = 'translate(-50%, -50%) scale(1)';
@@ -241,10 +244,9 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Resposta upload:', data); // <-- debug
                 if (data.success && data.caminho) {
-                    uploadIcon.src = data.caminho + '?t=' + Date.now(); // força refresh
-                    icon.classList.add('has-image'); // Garante que o efeito hover funcione
+                    uploadIcon.src = data.caminho + '?t=' + Date.now();
+                    icon.classList.add('has-image');
                     if (letter) letter.style.display = 'none';
                 } else {
                     alert(data.error || 'Erro ao fazer upload da imagem.');
@@ -252,12 +254,13 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch((err) => {
                 alert('Erro ao enviar imagem.');
-                console.log('Erro fetch:', err);
             });
         }
     });
 });
 </script>
+<?php endif; ?>
+<?php if ($cargo_usuario === 'Admin'): ?>
 <style>
 .profile-icon.has-image:hover .profile-upload-icon {
     box-shadow: 0 0 0 5px rgb(226, 2, 2), 0 0 20px 10px rgba(243, 33, 33, 0.67) !important;
@@ -276,3 +279,23 @@ document.addEventListener('DOMContentLoaded', function() {
     z-index: 10;
 }
 </style>
+<?php else: ?>
+<style>
+.profile-icon.has-image:hover .profile-upload-icon {
+    box-shadow: 0 0 0 5px #2196f3, 0 0 20px 10px #2196f3aa !important;
+    transition: box-shadow 0.3s;
+}
+.profile-particle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: #2196f3;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.8;
+    z-index: 10;
+}
+</style>
+<?php endif; ?>
