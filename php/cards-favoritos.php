@@ -113,7 +113,7 @@ while ($carro = $resultModelos->fetch_assoc()) {
     $promo = $stmtPromo->get_result()->fetch_assoc();
 
     if ($promo) {
-        // Card com promoção
+        // Card com promoção (em favoritos.php NÃO mostra o preço antigo)
         $precoOriginal = $carro['preco'];
         $precoComDesconto = $promo['preco_com_desconto'];
         $desconto = $promo['desconto'];
@@ -143,19 +143,18 @@ while ($carro = $resultModelos->fetch_assoc()) {
         foreach ($rating as $estrela) {
             echo '<img src="../img/cards/' . $estrela . '" alt="estrela">';
         }
-        echo '<span class="nota">(' . number_format($nota, 0, ',', '.') . ')</span>
+        echo '<span class="nota">(' . number_format($nota, 0, ',', '.') . ')</span></div>';
+        // Só mostra o preço novo e desconto
+        echo '<div class="preco-promocao">
+                <div class="preco-novo">
+                    <h2>R$ ' . number_format($precoComDesconto, 2, ',', '.') . '</h2>
+                    <span class="desconto">-' . $desconto . '%</span>
                 </div>
-                <div class="preco-promocao">
-                    <h2 class="preco-antigo">R$ ' . number_format($precoOriginal, 2, ',', '.') . '</h2>
-                    <div class="preco-novo">
-                        <h2>R$ ' . number_format($precoComDesconto, 2, ',', '.') . '</h2>
-                        <span class="desconto">-' . $desconto . '%</span>
-                    </div>
-                </div>
-                <a href="../php/pagina_veiculo.php?id=' . $carro['id'] . '" class="btn-link">
-                    <button class="btn-send">Estou interessado</button>
-                </a>
             </div>';
+        echo '<a href="../php/pagina_veiculo.php?id=' . $carro['id'] . '" class="btn-link">
+                <button class="btn-send">Estou interessado</button>
+            </a>
+        </div>';
     } else {
         // Card normal
         echo '<div class="card">

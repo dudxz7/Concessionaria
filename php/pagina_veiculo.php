@@ -987,8 +987,60 @@ if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
             checkbox.addEventListener('change', function () {
                 if (this.checked) {
                     const corSelecionada = this.getAttribute('data-cor');
-                    updateCarrossel(corSelecionada);
-
+                    const modeloSlug = '<?= $modelo_slug ?>';
+                    const caminhoBase = `../img/modelos/cores/${modeloSlug}/${corSelecionada.toLowerCase()}/`;
+                    const extensoes = ['webp', 'png', 'jpg', 'jpeg'];
+                    const maxImagens = 12; // Limite máximo de imagens por cor
+                    const thumbnailRow = document.querySelector('.thumbnail-row');
+                    // Remove todas as miniaturas atuais
+                    thumbnailRow.innerHTML = '';
+                    let miniaturasValidas = 0;
+                    let primeiraImagem = null;
+                    let imagensCarregadas = 0;
+                    // Tenta carregar até maxImagens possíveis
+                    for (let i = 1; i <= maxImagens; i++) {
+                        let encontrada = false;
+                        for (let ext of extensoes) {
+                            const nomeArquivo = i + '.' + ext;
+                            const url = caminhoBase + nomeArquivo;
+                            const testImg = new Image();
+                            testImg.onload = function() {
+                                if (!encontrada) {
+                                    encontrada = true;
+                                    // Cria miniatura
+                                    const thumb = document.createElement('img');
+                                    thumb.src = url;
+                                    thumb.className = 'thumb';
+                                    thumb.setAttribute('data-cor', corSelecionada.toLowerCase());
+                                    thumb.alt = 'Imagem do modelo';
+                                    thumb.onclick = function() {
+                                        document.getElementById('imagem-principal').src = url;
+                                    };
+                                    thumbnailRow.appendChild(thumb);
+                                    // Primeira imagem válida vira principal
+                                    if (miniaturasValidas === 0) {
+                                        primeiraImagem = url;
+                                        document.getElementById('imagem-principal').src = url;
+                                    }
+                                    miniaturasValidas++;
+                                }
+                            };
+                            testImg.onerror = function() {
+                                imagensCarregadas++;
+                                // Se terminou de tentar todas e nenhuma válida, mostra padrão
+                                if (imagensCarregadas === maxImagens * extensoes.length && miniaturasValidas === 0) {
+                                    document.getElementById('imagem-principal').src = '../img/modelos/padrao.webp';
+                                }
+                            };
+                            testImg.src = url;
+                        }
+                    }
+                    // Se nenhuma miniatura válida após um tempo, mostra imagem padrão
+                    setTimeout(function() {
+                        if (miniaturasValidas === 0) {
+                            document.getElementById('imagem-principal').src = '../img/modelos/padrao.webp';
+                        }
+                    }, 500);
                     // Desmarca os outros checkboxes
                     document.querySelectorAll('.color-checkbox').forEach((cb) => {
                         if (cb !== this) cb.checked = false;
@@ -998,11 +1050,6 @@ if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
         });
 
         // Troca a imagem principal ao clicar na miniatura
-        document.querySelectorAll('.thumbnail-row img.thumb').forEach((img) => {
-            img.addEventListener('click', function () {
-                document.getElementById('imagem-principal').src = this.src;
-            });
-        });
 
         // Envia a cor selecionada para a página de pagamento
         const btnComprar = document.getElementById('btn-comprar');
@@ -1019,7 +1066,7 @@ if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
                 // Verifica se já existe sessão Pix válida para este veículo/cor
                 fetch('verifica_pix_session.php?id=' + encodeURIComponent(id) + '&cor=' + cor)
                     .then(response => response.json())
-                    .then(data => {
+                    .then(function(data) {
                         if (data && data.pix_valido) {
                             window.location.href = `realizar_pagamento_pix.php?id=${id}&cor=${cor}`;
                         } else {
@@ -1027,7 +1074,7 @@ if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
                             window.location.href = `pagamento.php?id=${id}&cor=${cor}&redir=1`;
                         }
                     })
-                    .catch(() => {
+                    .catch(function() {
                         // fallback: vai para pagamento normal, sempre com &redir=1
                         window.location.href = `pagamento.php?id=${id}&cor=${cor}&redir=1`;
                     });

@@ -218,12 +218,9 @@ if ($result->num_rows > 0) {
                 </div>
 
                 <div class="favorite-icon">
-                    <form method="post" style="display:inline;">
-                        <input type="hidden" name="modelo_id" value="' . $carro['id'] . '">
-                        <button type="submit" name="favoritar" style="background:none;border:none;padding:0;cursor:pointer;">
-                            <img src="img/coracoes/' . $coracaoImg . '" alt="Favoritar" class="heart-icon" draggable="false">
-                        </button>
-                    </form>
+                    <button type="button" class="btn-favoritar" data-modelo-id="' . (int) $carro['id'] . '" style="background:none;border:none;padding:0;cursor:pointer;">
+                        <img src="img/coracoes/' . $coracaoImg . '" alt="Favoritar" class="heart-icon" draggable="false">
+                    </button>
                 </div>
 
                 <img src="' . htmlspecialchars($imagemPath) . '" alt="' . htmlspecialchars($carro['modelo']) . '">

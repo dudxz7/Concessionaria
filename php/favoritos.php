@@ -26,8 +26,17 @@ if ($usuarioId) {
     <link rel="stylesheet" href="../css/favoritos.css">
     <link rel="stylesheet" href="../css/consultar_clientes.css">
     <link rel="icon" href="../img/logos/logoofcbmw.png">
+    <style>
+    .titulos-favoritos {
+      margin-left: 20px;
+    }
+    @media (min-width: 1920px) {
+      .titulos-favoritos {
+        margin-left: 50px !important;
+      }
+    }
+    </style>
 </head>
-
 <body>
     <div class="container">
         <!-- Sidebar -->
@@ -37,7 +46,7 @@ if ($usuarioId) {
         <!-- Main Content: títulos + cards -->
         <div class="main-content" style="display:flex;flex-direction:column;width:100%;height:100vh;overflow:hidden;">
             <!-- Títulos -->
-            <div style="width:100%;display:flex;flex-direction:column;align-items:flex-start;">
+            <div class="titulos-favoritos" style="width:100%;display:flex;flex-direction:column;align-items:flex-start;max-width:100%;margin-left:20px;margin-top:20px;">
                 <h2 class="btn-shine" style="text-align:left;margin:0 0 4px 10px;">Meus favoritos</h2>
                 <h3 id="total-favoritos" style="text-align:left;margin:0 0 24px 20px;">Total de favoritos (<?php echo $totalFavoritos; ?>)</h3>
             </div>
@@ -90,5 +99,4 @@ window.addEventListener('DOMContentLoaded', function() {
 document.body.addEventListener('favoritoAtualizado', ativarRemoverFavorito);
     </script>
 </body>
-
 </html>

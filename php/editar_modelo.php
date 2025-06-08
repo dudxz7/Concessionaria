@@ -233,7 +233,20 @@ $conn->close();
                 <label>Cores Disponíveis</label>
                 <div class="checkbox-group">
                     <?php
-                    $cores_disponiveis = ["Preto", "Branco", "Azul", "Prata", "Verde", "Vermelho"];
+                    $cores_disponiveis = [
+                        "Preto",
+                        "Branco",
+                        "Bege",
+                        "Prata",
+                        "Azul",
+                        "Azul-bebe",
+                        "Ciano",
+                        "Verde-acqua",
+                        "Verde",
+                        "Vermelho",
+                        "Laranja",
+                        "Preto-com-Laranja"
+                    ];
                     foreach ($cores_disponiveis as $cor) {
                     echo '<label class="checkbox-field">
                         <input type="checkbox" name="cor[]" value="'.$cor.'" '.(in_array($cor, $coresSelecionadas) ? 'checked' : '').'>

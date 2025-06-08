@@ -40,17 +40,34 @@
     background-color: rgb(16, 16, 16);
     box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
 }
+.checkbox-field input[name="cor[]"][value="Preto-com-Laranja"]:not(:checked) ~ .checkmark {
+    background: linear-gradient(120deg, rgb(16,16,16) 0%, rgb(16,16,16) 40%, rgb(255,115,0) 100%);
+    box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
+}
 
 .checkbox-field input[name="cor[]"][value="Branco"]:not(:checked) ~ .checkmark {
     background-color: rgb(255, 255, 255);
     box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
 }
 
+.checkbox-field input[name="cor[]"][value="Bege"]:not(:checked) ~ .checkmark {
+    background-color: #f7f3be;
+    box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
+}
 .checkbox-field input[name="cor[]"][value="Azul"]:not(:checked) ~ .checkmark {
     background-color: rgb(0, 0, 255);
     box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
 }
 
+.checkbox-field input[name="cor[]"][value="Ciano"]:not(:checked) ~ .checkmark {
+    background-color: #3dd6e7;
+    box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
+}
+
+.checkbox-field input[name="cor[]"][value="Azul-bebe"]:not(:checked) ~ .checkmark {
+    background-color: #9dbbda;
+    box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
+}
 .checkbox-field input[name="cor[]"][value="Prata"]:not(:checked) ~ .checkmark {
     background-color: rgba(192, 192, 192, 0.5);
     box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
@@ -61,15 +78,35 @@
     box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
 }
 
+.checkbox-field input[name="cor[]"][value="Verde-acqua"]:not(:checked) ~ .checkmark {
+    background-color: #70b7a5;
+    box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
+}
+
 .checkbox-field input[name="cor[]"][value="Vermelho"]:not(:checked) ~ .checkmark {
     background-color: rgb(255, 0, 0);
     box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
 }
 
+.checkbox-field input[name="cor[]"][value="Laranja"]:not(:checked) ~ .checkmark {
+    background-color: rgb(230, 108, 8);
+    box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
+}
+
 /* Quando o checkbox for marcado */
+
 .checkbox-field input[name="cor[]"][value="Preto"]:checked ~ .checkmark {
     background-color: rgb(16, 16, 16);
     box-shadow: 0px 0px 0px 2px rgb(0, 0, 0); /* Preto */
+}
+
+.checkbox-field input[name="cor[]"][value="Preto-com-Laranja"]:checked ~ .checkmark {
+    background-color: rgb(16, 16, 16);
+    box-shadow: 0px 0px 0px 2px rgb(0, 0, 0); /* Preto */
+}
+.checkbox-field input[name="cor[]"][value="Bege"]:checked ~ .checkmark {
+    background-color: #f7f3be;
+    box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
 }
 
 .checkbox-field input[name="cor[]"][value="Branco"]:checked ~ .checkmark {
@@ -82,8 +119,23 @@
     box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
 }
 
+.checkbox-field input[name="cor[]"][value="Ciano"]:checked ~ .checkmark {
+    background-color: #3dd6e7;
+    box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
+}
+
+.checkbox-field input[name="cor[]"][value="Azul-bebe"]:checked ~ .checkmark {
+    background-color: #9dbbda;
+    box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
+}
+
 .checkbox-field input[name="cor[]"][value="Prata"]:checked ~ .checkmark {
     background-color: rgba(192, 192, 192, 1);
+    box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
+}
+
+.checkbox-field input[name="cor[]"][value="Verde-acqua"]:checked ~ .checkmark {
+    background-color: #70b7a5;
     box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
 }
 
@@ -96,8 +148,18 @@
     background-color: rgb(255, 0, 0);
     box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
 }
+
+.checkbox-field input[name="cor[]"][value="Laranja"]:checked ~ .checkmark {
+    background-color: rgb(255, 115, 0);
+    box-shadow: 0px 0px 0px 2px rgb(16, 16, 16); /* Preto */
+}
 /* Quando o checkbox for marcado e a cor for branca ou cinza, a seta fica preta */
 .checkbox-field input[name="cor[]"][value="Branco"]:checked ~ .checkmark:after,
+.checkbox-field input[name="cor[]"][value="Bege"]:checked ~ .checkmark:after,
+.checkbox-field input[name="cor[]"][value="Azul-bebe"]:checked ~ .checkmark:after,
+.checkbox-field input[name="cor[]"][value="Ciano"]:checked ~ .checkmark:after,
+.checkbox-field input[name="cor[]"][value="Ciano"]:checked ~ .checkmark:after,
+.checkbox-field input[name="cor[]"][value="Verde-acqua"]:checked ~ .checkmark:after,
 .checkbox-field input[name="cor[]"][value="Prata"]:checked ~ .checkmark:after {
     border-color: black;  /* A seta vai ficar preta */
 }
