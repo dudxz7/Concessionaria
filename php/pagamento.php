@@ -13,6 +13,36 @@ $cor_principal = $cor_param;
 $usuarioId = isset($_SESSION['usuarioId']) ? $_SESSION['usuarioId'] : null;
 $redir = isset($_GET['redir']) ? intval($_GET['redir']) : 0;
 
+// --- REDIRECIONAMENTO AUTOMÁTICO PARA BOLETO PENDENTE (SEM MEXER NO PIX) ---
+if (
+    isset($usuarioId, $modelo_id, $cor_param) &&
+    $modelo_id > 0 &&
+    trim($cor_param) !== ''
+) {
+    $sqlBoleto = "SELECT data_expiracao FROM pagamento_boleto WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? AND status = 'pendente' AND data_expiracao > NOW() ORDER BY data_criacao DESC LIMIT 1";
+    $stmtBoleto = $conn->prepare($sqlBoleto);
+    $stmtBoleto->bind_param("iis", $usuarioId, $modelo_id, $cor_param);
+    $stmtBoleto->execute();
+    $stmtBoleto->bind_result($data_expiracao_boleto);
+    $temBoletoValido = false;
+    if ($stmtBoleto->fetch()) {
+        $agora = time();
+        if (strtotime($data_expiracao_boleto) > $agora) {
+            $temBoletoValido = true;
+        }
+    }
+    $stmtBoleto->close();
+    if ($temBoletoValido) {
+        $chave_boleto = gerarChavePagamento($modelo_id, $cor_param, $usuarioId);
+        $_SESSION[$chave_boleto] = [ 'expira_em' => strtotime($data_expiracao_boleto) ];
+        $_SESSION['pagamento_autorizado_boleto'] = true;
+        $_SESSION['pagamento_id'] = $modelo_id;
+        $_SESSION['pagamento_cor'] = $cor_param;
+        header('Location: realizar_pagamento_boleto.php?id=' . $modelo_id . '&cor=' . urlencode($cor_param));
+        exit;
+    }
+}
+
 // Só faz redirect automático se redir=1, cor válida e cor EXISTE no banco para o modelo
 $cor_existe = false;
 if ($modelo_id > 0 && $cor_param && trim($cor_param) !== '' && $usuarioId && $redir === 1) {

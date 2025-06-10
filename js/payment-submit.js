@@ -8,7 +8,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const forma = document.querySelector('input[name="forma"]:checked');
         const total = document.body.getAttribute('data-total');
         const id = document.body.getAttribute('data-id');
-        const cor = document.body.getAttribute('data-cor');
+        // Busca a cor selecionada pelo usuário, se houver input/select de cor visível e selecionado
+        let cor = null;
+        const corInput = document.querySelector('input[name="cor"]:checked, select[name="cor"]');
+        if (corInput && corInput.value && corInput.value.trim() !== '') {
+            cor = corInput.value.trim();
+        } else {
+            // Se não houver input/select, pega do data-cor do body
+            cor = document.body.getAttribute('data-cor');
+        }
         // Validação dos campos obrigatórios
         const camposObrigatorios = ['nome', 'email', 'cpf', 'data_nasc', 'telefone'];
         let camposPreenchidos = true;
@@ -35,17 +43,33 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.text())
             .then(res => {
-                if (res.trim() === 'ok') {
+                console.log('RESPOSTA_BACKEND:', res);
+                if (res.trim().startsWith('ok')) {
                     window.location.href = `../php/realizar_pagamento_pix.php?id=${encodeURIComponent(id)}&cor=${encodeURIComponent(cor)}`;
                 } else {
-                    alert('Erro ao iniciar pagamento Pix. Tente novamente.');
+                    alert(res.trim()); // Mostra o erro real do backend
                 }
             })
             .catch(() => {
                 alert('Erro ao conectar com o servidor. Tente novamente.');
             });
         } else if (forma && forma.id === 'boleto') {
-            alert('Pagamento por boleto ainda não implementado.');
+            fetch('../php/seta_pagamento_autorizado_boleto.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'id=' + encodeURIComponent(id) + '&cor=' + encodeURIComponent(cor)
+            })
+            .then(response => response.text())
+            .then(res => {
+                if (res.trim() === 'ok') {
+                    window.location.href = `../php/realizar_pagamento_boleto.php?id=${encodeURIComponent(id)}&cor=${encodeURIComponent(cor)}`;
+                } else {
+                    alert('Erro ao iniciar pagamento Boleto. Tente novamente.');
+                }
+            })
+            .catch(() => {
+                alert('Erro ao conectar com o servidor. Tente novamente.');
+            });
         } else if (forma && forma.id === 'cartao') {
             if (!validarCamposCartao()) {
                 alert('Preencha corretamente todos os campos do cartão.');
