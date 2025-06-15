@@ -113,13 +113,9 @@ html, body {
     width: 32px;
     height: 32px;
     object-fit: contain;
-    /* Garante que a imagem mantenha proporção */
     display: block;
-    /* Remove espaços fantasmas abaixo da imagem */
     transition: filter 0.3s ease;
-    /* Transição para o brilho */
     user-select: none;
-    /* Impede selecionar texto */
 }
 
 .heart-icon:hover {

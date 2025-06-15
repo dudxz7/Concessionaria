@@ -2,23 +2,25 @@
 session_start();
 require_once 'conexao.php';
 
-// Limpa pagamentos Pix pendentes expirados (boa prática)
-$conn->query("DELETE FROM pagamentos_pix_pendentes WHERE expira_em <= UNIX_TIMESTAMP()");
+// Limpa pagamentos Pix expirados (boa prática)
+$conn->query("DELETE FROM pagamentos_pix WHERE expira_em <= NOW() AND status = 'pendente'");
 
 // Função para gerar uma chave única para cada tentativa de pagamento
-function gerarChavePagamento($id_veiculo, $cor) {
-    return 'pagamento_' . $id_veiculo . '_' . md5(strtolower($cor));
+function gerarChavePagamento($id_veiculo, $cor, $usuarioId) {
+    return 'pagamento_' . $usuarioId . '_' . $id_veiculo . '_' . md5(strtolower($cor));
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST['cor'])) {
     $id = intval($_POST['id']);
     $cor = trim($_POST['cor']);
     $usuarioId = $_SESSION['usuarioId'];
-    $expira_em = time() + 15 * 60; // 15 minutos
-    $chave = gerarChavePagamento($id, $cor);
+    $criado_em = date('Y-m-d H:i:s');
+    $expira_em = date('Y-m-d H:i:s', strtotime('+15 minutes'));
+    $expira_em_timestamp = strtotime($expira_em); // Salva como timestamp
+    $chave = gerarChavePagamento($id, $cor, $usuarioId);
     
     // Remove qualquer Pix pendente anterior para o mesmo usuário/veículo/cor
-    $sqlDel = "DELETE FROM pagamentos_pix_pendentes WHERE usuario_id = ? AND veiculo_id = ? AND cor = ?";
+    $sqlDel = "DELETE FROM pagamentos_pix WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? AND status = 'pendente'";
     $stmtDel = $conn->prepare($sqlDel);
     $stmtDel->bind_param("iis", $usuarioId, $id, $cor);
     $stmtDel->execute();
@@ -35,19 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST
     $stmtPreco->close();
 
     // Insere novo Pix pendente
-    $sql = "INSERT INTO pagamentos_pix_pendentes (usuario_id, veiculo_id, cor, expira_em) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO pagamentos_pix (usuario_id, veiculo_id, cor, criado_em, expira_em, status, valor, forma_pagamento) VALUES (?, ?, ?, ?, ?, 'pendente', ?, 'pix')";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iisi", $usuarioId, $id, $cor, $expira_em);
+    $stmt->bind_param("iisssd", $usuarioId, $id, $cor, $criado_em, $expira_em, $valor_pix);
     if ($stmt->execute()) {
-        // Também insere no histórico
-        $sqlHist = "INSERT INTO pagamentos_pix_historico (usuario_id, veiculo_id, cor, criado_em, expira_em, status, valor, forma_pagamento) VALUES (?, ?, ?, ?, ?, 'pendente', ?, 'pix')";
-        $stmtHist = $conn->prepare($sqlHist);
-        $criado_em = time();
-        $stmtHist->bind_param("iisisd", $usuarioId, $id, $cor, $criado_em, $expira_em, $valor_pix);
-        $stmtHist->execute();
-        $stmtHist->close();
         $_SESSION[$chave] = [
-            'expira_em' => $expira_em
+            'expira_em' => $expira_em_timestamp
         ];
         $_SESSION['pagamento_autorizado'] = true;
         $_SESSION['pagamento_id'] = $id;

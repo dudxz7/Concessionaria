@@ -3,21 +3,36 @@ session_start();
 require_once 'conexao.php'; // ajuste o caminho se necessário
 
 // Função para gerar uma chave única para cada tentativa de pagamento
-function gerarChavePagamento($id_veiculo, $cor) {
-    return 'pagamento_' . $id_veiculo . '_' . md5(strtolower($cor));
+function gerarChavePagamento($id_veiculo, $cor, $usuarioId) {
+    return 'pagamento_' . $usuarioId . '_' . $id_veiculo . '_' . md5(strtolower($cor));
 }
 
+$usuarioId = isset($_SESSION['usuarioId']) ? $_SESSION['usuarioId'] : null;
 $id_veiculo = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $cor = isset($_GET['cor']) ? trim($_GET['cor']) : '';
-$chave_pagamento = gerarChavePagamento($id_veiculo, $cor);
+$chave_pagamento = gerarChavePagamento($id_veiculo, $cor, $usuarioId);
 $agora = time();
 $pagamento_info = $_SESSION[$chave_pagamento] ?? null;
 
+// NOVO: Buscar expiração do banco se não houver na sessão ou se estiver inconsistente
+if (!$pagamento_info || !isset($pagamento_info['expira_em']) || $pagamento_info['expira_em'] <= $agora) {
+    // Busca expira_em do banco (em datetime)
+    $sqlPix = "SELECT expira_em FROM pagamentos_pix WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? AND status = 'pendente' LIMIT 1";
+    $stmtPix = $conn->prepare($sqlPix);
+    $stmtPix->bind_param("iis", $usuarioId, $id_veiculo, $cor);
+    $stmtPix->execute();
+    $stmtPix->bind_result($expira_em_db);
+    if ($stmtPix->fetch() && $expira_em_db) {
+        $expira_em_timestamp = strtotime($expira_em_db);
+        $pagamento_info = ['expira_em' => $expira_em_timestamp];
+        $_SESSION[$chave_pagamento] = $pagamento_info;
+    }
+    $stmtPix->close();
+}
+
 if ($pagamento_info && isset($pagamento_info['expira_em']) && $pagamento_info['expira_em'] > $agora) {
-    // Pagamento já está autorizado e dentro do prazo
     $_SESSION['pagamento_autorizado'] = true;
 } else {
-    // Se não está autorizado ou expirou, redireciona para pagamento.php
     header('Location: pagamento.php?id=' . $id_veiculo . '&cor=' . urlencode($cor));
     exit;
 }

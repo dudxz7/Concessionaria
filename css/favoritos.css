@@ -50,7 +50,7 @@ body, html {
     font-family: 'Poppins', Arial;
     filter: none;
     overflow: visible;
-    margin: 0 0 25px 0;
+    margin: 0 0 70px 0;
 }
 
 .card img {
@@ -127,7 +127,7 @@ body, html {
 
 .btn-link {
     display: block;
-    width: 98%;
+    width: 100%;
     text-decoration: none;
 }
 
@@ -274,4 +274,36 @@ body, html {
     padding: 0 12px;
     max-width: 70px;
 }
-/* --- FIM PROMOÇÃO CARD --- */
+.forma-pagamento-overlay {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 2;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.forma-pagamento-card img {
+    width: 40px;
+    height: 40px;
+    display: block;
+}
+.btn-send.cancelar {
+    background: #e53935 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 12px 24px !important;
+    font-size: 16px !important;
+    width: 100% !important;
+    font-weight: 600 !important;
+    margin-top: 8px !important;
+    cursor: pointer !important;
+    transition: background 0.2s !important;
+}
+
+.btn-send.cancelar:hover {
+    background: #b71c1c !important;
+}

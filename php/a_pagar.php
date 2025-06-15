@@ -13,7 +13,7 @@ if ($usuarioId) {
   $stmtExpira->execute();
 
   // Corrigido: contar veículos a pagar nas duas tabelas
-  $sqlPix = "SELECT COUNT(DISTINCT veiculo_id) as total FROM pagamentos_pix_pendentes WHERE usuario_id = ?";
+  $sqlPix = "SELECT COUNT(DISTINCT veiculo_id) as total FROM pagamentos_pix WHERE usuario_id = ? AND status = 'pendente' AND expira_em > NOW()";
   $stmtPix = $conn->prepare($sqlPix);
   $stmtPix->bind_param('i', $usuarioId);
   $stmtPix->execute();
@@ -77,19 +77,18 @@ if ($usuarioId) {
 
     /* Fundo da barra de rolagem (track) */
     .main-content::-webkit-scrollbar-track {
-      background: #ffcccc;
+      background: transparent;
     }
 
     /* "Thumb" — a parte que você arrasta */
     .main-content::-webkit-scrollbar-thumb {
-      background-color: red;
+      background-color: #2b2b2b; /* Cor do thumb */
       border-radius: 8px;
-      border: 2px solid rgb(0, 0, 0);
     }
 
     /* Hover no thumb (opcional) */
     .main-content::-webkit-scrollbar-thumb:hover {
-      background-color: darkred;
+      background-color: #999999;
     }
   </style>
 </head>

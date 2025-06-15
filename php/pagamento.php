@@ -37,14 +37,14 @@ if (
     }
     $stmtBoleto->close();
     // Verifica pix pendente
-    $sqlPix = "SELECT expira_em FROM pagamentos_pix_pendentes WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? LIMIT 1";
+    $sqlPix = "SELECT expira_em FROM pagamentos_pix WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? AND status = 'pendente' LIMIT 1";
     $stmtPix = $conn->prepare($sqlPix);
     $stmtPix->bind_param("iis", $usuarioId, $modelo_id, $cor_param);
     $stmtPix->execute();
     $stmtPix->bind_result($expira_em_pix);
     if ($stmtPix->fetch()) {
         $chave = gerarChavePagamento($modelo_id, $cor_param, $usuarioId);
-        $_SESSION[$chave] = [ 'expira_em' => $expira_em_pix ];
+        $_SESSION[$chave] = [ 'expira_em' => strtotime($expira_em_pix) ];
         $_SESSION['pagamento_autorizado'] = true;
         $_SESSION['pagamento_id'] = $modelo_id;
         $_SESSION['pagamento_cor'] = $cor_param;
@@ -70,7 +70,7 @@ if ($modelo_id > 0 && $cor_param && trim($cor_param) !== '' && $usuarioId && $re
     $stmtCor->close();
 
     if ($cor_existe) {
-        $sqlPix = "SELECT expira_em FROM pagamentos_pix_pendentes WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? LIMIT 1";
+        $sqlPix = "SELECT expira_em FROM pagamentos_pix WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? AND status = 'pendente' LIMIT 1";
         $stmtPix = $conn->prepare($sqlPix);
         $stmtPix->bind_param("iis", $usuarioId, $modelo_id, $cor_param);
         $stmtPix->execute();
@@ -78,19 +78,19 @@ if ($modelo_id > 0 && $cor_param && trim($cor_param) !== '' && $usuarioId && $re
         $temPixValido = false;
         if ($stmtPix->fetch()) {
             $agora = time();
-            if ($expira_em_pix > $agora) {
+            if (strtotime($expira_em_pix) > $agora) {
                 $temPixValido = true;
             }
         }
         $stmtPix->close();
         // Só executa o DELETE depois de fechar o statement
-        if (isset($expira_em_pix) && $expira_em_pix <= $agora) {
-            $conn->query("DELETE FROM pagamentos_pix_pendentes WHERE usuario_id = $usuarioId AND veiculo_id = $modelo_id AND cor = '" . $conn->real_escape_string($cor_param) . "'");
+        if (isset($expira_em_pix) && strtotime($expira_em_pix) <= $agora) {
+            $conn->query("DELETE FROM pagamentos_pix WHERE usuario_id = $usuarioId AND veiculo_id = $modelo_id AND cor = '" . $conn->real_escape_string($cor_param) . "' AND status = 'pendente'");
         }
         if ($temPixValido) {
             // Recria sessão de autorização para o Pix pendente
             $chave = gerarChavePagamento($modelo_id, $cor_param, $usuarioId);
-            $_SESSION[$chave] = [ 'expira_em' => $expira_em_pix ];
+            $_SESSION[$chave] = [ 'expira_em' => strtotime($expira_em_pix) ];
             $_SESSION['pagamento_autorizado'] = true;
             $_SESSION['pagamento_id'] = $modelo_id;
             $_SESSION['pagamento_cor'] = $cor_param;
