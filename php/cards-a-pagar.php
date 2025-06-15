@@ -94,7 +94,7 @@ while ($row = $resultBoleto->fetch_assoc()) {
 $pagamentosAPagar = array_unique($pagamentosAPagar, SORT_REGULAR);
 
 if (empty($pagamentosAPagar)) {
-    echo '<div style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-height:60vh;width:100vw;padding-left:30vw;">';
+    echo '<div style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-height:60vh;width:100vw;padding-left:27vw;">';
     echo '<img src="../videos/giphy2.webp" alt="Sem veículos" style="width:450px;height:400px;margin-bottom:24px;display:block;">';
     echo '<p class="espaco-galactico-flutuante" style="position:relative;">Você não possui veículos a pagar no momento.';
     // Estrelas animadas sobre o p

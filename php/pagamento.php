@@ -13,6 +13,13 @@ $cor_principal = $cor_param;
 $usuarioId = isset($_SESSION['usuarioId']) ? $_SESSION['usuarioId'] : null;
 $redir = isset($_GET['redir']) ? intval($_GET['redir']) : 0;
 
+// Garantir que o usuarioId está presente na session
+if (!isset($_SESSION['usuarioId']) || empty($_SESSION['usuarioId'])) {
+    // Redireciona para login ou página de erro
+    header('Location: ../login.html');
+    exit;
+}
+
 // --- REDIRECIONAMENTO AUTOMÁTICO PARA BOLETO OU PIX PENDENTE (INDEPENDENTE DO TEMPO) ---
 if (
     isset($usuarioId, $modelo_id, $cor_param) &&
@@ -44,13 +51,18 @@ if (
     $stmtPix->bind_result($expira_em_pix);
     if ($stmtPix->fetch()) {
         $chave = gerarChavePagamento($modelo_id, $cor_param, $usuarioId);
-        $_SESSION[$chave] = [ 'expira_em' => strtotime($expira_em_pix) ];
+        date_default_timezone_set('America/Sao_Paulo');
+        $expira_em_ts = strtotime($expira_em_pix);
+        $agora = time();
+        $_SESSION[$chave] = [ 'expira_em' => $expira_em_ts ];
         $_SESSION['pagamento_autorizado'] = true;
         $_SESSION['pagamento_id'] = $modelo_id;
         $_SESSION['pagamento_cor'] = $cor_param;
-        $stmtPix->close();
-        header('Location: realizar_pagamento_pix.php?id=' . $modelo_id . '&cor=' . urlencode($cor_param));
-        exit;
+        if ($expira_em_ts > $agora && $redir != 1) {
+            $stmtPix->close();
+            header('Location: realizar_pagamento_pix.php?id=' . $modelo_id . '&cor=' . urlencode($cor_param) . '&redir=1');
+            exit;
+        }
     }
     $stmtPix->close();
 }
@@ -83,10 +95,7 @@ if ($modelo_id > 0 && $cor_param && trim($cor_param) !== '' && $usuarioId && $re
             }
         }
         $stmtPix->close();
-        // Só executa o DELETE depois de fechar o statement
-        if (isset($expira_em_pix) && strtotime($expira_em_pix) <= $agora) {
-            $conn->query("DELETE FROM pagamentos_pix WHERE usuario_id = $usuarioId AND veiculo_id = $modelo_id AND cor = '" . $conn->real_escape_string($cor_param) . "' AND status = 'pendente'");
-        }
+        // NÃO REDIRECIONA MAIS AQUI! Apenas exibe a tela normalmente se não houver Pix válido
         if ($temPixValido) {
             // Recria sessão de autorização para o Pix pendente
             $chave = gerarChavePagamento($modelo_id, $cor_param, $usuarioId);

@@ -14,25 +14,13 @@ $chave_pagamento = gerarChavePagamento($id_veiculo, $cor, $usuarioId);
 $agora = time();
 $pagamento_info = $_SESSION[$chave_pagamento] ?? null;
 
-// NOVO: Buscar expiração do banco se não houver na sessão ou se estiver inconsistente
-if (!$pagamento_info || !isset($pagamento_info['expira_em']) || $pagamento_info['expira_em'] <= $agora) {
-    // Busca expira_em do banco (em datetime)
-    $sqlPix = "SELECT expira_em FROM pagamentos_pix WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? AND status = 'pendente' LIMIT 1";
-    $stmtPix = $conn->prepare($sqlPix);
-    $stmtPix->bind_param("iis", $usuarioId, $id_veiculo, $cor);
-    $stmtPix->execute();
-    $stmtPix->bind_result($expira_em_db);
-    if ($stmtPix->fetch() && $expira_em_db) {
-        $expira_em_timestamp = strtotime($expira_em_db);
-        $pagamento_info = ['expira_em' => $expira_em_timestamp];
-        $_SESSION[$chave_pagamento] = $pagamento_info;
-    }
-    $stmtPix->close();
-}
-
+// FLUXO IDEAL: SÓ USA SESSION PARA VALIDAR O PIX
 if ($pagamento_info && isset($pagamento_info['expira_em']) && $pagamento_info['expira_em'] > $agora) {
+    // Session válida, segue para exibir QR Code normalmente
+    // NÃO LIMPA session aqui!
     $_SESSION['pagamento_autorizado'] = true;
 } else {
+    // Se não está autorizado ou expirou, redireciona para pagamento.php
     header('Location: pagamento.php?id=' . $id_veiculo . '&cor=' . urlencode($cor));
     exit;
 }
@@ -131,8 +119,8 @@ $preco_formatado = number_format($preco_final, 2, ',', '.');
             </div>
         </div>
     </div>
-    <!-- Após exibir a página, limpe a autorização para evitar reuso indevido -->
-    <?php unset($_SESSION['pagamento_autorizado']); ?>
+    <!-- Após exibir a página, NÃO limpe a autorização aqui! -->
+    <!-- Removido: unset($_SESSION['pagamento_autorizado']); -->
     <script>
 (function() {
     // Tempo de expiração salvo na sessão (em segundos)

@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('America/Sao_Paulo');
 require_once 'conexao.php';
 
 // Limpa pagamentos Pix expirados (boa prática)
