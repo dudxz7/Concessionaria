@@ -182,6 +182,10 @@ $conn->close();
                     <img src="img/coracoes/coracao.png" alt="Favoritos">
                     <span>Favoritos</span>
                 </div>
+                <div class="icon-item" onclick="window.location.href='php/a_pagar.php'">
+                    <img src="img/relogio.png" alt="A pagar">
+                    <span>A pagar</span>
+                </div>
                 <?php endif; ?>
                 <div class="icon-item" onclick="window.location.href='php/redefinir_a_senha.php'">
                     <img src="img/ajudando.png" alt="Esqueceu a Senha">

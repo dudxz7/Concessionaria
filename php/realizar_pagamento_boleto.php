@@ -1,5 +1,11 @@
 <?php
 session_start();
+// Headers anti-cache para garantir atualização do status
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+header('Expires: 0');
+date_default_timezone_set('America/Sao_Paulo');
+
 require_once 'conexao.php';
 
 $id_veiculo = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -10,7 +16,7 @@ if (!$id_veiculo || !$cor || !$usuarioId) {
     exit;
 }
 
-// Busca boleto pendente e válido
+// Busca boleto pendente
 $sqlBoleto = "SELECT * FROM pagamento_boleto WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? AND status = 'pendente' ORDER BY data_criacao DESC LIMIT 1";
 $stmtBoleto = $conn->prepare($sqlBoleto);
 $stmtBoleto->bind_param("iis", $usuarioId, $id_veiculo, $cor);
@@ -22,18 +28,19 @@ if ($boleto) {
     $codigo_barras = $boleto['codigo_barras'];
     $data_expiracao = strtotime($boleto['data_expiracao']);
     $expiraEmJs = $data_expiracao;
-    if ($data_expiracao < time()) {
-        // Atualiza o status para expirado
-        $sqlExpira = "UPDATE pagamento_boleto SET status = 'expirado' WHERE id = ?";
+    // Se o boleto já expirou, atualiza o status e redireciona para pagamento.php
+    if ($data_expiracao <= time()) {
+        $sqlExpira = "UPDATE pagamento_boleto SET status = 'expirado' WHERE id = ? AND status = 'pendente'";
         $stmtExpira = $conn->prepare($sqlExpira);
         $stmtExpira->bind_param("i", $boleto['id']);
         $stmtExpira->execute();
         $stmtExpira->close();
-        // Redireciona para gerar novo boleto
         header('Location: pagamento.php?id=' . urlencode($id_veiculo) . '&cor=' . urlencode($cor));
         exit;
     }
 } else {
+    // Não bloqueia se houver expirado, permite criar novo boleto normalmente
+
     // Busca valor do veículo
     $sqlPreco = "SELECT m.preco, p.preco_com_desconto, p.status, p.data_limite FROM modelos m LEFT JOIN promocoes p ON m.id = p.modelo_id AND p.status = 'Ativa' AND p.data_limite > NOW() WHERE m.id = ?";
     $stmtPreco = $conn->prepare($sqlPreco);
@@ -48,7 +55,7 @@ if ($boleto) {
         $valor_boleto = $dadosPreco['preco'];
     }
     $codigo_barras = "34191.79001 01043.510047 91020.150008 6 12340000010000";
-    $expira_em = time() + 72 * 60 * 60;
+    $expira_em = time() + 60; // Expira em 72 horas
     $data_expiracao = $expira_em;
     $data_expiracao_sql = date('Y-m-d H:i:s', $expira_em);
     $sqlInsert = "INSERT INTO pagamento_boleto (usuario_id, veiculo_id, cor, codigo_barras, status, data_expiracao, valor) VALUES (?, ?, ?, ?, 'pendente', ?, ?)";
@@ -186,6 +193,6 @@ $preco_formatado = number_format($preco_final, 2, ',', '.');
     atualizarTimer();
 })();
 </script>
-<script src="../js/copiar-codigo-pix.js"></script>
+<script src="../js/copiar-codigo-boleto.js"></script>
 </body>
 </html>

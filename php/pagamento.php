@@ -13,34 +13,46 @@ $cor_principal = $cor_param;
 $usuarioId = isset($_SESSION['usuarioId']) ? $_SESSION['usuarioId'] : null;
 $redir = isset($_GET['redir']) ? intval($_GET['redir']) : 0;
 
-// --- REDIRECIONAMENTO AUTOMÁTICO PARA BOLETO PENDENTE (SEM MEXER NO PIX) ---
+// --- REDIRECIONAMENTO AUTOMÁTICO PARA BOLETO OU PIX PENDENTE (INDEPENDENTE DO TEMPO) ---
 if (
     isset($usuarioId, $modelo_id, $cor_param) &&
     $modelo_id > 0 &&
     trim($cor_param) !== ''
 ) {
-    $sqlBoleto = "SELECT data_expiracao FROM pagamento_boleto WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? AND status = 'pendente' AND data_expiracao > NOW() ORDER BY data_criacao DESC LIMIT 1";
+    // Verifica boleto pendente
+    $sqlBoleto = "SELECT data_expiracao FROM pagamento_boleto WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? AND status = 'pendente' ORDER BY data_criacao DESC LIMIT 1";
     $stmtBoleto = $conn->prepare($sqlBoleto);
     $stmtBoleto->bind_param("iis", $usuarioId, $modelo_id, $cor_param);
     $stmtBoleto->execute();
     $stmtBoleto->bind_result($data_expiracao_boleto);
-    $temBoletoValido = false;
     if ($stmtBoleto->fetch()) {
-        $agora = time();
-        if (strtotime($data_expiracao_boleto) > $agora) {
-            $temBoletoValido = true;
-        }
-    }
-    $stmtBoleto->close();
-    if ($temBoletoValido) {
         $chave_boleto = gerarChavePagamento($modelo_id, $cor_param, $usuarioId);
         $_SESSION[$chave_boleto] = [ 'expira_em' => strtotime($data_expiracao_boleto) ];
         $_SESSION['pagamento_autorizado_boleto'] = true;
         $_SESSION['pagamento_id'] = $modelo_id;
         $_SESSION['pagamento_cor'] = $cor_param;
+        $stmtBoleto->close();
         header('Location: realizar_pagamento_boleto.php?id=' . $modelo_id . '&cor=' . urlencode($cor_param));
         exit;
     }
+    $stmtBoleto->close();
+    // Verifica pix pendente
+    $sqlPix = "SELECT expira_em FROM pagamentos_pix_pendentes WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? LIMIT 1";
+    $stmtPix = $conn->prepare($sqlPix);
+    $stmtPix->bind_param("iis", $usuarioId, $modelo_id, $cor_param);
+    $stmtPix->execute();
+    $stmtPix->bind_result($expira_em_pix);
+    if ($stmtPix->fetch()) {
+        $chave = gerarChavePagamento($modelo_id, $cor_param, $usuarioId);
+        $_SESSION[$chave] = [ 'expira_em' => $expira_em_pix ];
+        $_SESSION['pagamento_autorizado'] = true;
+        $_SESSION['pagamento_id'] = $modelo_id;
+        $_SESSION['pagamento_cor'] = $cor_param;
+        $stmtPix->close();
+        header('Location: realizar_pagamento_pix.php?id=' . $modelo_id . '&cor=' . urlencode($cor_param));
+        exit;
+    }
+    $stmtPix->close();
 }
 
 // Só faz redirect automático se redir=1, cor válida e cor EXISTE no banco para o modelo
@@ -160,8 +172,23 @@ if ($result_img->num_rows > 0) {
 } else {
     $imagem = "../img/modelos/padrao.webp";
 }
-?>
 
+// Adiciona expiração do boleto para o JS, se houver
+$expiraEmJs = null;
+$temBoletoPendente = false;
+if (isset($usuarioId, $modelo_id, $cor_param) && $modelo_id > 0 && trim($cor_param) !== '') {
+    $sqlBoleto = "SELECT data_expiracao FROM pagamento_boleto WHERE usuario_id = ? AND veiculo_id = ? AND cor = ? AND status = 'pendente' ORDER BY data_criacao DESC LIMIT 1";
+    $stmtBoleto = $conn->prepare($sqlBoleto);
+    $stmtBoleto->bind_param("iis", $usuarioId, $modelo_id, $cor_param);
+    $stmtBoleto->execute();
+    $stmtBoleto->bind_result($data_expiracao_boleto);
+    if ($stmtBoleto->fetch()) {
+        $expiraEmJs = strtotime($data_expiracao_boleto);
+        $temBoletoPendente = true;
+    }
+    $stmtBoleto->close();
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -172,7 +199,7 @@ if ($result_img->num_rows > 0) {
     <title>Pagamento</title>
 </head>
 <body data-total="<?= htmlspecialchars($total) ?>" data-id="<?= $modelo_id ?>" data-cor="<?= htmlspecialchars($cor_principal) ?>">
-    <div class=" container">
+<div class="container">
     <!-- Parte superior: imagem e dados -->
     <div class="superior">
         <div class="topo">
@@ -296,6 +323,24 @@ if ($result_img->num_rows > 0) {
 
         </div>
     </div>
+    <?php if ($temBoletoPendente && $expiraEmJs && $expiraEmJs > time()): ?>
+    <script>
+    (function() {
+        var expiraEm = <?php echo intval($expiraEmJs); ?>;
+        var agora = Math.floor(Date.now() / 1000);
+        var tempoRestante = expiraEm - agora;
+        function redirecionarAoExpirar() {
+            if (tempoRestante <= 0) {
+                window.location.reload();
+                return;
+            }
+            tempoRestante--;
+            setTimeout(redirecionarAoExpirar, 1000);
+        }
+        redirecionarAoExpirar();
+    })();
+    </script>
+    <?php endif; ?>
     <script src="../js/payment-main.js" type="module"></script>
     <script src="../js/habilita-botao-payment.js"></script>
     <script src="../js/toggle-campos-cartao.js"></script>

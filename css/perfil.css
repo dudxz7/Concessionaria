@@ -50,6 +50,10 @@ body {
     color: white;
     margin: 20px auto;
 }
+.profile-icon.has-image {
+    border: none !important;
+    background: none !important;
+}
 
 .content {
     flex: 1;

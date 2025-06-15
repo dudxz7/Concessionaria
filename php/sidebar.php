@@ -285,6 +285,10 @@ document.addEventListener('DOMContentLoaded', function() {
     box-shadow: 0 0 0 5px #2196f3, 0 0 20px 10px #2196f3aa !important;
     transition: box-shadow 0.3s;
 }
+.profile-icon.has-image {
+    border: none !important;
+    background: none !important;
+}
 .profile-particle {
     position: absolute;
     top: 50%;
