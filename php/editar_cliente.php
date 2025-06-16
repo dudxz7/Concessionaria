@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
             $sql_update = "UPDATE clientes SET nome_completo = ?, email = ?, cpf = ?, rg = ?, cidade = ?, estado = ?, telefone = ?, cnh = ?, senha = ? WHERE id = ?";
             $stmt_update = $conn->prepare($sql_update);
-            $stmt_update->bind_param("ssssssssssi", $nome, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $senha_hash, $cliente_id);
+            $stmt_update->bind_param("sssssssssi", $nome, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $senha_hash, $cliente_id);
         }
 
         if ($stmt_update->execute()) {

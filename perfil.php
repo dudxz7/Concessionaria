@@ -183,7 +183,7 @@ $conn->close();
                     <span>Favoritos</span>
                 </div>
                 <div class="icon-item" onclick="window.location.href='php/a_pagar.php'">
-                    <img src="img/relogio.png" alt="A pagar">
+                    <img src="img/apagar.png" alt="A pagar">
                     <span>A pagar</span>
                 </div>
                 <?php endif; ?>
@@ -214,6 +214,10 @@ $conn->close();
                         <img src="img/promocoes.png" alt="Consultar promoções">
                         <span>Consultar Promoções</span>
                     </div>
+                    <div class="icon-item" onclick="window.location.href='php/consultar_vendas.php'">
+                        <img src="img/venda.png" alt="Consultar Vendas">
+                        <span>Consultar Vendas</span>
+                    </div> 
                 <?php endif; ?>
                 <div class="icon-item" onclick="window.location.href='php/logout.php'">
                     <img src="img/sairr.png" alt="Sair">

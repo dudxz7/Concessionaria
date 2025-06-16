@@ -99,6 +99,10 @@ if ($usuario_id) {
                 <img src="../img/navbar/heart.png" alt="Favoritos">
                 <span>Favoritos</span>
             </div>
+            <div class="icon-item" onclick="window.location.href='a_pagar.php'">
+                <img src="../img/apagar.png" alt="A pagar">
+                <span>A pagar</span>
+            </div>
             <div class="icon-item" onclick="window.location.href='redefinir_a_senha.php'">
                 <img src="../img/ajudando.png" alt="Esqueceu a Senha">
                 <span>Esqueceu a Senha</span>
@@ -157,6 +161,10 @@ if ($usuario_id) {
             <div class="icon-item" onclick="window.location.href='consultar_promocoes.php'">
                 <img src="../img/promocoes.png" alt="Consultar promoções">
                 <span>Consultar Promoções</span>
+            </div>
+            <div class="icon-item" onclick="window.location.href='consultar_vendas.php'">
+                <img src="../img/venda.png" alt="Consulta Vendas">
+                <span>Consultar Vendas</span>
             </div>
             <div class="icon-item" onclick="window.location.href='logout.php'">
                 <img src="../img/sairr.png" alt="Sair">

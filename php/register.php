@@ -25,11 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $cnh = $_POST['cnh'];
     $senha = $_POST['senha'];
     $confirma_senha = $_POST['confirma_senha'];
-    $cargo = $_POST['cargo'];
+    // O cargo deve ser o enviado pelo formulário (admin, gerente, funcionario, cliente)
+    $cargo = isset($_POST['cargo']) ? $_POST['cargo'] : 'Cliente';
 
     // Campos extras (só existem se for funcionário ou gerente)
-    $pis = !empty($_POST['pis']) ? $_POST['pis'] : null;
-    $endereco = !empty($_POST['endereco']) ? $_POST['endereco'] : null;
+    $pis = isset($_POST['pis']) ? $_POST['pis'] : "";
+    $endereco = isset($_POST['endereco']) ? $_POST['endereco'] : "";
 
     // Verifica se as senhas coincidem
     if ($senha !== $confirma_senha) {
@@ -68,10 +69,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssssssssssss", $nome, $email, $cpf, $rg, $cidade, $estado, $telefone, $cnh, $senha_hash, $cargo, $pis, $endereco);
 
+    // Após inserir em clientes, se for Funcionario, insere também em funcionarios
     if ($stmt->execute()) {
-        echo "Conta criada com sucesso!";
-        header("Location: ../index.php");
-        exit();
+        // Se for funcionário, insere também na tabela funcionarios
+        if ($cargo === 'Funcionario') {
+            // Verifica se já existe PIS ou CPF na tabela funcionarios
+            $sql_check_func = "SELECT id FROM funcionarios WHERE cpf = ? OR pis = ? OR email = ?";
+            $stmt_check_func = $conn->prepare($sql_check_func);
+            $stmt_check_func->bind_param("sss", $cpf, $pis, $email);
+            $stmt_check_func->execute();
+            $stmt_check_func->store_result();
+            if ($stmt_check_func->num_rows === 0) {
+                $sql_func = "INSERT INTO funcionarios (nome_completo, email, cpf, rg, telefone, pis, endereco, cidade, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt_func = $conn->prepare($sql_func);
+                $stmt_func->bind_param("sssssssss", $nome, $email, $cpf, $rg, $telefone, $pis, $endereco, $cidade, $estado);
+                $stmt_func->execute();
+                $stmt_func->close();
+            }
+            $stmt_check_func->close();
+        }
+        // Redirecionamento correto para origem admin
+        if (isset($_POST['origem']) && $_POST['origem'] === 'admin') {
+            header("Location: consultar_func_gerente.php");
+            exit();
+        } else {
+            header("Location: ../index.php");
+            exit();
+        }
     } else {
         if ($conn->errno == 1062) {
             echo "Erro: CPF, RG, Telefone ou CNH já existem.";

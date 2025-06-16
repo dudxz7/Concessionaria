@@ -49,7 +49,7 @@ $filtro = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Buscar clientes
 if ($letra_filtro) {
-    $sql = "SELECT id, nome_completo, email, telefone, registrado_em FROM clientes 
+    $sql = "SELECT id, nome_completo, email, telefone, registrado_em, cpf FROM clientes 
             WHERE cargo = 'Cliente' AND nome_completo LIKE ? 
             LIMIT ?, ?";
     $stmt = $conn->prepare($sql);
@@ -57,14 +57,19 @@ if ($letra_filtro) {
     $stmt->bind_param("sii", $param, $offset, $clientes_por_pagina);
 } else {
     if ($filtro) {
-        $sql = "SELECT id, nome_completo, email, telefone, registrado_em FROM clientes 
-                WHERE cargo = 'Cliente' AND (nome_completo LIKE ? OR email LIKE ?) 
+        // Remove qualquer máscara do filtro se for CPF
+        $filtro_sem_mascara = preg_replace('/[^0-9]/', '', $filtro);
+        $sql = "SELECT id, nome_completo, email, telefone, registrado_em, cpf FROM clientes 
+                WHERE cargo = 'Cliente' AND (
+                    nome_completo LIKE ? OR email LIKE ? OR cpf LIKE ? OR cpf LIKE ?
+                ) 
                 LIMIT ?, ?";
         $stmt = $conn->prepare($sql);
         $param = "%$filtro%";
-        $stmt->bind_param("ssii", $param, $param, $offset, $clientes_por_pagina);
+        $param_cpf = "%$filtro_sem_mascara%";
+        $stmt->bind_param("ssssii", $param, $param, $param, $param_cpf, $offset, $clientes_por_pagina);
     } else {
-        $sql = "SELECT id, nome_completo, email, telefone, registrado_em FROM clientes 
+        $sql = "SELECT id, nome_completo, email, telefone, registrado_em, cpf FROM clientes 
                 WHERE cargo = 'Cliente'
                 LIMIT ?, ?";
         $stmt = $conn->prepare($sql);
@@ -82,9 +87,11 @@ if ($letra_filtro) {
     $stmt_total->bind_param("s", $param);
 } else {
     if ($filtro) {
-        $sql_total = "SELECT COUNT(*) as total FROM clientes WHERE cargo = 'Cliente' AND (nome_completo LIKE ? OR email LIKE ?)";
+        $sql_total = "SELECT COUNT(*) as total FROM clientes WHERE cargo = 'Cliente' AND (
+            nome_completo LIKE ? OR email LIKE ? OR cpf LIKE ? OR cpf LIKE ?
+        )";
         $stmt_total = $conn->prepare($sql_total);
-        $stmt_total->bind_param("ss", $param, $param);
+        $stmt_total->bind_param("ssss", $param, $param, $param, $param_cpf);
     } else {
         $sql_total = "SELECT COUNT(*) as total FROM clientes WHERE cargo = 'Cliente'";
         $stmt_total = $conn->prepare($sql_total);
@@ -130,11 +137,29 @@ $conn->close();
             </a>
 
             <form method="GET" action="">
-                <input type="text" name="search" class="input" placeholder="Buscar por nome ou email..." value="<?php echo htmlspecialchars($filtro); ?>">
+                <input type="text" name="search" class="input" id="search-cpf" placeholder="Buscar por nome, email ou CPF..." value="<?php echo htmlspecialchars($filtro); ?>">
                 <button type="submit">
                     <img src="../img/lupa.png" alt="Buscar" class="icone-lupa">
                 </button>
             </form>
+            <script>
+            // Máscara de CPF no input de pesquisa
+            function cpfMask(v) {
+                v = v.replace(/\D/g, "");
+                v = v.replace(/(\d{3})(\d)/, "$1.$2");
+                v = v.replace(/(\d{3})(\d)/, "$1.$2");
+                v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+                return v;
+            }
+            const searchInput = document.getElementById('search-cpf');
+            searchInput.addEventListener('input', function(e) {
+                // Só aplica máscara se for número e até 11 dígitos
+                let valor = this.value.replace(/\D/g, '');
+                if (valor.length <= 11) {
+                    this.value = cpfMask(this.value);
+                }
+            });
+            </script>
 
             <div class="letras-filtro">
             <?php
@@ -150,6 +175,7 @@ $conn->close();
                     <tr>
                         <th>ID</th>
                         <th>Nome</th>
+                        <th>CPF</th>
                         <th>Email</th>
                         <th>Telefone</th>
                         <th>Registrado em</th>
@@ -161,6 +187,14 @@ $conn->close();
                         <tr>
                             <td><?php echo $row['id']; ?></td>
                             <td><?php echo $row['nome_completo']; ?></td>
+                            <td><?php 
+                                $cpf = preg_replace('/[^0-9]/', '', $row['cpf']);
+                                if (strlen($cpf) === 11) {
+                                    echo substr($cpf,0,3).'.'.substr($cpf,3,3).'.'.substr($cpf,6,3).'-'.substr($cpf,9,2);
+                                } else {
+                                    echo $row['cpf'];
+                                }
+                            ?></td>
                             <td><?php echo $row['email']; ?></td>
                             <td><?php echo $row['telefone']; ?></td>
                             <td><?php echo $row['registrado_em']; ?></td>

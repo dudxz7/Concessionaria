@@ -157,9 +157,10 @@ if ($cargoUsuario !== 'Admin' && $cargoUsuario !== 'Gerente') {
             <div id="error-message" style="color: red; display: none;"></div> 
 
             <button type="submit" class="btn">
-                <img src="../img/verifica.png" alt="Ícone de check">
+                <img src="../img/registro/verifica.png" alt="Ícone de check">
                 Criar conta
             </button>
+            <input type="hidden" name="origem" value="admin">
         </form>
     </div>
 
