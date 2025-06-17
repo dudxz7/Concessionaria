@@ -51,45 +51,13 @@ if ($usuarioId) {
       }
     }
 
-      /* Força o scroll vertical apenas nesta página, sem alterar o CSS global */
-      .main-content {
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-      }
+      /* Força o scroll vertical a existir e o do  horizontal a nao existir */
 
       .content {
-        min-height: 400px;
-        height: auto !important;
-        max-height: none !important;
+        overflow-x: hidden !important;
         overflow-y: visible !important;
-        padding-bottom: 32px !important;
-        box-sizing: border-box;
       }
 
-    /* Estilos personalizados para a barra de rolagem */
-    .main-content::-webkit-scrollbar {
-      width: 17px;
-    }
-
-    /* Fundo da barra de rolagem (track) */
-    .main-content::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    /* "Thumb" — a parte que você arrasta */
-    .main-content::-webkit-scrollbar-thumb {
-      background-color: #2b2b2b; /* Cor do thumb */
-      border-radius: 8px;
-    }
-
-    /* Hover no thumb (opcional) */
-    .main-content::-webkit-scrollbar-thumb:hover {
-      background-color: #999999;
-    }
   </style>
 </head>
 

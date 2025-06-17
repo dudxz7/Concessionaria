@@ -218,6 +218,7 @@ foreach ($cards as $carro) {
     }
     echo '<span class="nota">(' . number_format($nota, 0, ',', '.') . ')</span></div>';
     echo '<h2>R$ ' . number_format($precoExibir, 2, ',', '.') . '</h2>';
+    echo '<button class="btn-send">STATUS</button>';
     echo '<a href="../php/pagamento.php?id=' . $carro['id'] . '&cor=' . urlencode($corSelecionada) . '&redir=1" class="btn-link">';
     echo '<button class="btn-send">Pagar</button>';
     echo '</a>';
@@ -252,7 +253,6 @@ foreach ($cards as $carro) {
     const modal = document.getElementById('modal-cancelar-pagamento');
     const btnsCancelar = document.querySelectorAll('.btn-cancelar-modal');
     const btnSim = document.getElementById('confirmar-cancelar-pagamento');
-    const btnNao = document.getElementById('cancelar-cancelar-pagamento');
     const statusDiv = document.getElementById('cancelar-pagamento-status');
 
     btnsCancelar.forEach(btn => {

@@ -103,6 +103,10 @@ if ($usuario_id) {
                 <img src="../img/apagar.png" alt="A pagar">
                 <span>A pagar</span>
             </div>
+            <div class="icon-item" onclick="window.location.href='historico_pagamentos.php'">
+                <img src="../img/historico.png" alt="Historico de vendas">
+                <span>Histórico</span>
+            </div>
             <div class="icon-item" onclick="window.location.href='redefinir_a_senha.php'">
                 <img src="../img/ajudando.png" alt="Esqueceu a Senha">
                 <span>Esqueceu a Senha</span>
@@ -122,7 +126,7 @@ if ($usuario_id) {
                 <img class="profile-upload-icon" src="<?php echo htmlspecialchars('../img/perfis/' . $foto_perfil); ?>" alt="Foto de perfil" style="width:90px;height:90px;object-fit:cover;border-radius:50%;display:block;position:absolute;top:0;left:0;box-shadow:none;transition:box-shadow 0.3s;z-index:1;" />
                 <span class="profile-letter" style="display:none;"></span>
             <?php else: ?>
-                <span class="profile-letter" style="display:flex;align-items:center;justify-content:center;width:90px;height:90px;background:#2196f3;color:#fff;font-size:2.5rem;font-weight:bold;border-radius:50%;user-select:none;position:absolute;top:0;left:0;z-index:1;">
+                <span class="profile-letter" style="display:flex;align-items:center;justify-content:center;width:90px;height:90px;color:#fff;font-size:2.5rem;font-weight:bold;border-radius:50%;user-select:none;position:absolute;top:0;left:0;z-index:1;">
                     <?php echo strtoupper(substr($nome_completo, 0, 1)); ?>
                 </span>
                 <img class="profile-upload-icon" src="../img/pasta.png" alt="Upload" style="display:block;position:absolute;width:32px;height:32px;object-fit:cover;cursor:pointer;opacity:0;transition:opacity 0.2s;top:29px;left:29px;z-index:2;" />
@@ -285,6 +289,10 @@ document.addEventListener('DOMContentLoaded', function() {
     pointer-events: none;
     opacity: 0.8;
     z-index: 10;
+}
+.profile-icon.has-image {
+    border: none !important;
+    background: none !important;
 }
 </style>
 <?php else: ?>
