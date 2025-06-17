@@ -295,10 +295,6 @@ if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
             z-index: 1000;
         }
 
-        /* img {
-        filter: hue-rotate(-210deg) brightness(1.2) saturate(1.5);
-        } */
-
         .heart-counter-navbar {
             position: absolute;
             top: -6px;
@@ -322,6 +318,50 @@ if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
 
         .heart-counter-navbar.oculto {
             display: none;
+        }
+
+        .modal-360 {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.95);
+            justify-content: center; align-items: center;
+        }
+        .modal-360.active { display: flex; }
+        .modal-360-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #img360 {
+            max-width: 100vw;
+            max-height: 80vh;
+            user-select: none;
+            background-color: #d9d9d9 !important;
+            border-radius: 12px;
+            box-shadow: 0 4px 32px #000a;
+        }
+        .modal-360-indicators {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+        }
+        .modal-360-indicators .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #fff3;
+            border: 1.5px solid #fff8;
+        }
+        .modal-360-indicators .dot.active {
+            background: #2f4eda;
+            border-color: #fff;
         }
     </style>
 </head>
@@ -943,7 +983,14 @@ if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
         </div>
     </div>
 
-    <script src="../js/veiculo-carrossel.js"></script>
+    <!-- Modal 360° -->
+    <div id="modal360" class="modal-360" style="display:none;">
+        <div class="modal-360-content">
+            <img id="img360" src="" alt="BMW 360°" draggable="false" />
+        </div>
+        <div class="modal-360-indicators" id="modal360Indicators"></div>
+    </div>
+        <script src="../js/veiculo-carrossel.js"></script>
     <script src="../js/only-one-selected.js"></script>
     <script src="../js/mostrar-mais.js"></script>
     <script src="../js/horario-detalhado.js"></script>
@@ -1080,6 +1127,204 @@ if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
                     });
             });
         }
+    </script>
+    <style>
+        .modal-360 {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.95);
+            justify-content: center; align-items: center;
+        }
+        .modal-360.active { display: flex; }
+        .modal-360-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #img360 {
+            max-width: 90vw;
+            max-height: 80vh;
+            user-select: none;
+            background: #222;
+            border-radius: 12px;
+            box-shadow: 0 4px 32px #000a;
+        }
+        .modal-360-indicators {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+        }
+        .modal-360-indicators .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #fff3;
+            border: 1.5px solid #fff8;
+        }
+        .modal-360-indicators .dot.active {
+            background: #2f4eda;
+            border-color: #fff;
+        }
+    </style>
+    <script>
+    // --- Script ISOLADO do 360° Modal (agora pega imagens até max-1 igual ao PHP original) ---
+    document.addEventListener('DOMContentLoaded', function() {
+        let imagens360 = [];
+        let idxAtual = 0;
+        let isDragging = false;
+        let startX = 0;
+        let lastIdx = 0;
+        let img360 = null;
+        let modal360 = null;
+        let indicators = null;
+        let dragAccum = 0;
+        const PIXELS_PER_FRAME =  15; // Quantidade de pixels para cada "frame" de arrasto
+
+        // Função para buscar as imagens da cor selecionada (igual carrossel, mas só até max-1)
+        function buscarImagens360(cor) {
+            const modeloSlug = '<?= $modelo_slug ?>';
+            const caminhoBase = `../img/modelos/cores/${modeloSlug}/${cor.toLowerCase()}/`;
+            const extensoes = ['webp', 'png', 'jpg', 'jpeg'];
+            const maxImagens = 12;
+            let imgs = [];
+            let carregadas = 0;
+            let totalValidas = 0;
+            let promises = [];
+            for (let i = 1; i <= maxImagens; i++) {
+                for (let ext of extensoes) {
+                    const url = caminhoBase + i + '.' + ext;
+                    promises.push(new Promise(resolve => {
+                        const testImg = new Image();
+                        testImg.onload = function() {
+                            resolve(url);
+                        };
+                        testImg.onerror = function() {
+                            resolve(null);
+                        };
+                        testImg.src = url;
+                    }));
+                }
+            }
+            // Só retorna as imagens válidas, e remove a última (imagens.length - 1)
+            return Promise.all(promises).then(results => {
+                let validas = results.filter(Boolean);
+                if (validas.length > 1) {
+                    validas = validas.slice(0, validas.length - 1);
+                }
+                return validas;
+            });
+        }
+
+        async function showModal360(startIdx = 0) {
+            // Pega a cor atualmente selecionada
+            const corCheckbox = document.querySelector('.color-checkbox:checked');
+            let cor = corCheckbox ? corCheckbox.getAttribute('data-cor') : '<?= $corPrincipal ?>';
+            imagens360 = await buscarImagens360(cor);
+            if (!imagens360.length) return;
+            idxAtual = startIdx;
+            modal360 = document.getElementById('modal360');
+            img360 = document.getElementById('img360');
+            indicators = document.getElementById('modal360Indicators');
+            modal360.classList.add('active');
+            modal360.style.display = 'flex';
+            updateImg360();
+            renderIndicators();
+        }
+        function closeModal360() {
+            document.getElementById('modal360').classList.remove('active');
+            document.getElementById('modal360').style.display = 'none';
+        }
+        function updateImg360() {
+            if (img360 && imagens360[idxAtual]) {
+                img360.src = imagens360[idxAtual];
+                updateIndicators();
+            }
+        }
+        function renderIndicators() {
+            if (!indicators) return;
+            indicators.innerHTML = '';
+            for (let i = 0; i < imagens360.length; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'dot' + (i === idxAtual ? ' active' : '');
+                indicators.appendChild(dot);
+            }
+        }
+        function updateIndicators() {
+            if (!indicators) return;
+            Array.from(indicators.children).forEach((dot, i) => {
+                dot.className = 'dot' + (i === idxAtual ? ' active' : '');
+            });
+        }
+        // Mouse/touch events
+        function onDragStart(e) {
+            isDragging = true;
+            startX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+            lastIdx = idxAtual;
+            dragAccum = 0;
+        }
+        function onDragMove(e) {
+            if (!isDragging) return;
+            const x = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+            const delta = x - startX;
+            dragAccum = delta;
+            if (Math.abs(dragAccum) >= PIXELS_PER_FRAME) {
+                let steps = Math.floor(dragAccum / PIXELS_PER_FRAME);
+                let novoIdx = (lastIdx - steps) % imagens360.length;
+                if (novoIdx < 0) novoIdx += imagens360.length;
+                if (novoIdx !== idxAtual) {
+                    idxAtual = novoIdx;
+                    updateImg360();
+                }
+            }
+        }
+        function onDragEnd() {
+            if (!isDragging) return;
+            lastIdx = idxAtual;
+            dragAccum = 0;
+            isDragging = false;
+        }
+        // Sempre reatribui o click na imagem principal (caso DOM mude)
+        function bindImagemPrincipalClick() {
+            var imgPrincipal = document.getElementById('imagem-principal');
+            if (imgPrincipal) {
+                imgPrincipal.removeEventListener('click', showModal360Handler);
+                imgPrincipal.addEventListener('click', showModal360Handler);
+            }
+        }
+        async function showModal360Handler(e) {
+            e.preventDefault();
+            await showModal360(0);
+        }
+        bindImagemPrincipalClick();
+        // Também reatribui após troca de cor/miniaturas
+        document.querySelectorAll('.color-checkbox').forEach(function(cb) {
+            cb.addEventListener('change', function() {
+                bindImagemPrincipalClick();
+            });
+        });
+        var closeBtn = document.getElementById('closeModal360');
+        if (closeBtn) closeBtn.addEventListener('click', closeModal360);
+        var modalEl = document.getElementById('modal360');
+        if (modalEl) {
+            modalEl.addEventListener('mousedown', onDragStart);
+            modalEl.addEventListener('mousemove', onDragMove);
+            modalEl.addEventListener('mouseup', onDragEnd);
+            modalEl.addEventListener('mouseleave', onDragEnd);
+            modalEl.addEventListener('touchstart', onDragStart);
+            modalEl.addEventListener('touchmove', onDragMove);
+            modalEl.addEventListener('touchend', onDragEnd);
+            modalEl.addEventListener('click', function(e) {
+                if (e.target === this) closeModal360();
+            });
+        }
+    });
     </script>
 </body>
 
