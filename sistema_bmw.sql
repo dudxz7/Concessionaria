@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 16/06/2025 às 11:06
+-- Tempo de geração: 17/06/2025 às 11:00
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -54,7 +54,7 @@ INSERT INTO `clientes` (`id`, `nome_completo`, `email`, `cpf`, `telefone`, `rg`,
 (1, 'a', 'a@gmail.com', '111.111.111-11', '(11) 11111-1122', '1111111111-1', 'FORTALEZA', 'CE', '11111111111', '$2y$10$qz4/R1dWGZ2XZiS8pJyUOunwuI6vWpJrhJFt3Lev36iOgEqiU9kg.', 0, 'Funcionario', 'Rua bem ali', '00000000001', 'img/perfis/perfil_1_1748854813.jpg', '2025-03-25 14:57:44'),
 (3, 'dudu', 'dudu@gmail.com', '111.111.111-12', '(11) 11111-1212', '1111111111-2', 'FORTALEZA', 'CE', '11111111112', '$2y$10$O8qhgRi8muvTFkbKBlvmfuA3UBaeSQTP/7ugvT2RBKQW47FnXzsJO', 0, 'Cliente', '', NULL, NULL, '2025-03-25 14:57:44'),
 (5, 'ana', 'analinda@gmail.com', '111.111.111-13', '(11) 11111-1113', '1111111111-3', 'SAO PAULO', 'SP', '11111111113', '$2y$10$u0m/mLqzNLsVbYLFcNEJCOdcbIVEPIr8bkWlqP0jnyHQYkAC.hBS6', 0, 'Cliente', '', NULL, NULL, '2025-03-25 14:57:44'),
-(8, 'Administrador', 'admin@gmail.com', '12345678910', '999999999', '111234567', 'Fortal', 'CE', '222123456', '$2y$10$Afu4U38UJS88pOf2KtkJ2.3Y9e0BTp11WYhPFADyKYl.2Cl4LF.Bu', 1, 'Admin', '', NULL, 'img/perfis/perfil_8_1748902477.jpg', '2025-03-25 14:57:44'),
+(8, 'Administrador', 'admin@gmail.com', '12345678910', '999999999', '111234567', 'Fortal', 'CE', '222123456', '$2y$10$Afu4U38UJS88pOf2KtkJ2.3Y9e0BTp11WYhPFADyKYl.2Cl4LF.Bu', 1, 'Admin', '', NULL, 'img/perfis/perfil_8_1750137288.jpg', '2025-03-25 14:57:44'),
 (10, 'Isabelly', 'mcqwwr@gmail.com', '111.111.111-14', '(11) 11111-1114', '1111111111-4', 'FORTALEZA', 'CE', '11111111114', '$2y$10$.XzfcmcxeXy64iSFw4psS.jTOt5u.3JRyiPPNs2hoJ3f85GxNeznG', 0, 'Cliente', '', NULL, NULL, '2025-03-25 14:57:44'),
 (11, 'Tati Zaqui', 'tati@gmail.com', '111.111.111-15', '(11) 11111-1115', '1111111111-5', 'FORTALEZA', 'CE', '11111111115', '$2y$10$80Gs.agwOSvLU0vIQYM/LOs64/3SmkZI8bhgjohCtqdslZepA9zWm', 0, 'Cliente', '', NULL, NULL, '2025-03-25 14:57:44'),
 (12, 'dudu ', 'd@gmail.com', '111.111.111-16', '(11) 11111-1116', '1111111111-6', 'PINDAMONHAGABAA', 'AC', '11111111116', '$2y$10$zldDKpzpBKpBXyTcG1cyEu2mk9TAd3DN7Tk4PxxQw2h0c2skTvCzO', 0, 'Cliente', '', NULL, 'img/perfis/perfil_12_1749994794.jpg', '2025-03-25 14:57:44'),
@@ -78,7 +78,20 @@ INSERT INTO `clientes` (`id`, `nome_completo`, `email`, `cpf`, `telefone`, `rg`,
 (47, 'Carlos Souza', 'carlos.souza@email.com', '11122233344', '(31) 98888-7777', '1122334', 'Belo Horizonte', 'MG', '11223344556', '$2y$10$hashfunc1', 0, 'Funcionario', 'Rua das Flores, 100', '12345678901', NULL, '2025-06-16 05:41:29'),
 (48, 'Duda araújo', 'dudinhaaa@gmail.com', '747.567.439-18', '(31) 51113-4564', '1444444231-2', 'BROOKLYN', 'SP', '11133455665', '$2y$10$K67KgG2AG0AdLTJbSu0liOYm/G4orJ2KR6IA5BMRdp0tFr5QnmoXK', 0, 'Funcionario', 'Rua de cereja, 1100', '91749183811', NULL, '2025-06-16 05:44:01'),
 (49, 'Ana Maria braga', 'anamaria@gmail.com', '176.461.837-61', '(77) 34517-3454', '9991654536-7', 'SAO PAULO', 'SP', '99341556628', '$2y$10$Bwkaf.my9d2N44.B72JujeGbs4.Ex8zkQ8XpsBamwd0Z7XBBcCfzu', 0, 'Cliente', '', '', NULL, '2025-06-16 05:52:17'),
-(50, 'louro jose', 'louro@gmai.com', '773.554.355-11', '(55) 35547-5565', '7766655674-4', 'FORTALEZA', 'CE', '19427492555', '$2y$10$/jGhekwXnCfsXiRVMIsw4ujIZnXXaunUBOrw5CyKjdzSGN89GxtQ2', 0, 'Cliente', '', '', NULL, '2025-06-16 05:59:26');
+(50, 'louro jose', 'louro@gmai.com', '773.554.355-11', '(55) 35547-5565', '7766655674-4', 'FORTALEZA', 'CE', '19427492555', '$2y$10$/jGhekwXnCfsXiRVMIsw4ujIZnXXaunUBOrw5CyKjdzSGN89GxtQ2', 0, 'Cliente', '', '', NULL, '2025-06-16 05:59:26'),
+(51, 'Elinardy', 'elinardy@gmail.com', '998.877.665-54', '(88) 95353-5321', '1312421224-2', 'FORTALEZA', 'CE', '86423455543', '$2y$10$1CJ3uL6Eno/xNZrBbBuRb.bAbXuu0/5WYun1WDtrmTv4.WFgetxYu', 0, 'Cliente', '', '', NULL, '2025-06-16 22:17:19'),
+(52, 'Margot Robbie', 'margot@gmail.com', '112.347.313-15', '(11) 15252-1145', '1699153778-3', 'WASHINTON DC', 'SP', '99999144124', '$2y$10$/2WG8X0fNQYjcVhs26Gskez1lALS5YQanluW30XF2tIakrjJNvC1W', 0, 'Funcionario', 'Rua muito top aqui', '88776611314', 'img/perfis/perfil_52_1750125789.jpg', '2025-06-16 22:57:14'),
+(53, 'anakin', 'anakinisgone@gmail.com', '198.176.378-17', '(71) 77771-1132', '7766559198-2', 'FORTALEZA', 'CE', '24252525256', '$2y$10$k3L6.Dw2P8F9o9YzTdzGn.88qYA3hXUWv0G/4fMATDUOn3txxoTZa', 0, 'Funcionario', 'Rua onde nao existe lei 99', '99776666666', NULL, '2025-06-16 23:11:06'),
+(54, 'Scarface', 'scar@gmail.com', '717.461.895-71', '(11) 16666-6666', '1618883788-3', 'FORTALEZA', 'CE', '11444286858', '$2y$10$yKInNED6pZy.xtc7LKlSGul.e7gyV24mcgTVnbcWyu2pkngLlXIO2', 0, 'Cliente', '', '', NULL, '2025-06-16 23:15:01'),
+(55, 'Scarface', 'scar2@gmail.com', '063.581.649-17', '(99) 90016-3617', '8651918947-1', 'FORTALEZA', 'CE', '00417600174', '$2y$10$j.R3AGIDnHhz9yU/CnlXuuBN.gcMfOT9PYmc5E7Fvtp7L.R0T3Fva', 0, 'Funcionario', 'Rua Itália 1917', '81764891749', NULL, '2025-06-16 23:20:39'),
+(56, 'Clarinha =)', 'mairaescura@gmail.com', '717.437.478-13', '(10) 00414-7184', '1100000517-3', 'BELEM', 'PA', '10041781014', '$2y$10$1hveWMBik7bNpZZBwZHmTOS0hV/D2ig1lLeU9CfwxhQDL.YS588Iy', 0, 'Cliente', '', '', NULL, '2025-06-16 23:50:34'),
+(57, 'teste', 'ttt1@gmail.com', '001.437.818-38', '(10) 01473-9173', '1881839103-0', 'FORTALEZA', 'CE', '17361738139', '$2y$10$Zlvp4MwtQMtDtO.Ixo4p..e9v1Q.Gxv6VmXUxRkPU6hfHFadN/K8G', 0, 'Cliente', '', '', NULL, '2025-06-17 01:17:11'),
+(58, 'teste', 'teste2@gmail.com', '104.719.317-68', '(74) 93719-7130', '8317893816-3', 'FORTALEZA', 'CE', '', '$2y$10$8aOM3kVdVaIaV2u2FRfXFeYTlgmXTNK1FlOc6af2CR6MJCXt7f42q', 0, 'Cliente', '', '', NULL, '2025-06-17 01:20:17'),
+(59, 'teste ', 'teste3@gmail.com', '818.300.371-04', '(11) 73927-6801', '1831738193-9', 'FORTALEZA', 'CE', '18387818381', '$2y$10$x.oH0.9GQY9QPM1pC0RWkeLyjQHPk3UQRQbRxFpmZU2YFmTdG5OUW', 0, 'Funcionario', 'Rua bem ali no escuro 170', '91889001376', NULL, '2025-06-17 01:22:11'),
+(60, 'teste', 'teste4@gmail.com', '173.718.909-99', '(11) 94714-8184', '4167481476-1', 'FORTALEZA', 'CE', '71737173717', '$2y$10$1GZZNjXgvNRaaaKBxDCGu.R5GKXiArhMyPwXZG1nEXe6jrCL7puBa', 0, 'Cliente', '', '', NULL, '2025-06-17 01:26:27'),
+(61, 'teste', 'teste5@gmail.com', '111.117.371-38', '(11) 74318-3813', '1837163183-8', 'FORTALEZA', 'CE', '11173718381', '$2y$10$Ao1I8pladqjl.zkcKBJXye9U3h3KjBRMPTRngvly5ERib9LGLy9/i', 0, 'Cliente', '', '', NULL, '2025-06-17 01:27:40'),
+(62, 'teste', 'teste6@gmail.com', '017.431.938-71', '(11) 74381-3819', '5128191991-9', 'FORTALEZA', 'CE', '00176300317', '$2y$10$geGnMfjIjptkj2RF0fjs9ekbrYa0ZV51TOqHoAreDMa.HgLwnBTMO', 0, 'Cliente', '', '', NULL, '2025-06-17 01:28:45'),
+(63, 'teste', 'teste7@gmail.com', '177.138.183-91', '(85) 91736-1381', '1301948104-9', 'FORTALEZA', 'CE', '17361831938', '$2y$10$0qbygKoeXAuBSncoZZOI1.sCKxzTDBs51jBRkFaMpaPmpFkr28gwO', 0, 'Cliente', '', '', NULL, '2025-06-17 01:37:56');
 
 -- --------------------------------------------------------
 
@@ -227,7 +240,11 @@ CREATE TABLE `funcionarios` (
 
 INSERT INTO `funcionarios` (`id`, `nome_completo`, `email`, `cpf`, `rg`, `telefone`, `pis`, `endereco`, `cidade`, `estado`) VALUES
 (1, 'a', 'a@gmail.com', '111.111.111', '1111111111-1', '(11) 11111-1111', '00000000001', 'Rua Fulano de Tal, numero 10', 'XIQUE XIQUE ', 'SP'),
-(2, 'Duda araújo', 'dudinhaaa@gmail.com', '747.567.439', '1444444231-2', '(31) 51113-4564', '91749183818', 'Rua de cereja, 1100', 'BROOKLYN', 'SP');
+(2, 'Duda araújo', 'dudinhaaa@gmail.com', '747.567.439', '1444444231-2', '(31) 51113-4564', '91749183818', 'Rua de cereja, 1100', 'BROOKLYN', 'SP'),
+(3, 'Margot Robbie', 'margot@gmail.com', '112.347.313', '1699153778-3', '(11) 15252-1145', '88776611314', 'Rua muito top aqui', 'WASHINTON DC', 'SP'),
+(4, 'anakin', 'anakinisgone@gmail.com', '198.176.378', '7766559198-2', '(71) 77771-1132', '99776666666', 'Rua onde nao existe lei 99', 'FORTALEZA', 'CE'),
+(5, 'Scarface', 'scar2@gmail.com', '063.581.649', '8651918947-1', '(99) 90016-3617', '81764891749', 'Rua Itália 1917', 'FORTALEZA', 'CE'),
+(6, 'teste ', 'teste3@gmail.com', '818.300.371', '1831738193-9', '(11) 73927-6801', '91889001376', 'Rua bem ali no escuro 101', 'FORTALEZA', 'CE');
 
 -- --------------------------------------------------------
 
@@ -811,7 +828,9 @@ CREATE TABLE `pagamentos_pix` (
 INSERT INTO `pagamentos_pix` (`id`, `usuario_id`, `veiculo_id`, `cor`, `criado_em`, `expira_em`, `status`, `valor`, `observacao`, `forma_pagamento`) VALUES
 (15, 34, 1, 'Azul', '2025-06-16 04:08:54', '2025-06-16 04:23:54', 'aprovado', 320950.00, NULL, 'pix'),
 (16, 34, 27, 'Azul-bebe', '2025-06-16 04:17:12', '2025-06-16 04:32:12', 'aprovado', 726950.00, NULL, 'pix'),
-(17, 34, 6, 'Azul', '2025-06-16 04:29:13', '2025-06-16 04:44:13', 'aprovado', 503950.00, NULL, 'pix');
+(17, 34, 6, 'Azul', '2025-06-16 04:29:13', '2025-06-16 04:44:13', 'aprovado', 503950.00, NULL, 'pix'),
+(18, 12, 27, 'Azul-bebe', '2025-06-17 02:50:10', '2025-06-17 03:05:10', 'aprovado', 726950.00, NULL, 'pix'),
+(19, 12, 16, 'Laranja', '2025-06-17 02:55:14', '2025-06-17 03:10:14', 'aprovado', 649950.00, NULL, 'pix');
 
 -- --------------------------------------------------------
 
@@ -999,7 +1018,7 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT de tabela `detalhes_modelos`
@@ -1023,7 +1042,7 @@ ALTER TABLE `favoritos`
 -- AUTO_INCREMENT de tabela `funcionarios`
 --
 ALTER TABLE `funcionarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `imagens_secundarias`
@@ -1041,7 +1060,7 @@ ALTER TABLE `modelos`
 -- AUTO_INCREMENT de tabela `pagamentos_pix`
 --
 ALTER TABLE `pagamentos_pix`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de tabela `pagamento_boleto`
