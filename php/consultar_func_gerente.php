@@ -123,7 +123,7 @@ $conn->close();
         
         <h2 class="btn-shine">Consulta de Funcionários</h2>
         
-        <a href="cadastro_admin.php" class="btn-novo-cliente">
+        <a href="cadastro_admin.php?redir=3" class="btn-novo-cliente">
             <img src="../img/adicionar-usuario.png" alt="Cadastrar Funcionário" class="img-btn">
             Cadastrar Funcionário
         </a>

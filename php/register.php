@@ -88,12 +88,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             $stmt_check_func->close();
         }
-        // Redirecionamento correto para origem admin
-        if (isset($_POST['origem']) && $_POST['origem'] === 'admin') {
-            header("Location: consultar_func_gerente.php");
-            exit();
+        // Redirecionamento dinâmico por parâmetro
+        $redir = $_POST['redir'] ?? $_GET['redir'] ?? null;
+        if ($redir) {
+            switch ($redir) {
+                case '2':
+                    header("Location: consultar_clientes.php");
+                    exit();
+                case '3':
+                    header("Location: consultar_func_gerente.php");
+                    exit();
+                default:
+                    header("Location: ../index.php");
+                    exit();
+            }
         } else {
-            header("Location: ../index.php");
+            header("Location: ../login.html");
             exit();
         }
     } else {
@@ -105,6 +115,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $stmt->close();
+}
+// Se acessar via GET, redireciona para o formulário correto conforme redir
+elseif (isset($_GET['redir'])) {
+    switch ($_GET['redir']) {
+        case '2':
+            header("Location: cadastro_admin.php?redir=2"); // ou outro formulário de cadastro de cliente
+            exit();
+        case '3':
+            header("Location: cadastro_admin.php?redir=3"); // ou outro formulário de cadastro de funcionário
+            exit();
+        default:
+            header("Location: ../index.php");
+            exit();
+    }
+} else {
+    header("Location: ../login.html");
+    exit();
 }
 
 $conn->close();

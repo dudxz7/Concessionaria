@@ -131,7 +131,7 @@ $conn->close();
 
             <h2 class="btn-shine">Consulta de Clientes</h2>
 
-            <a href="../registro.html" class="btn-novo-cliente">
+            <a href="../registro.html?redir=2" class="btn-novo-cliente">
                 <img src="../img/adicionar-usuario.png" alt="Cadastrar Cliente" class="img-btn">
                 Cadastrar Cliente Novo
             </a>
