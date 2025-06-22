@@ -44,7 +44,7 @@ $limite = 10;
 $pagina_atual = isset($_GET['pagina']) ? (int) $_GET['pagina'] : 1;
 $offset = ($pagina_atual - 1) * $limite;
 
-// Query base com JOIN para contar o estoque
+// Query base para mostrar quantos veículos cadastrados existem por modelo
 $sql_base = "
     SELECT 
         modelos.id AS modelo_id, 
@@ -53,7 +53,7 @@ $sql_base = "
         modelos.ano, 
         modelos.preco, 
         modelos.cor, 
-        COUNT(veiculos.id) AS estoque
+        COUNT(CASE WHEN veiculos.status = 'disponivel' THEN 1 END) AS quantidade_veiculos
     FROM modelos
     LEFT JOIN veiculos ON veiculos.modelo_id = modelos.id
     WHERE 1=1
@@ -173,7 +173,7 @@ $result = $stmt->get_result();
                         <th>Ano</th>
                         <th>Preço</th>
                         <th>Cor</th>
-                        <th>Estoque</th> <!-- Coluna para Estoque -->
+                        <th>Estoque</th> <!-- Coluna para quantidade de veículos -->
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -186,7 +186,7 @@ $result = $stmt->get_result();
                             <td><?php echo $row['ano']; ?></td>
                             <td>R$ <?php echo number_format($row['preco'], 2, ',', '.'); ?></td>
                             <td><?php echo $row['cor']; ?></td>
-                            <td><?php echo $row['estoque']; ?></td> <!-- Exibe o estoque -->
+                            <td><?php echo $row['quantidade_veiculos']; ?></td> <!-- Exibe a quantidade de veículos -->
                             <td>
                                 <a class="a-btn" href="editar_modelo.php?id=<?php echo $row['modelo_id']; ?>">
                                     <img src="../img/editar.png" alt="Editar" class="btn-editar">
@@ -222,5 +222,4 @@ $result = $stmt->get_result();
         </div>
     </div>
 </body>
-
 </html>

@@ -1,6 +1,10 @@
 <?php
 session_start();
 include('conexao.php');
+// Atualiza boletos expirados
+$conn->query("UPDATE pagamento_boleto SET status = 'expirado' WHERE status = 'pendente' AND data_expiracao < NOW()");
+// Atualiza pix expirados
+$conn->query("UPDATE pagamentos_pix SET status = 'expirado' WHERE status = 'pendente' AND expira_em < NOW()");
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['usuarioNome'])) {
@@ -50,10 +54,12 @@ $offset = ($pagina_atual - 1) * $limite;
 // Isso aqui que junta as tabelas de pagamentos Pix e Boleto ( PHP EU TE ODEIO COM MT FORÇA D VDD)
 $sql_union = [];
 if ($tipo_pagamento_filtro === '' || $tipo_pagamento_filtro === 'Pix') {
-    $sql_union[] = "SELECT 'Pix' AS tipo_pagamento, p.id, p.usuario_id, COALESCE(c.nome_completo, CONCAT('ID ', p.usuario_id)) AS usuario_nome, p.veiculo_id, COALESCE(e.quantidade, 0) AS estoque, p.cor, p.valor, p.status, p.expira_em AS data_pagamento FROM pagamentos_pix p LEFT JOIN clientes c ON c.id = p.usuario_id LEFT JOIN estoque e ON e.veiculo_id = p.veiculo_id";
+    $sql_union[] = "SELECT 'Pix' AS tipo_pagamento, p.id, p.usuario_id, COALESCE(c.nome_completo, CONCAT('ID ', p.usuario_id)) AS usuario_nome, p.veiculo_id,
+    p.cor, p.valor, p.status, p.expira_em AS data_pagamento FROM pagamentos_pix p LEFT JOIN clientes c ON c.id = p.usuario_id";
 }
 if ($tipo_pagamento_filtro === '' || $tipo_pagamento_filtro === 'Boleto') {
-    $sql_union[] = "SELECT 'Boleto' AS tipo_pagamento, b.id, b.usuario_id, COALESCE(c.nome_completo, CONCAT('ID ', b.usuario_id)) AS usuario_nome, b.veiculo_id, COALESCE(e.quantidade, 0) AS estoque, b.cor, b.valor, b.status, b.data_expiracao AS data_pagamento FROM pagamento_boleto b LEFT JOIN clientes c ON c.id = b.usuario_id LEFT JOIN estoque e ON e.veiculo_id = b.veiculo_id";
+    $sql_union[] = "SELECT 'Boleto' AS tipo_pagamento, b.id, b.usuario_id, COALESCE(c.nome_completo, CONCAT('ID ', b.usuario_id)) AS usuario_nome, b.veiculo_id,
+    b.cor, b.valor, b.status, b.data_expiracao AS data_pagamento FROM pagamento_boleto b LEFT JOIN clientes c ON c.id = b.usuario_id";
 }
 $sql_base = implode(" UNION ALL ", $sql_union);
 
@@ -80,16 +86,16 @@ if (!empty($where)) {
 // Ordenação
 switch ($ordenar) {
     case 'id_desc':
-        $sql_base .= " ORDER BY id DESC";
+        $sql_base .= " ORDER BY data_pagamento DESC, id DESC";
         break;
     case 'data_asc':
-        $sql_base .= " ORDER BY data_pagamento ASC";
+        $sql_base .= " ORDER BY data_pagamento ASC, id ASC";
         break;
     case 'data_desc':
-        $sql_base .= " ORDER BY data_pagamento DESC";
+        $sql_base .= " ORDER BY data_pagamento DESC, id DESC";
         break;
     default:
-        $sql_base .= " ORDER BY id ASC";
+        $sql_base .= " ORDER BY data_pagamento ASC, id ASC";
 }
 
 // Consulta total de resultados
@@ -182,6 +188,10 @@ $result = $stmt->get_result();
         /* Amarelo para pendente */
         .toggle-switch.pendente .slider {
             background-color: #ffc107 !important;
+        }
+
+        .toggle-switch.expirado .slider {
+            background-color:rgb(121, 121, 121) !important;
         }
 
         .toggle-switch input:checked+.slider:before {
@@ -296,7 +306,6 @@ $result = $stmt->get_result();
                         <th>Tipo</th>
                         <th>Usuário</th>
                         <th>Veículo</th>
-                        <th>Estoque</th>
                         <th>Cor</th>
                         <th>Valor</th>
                         <th>Status</th>
@@ -305,35 +314,45 @@ $result = $stmt->get_result();
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while ($row = $result->fetch_assoc()): ?>
-                        <?php
+                    <?php 
+                    $contador = 1 + $offset;
+                    $agora = date('Y-m-d H:i:s');
+                    while ($row = $result->fetch_assoc()) {
                         $toggleClass = '';
-                        if ($row['status'] === 'pendente') {
+                        $toggleDisabled = '';
+                        $status = $row['status'];
+                        $data_pagamento = $row['data_pagamento'];
+                        // Só desabilita o toggle se status for 'expirado'
+                        if ($status === 'pendente') {
                             $toggleClass = 'pendente';
+                        } else if ($status === 'expirado') {
+                            $toggleClass = 'expirado';
+                            $toggleDisabled = 'disabled';
+                        } else if ($status === 'recusado') {
+                            $toggleClass = 'recusado';
                         }
-                        ?>
+                    ?>
                         <tr>
-                            <td><?php echo $row['id']; ?></td>
+                            <td><?php echo $contador++; ?></td>
                             <td><?php echo $row['tipo_pagamento']; ?></td>
                             <td><?php echo htmlspecialchars($row['usuario_nome']); ?></td>
                             <td><?php echo $row['veiculo_id']; ?></td>
-                            <td><?php echo $row['estoque']; ?></td>
                             <td><?php echo $row['cor']; ?></td>
                             <td>R$ <?php echo number_format($row['valor'], 2, ',', '.'); ?></td>
                             <td class="status-label" data-id="<?php echo $row['id']; ?>"
                                 data-tipo="<?php echo $row['tipo_pagamento']; ?>">
-                                <?php echo $row['status']; ?>
+                                <?php echo $status; ?>
                             </td>
                             <td><?php echo $row['data_pagamento']; ?></td>
                             <td>
                                 <label class="toggle-switch <?php echo $toggleClass; ?>">
                                     <input type="checkbox" class="toggle-aprovar" data-id="<?php echo $row['id']; ?>"
-                                        data-tipo="<?php echo $row['tipo_pagamento']; ?>" <?php echo ($row['status'] === 'aprovado') ? 'checked' : ''; ?> />
+                                        data-tipo="<?php echo $row['tipo_pagamento']; ?>" <?php echo ($row['status'] === 'aprovado') ? 'checked' : ''; ?> <?php echo $toggleDisabled; ?> />
                                     <span class="slider"></span>
                                 </label>
                             </td>
                         </tr>
-                    <?php endwhile; ?>
+                    <?php } ?>
                 </tbody>
             </table>
             <div class="paginacao">
@@ -379,6 +398,9 @@ $result = $stmt->get_result();
                 var status = checked ? 'aprovado' : 'recusado';
                 var tdStatus = this.closest('tr').querySelector('.status-label');
                 var label = this.closest('.toggle-switch');
+                var toggleInput = this;
+                // Desabilita o toggle durante a requisição
+                toggleInput.disabled = true;
                 fetch('atualizar_status_venda.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -386,25 +408,31 @@ $result = $stmt->get_result();
                 })
                     .then(response => response.json())
                     .then(data => {
-                        if (data.success) {
-                            tdStatus.textContent = status;
-                            label.classList.remove('pendente');
-                            // Atualiza o valor do estoque na tabela automaticamente
-                            var tdEstoque = this.closest('tr').querySelector('td:nth-child(5)');
-                            var novoEstoque = data.estoque !== undefined ? data.estoque : tdEstoque.textContent;
-                            tdEstoque.textContent = novoEstoque;
-                        } else {
-                            alert('Erro ao atualizar status!');
-                            this.checked = !checked;
-                        }
+                        // Recarrega a página após a resposta, independente de sucesso ou erro
+                        location.reload();
                     })
                     .catch(() => {
-                        alert('Erro ao atualizar status!');
-                        this.checked = !checked;
+                        // Também recarrega a página em caso de erro
+                        location.reload();
                     });
             });
         });
+        // Ao carregar, desabilita toggles de vendas expiradas
+        document.querySelectorAll('.toggle-aprovar').forEach(function(toggle) {
+            var tr = toggle.closest('tr');
+            var tdStatus = tr.querySelector('.status-label');
+            var label = tr.querySelector('.toggle-switch');
+            if (tdStatus.textContent.trim() === 'recusado') {
+                label.classList.add('recusado');
+            }
+            if (tdStatus.textContent.trim() === 'expirado') {
+                toggle.disabled = true;
+                label.classList.add('expirado');
+            } else if (tdStatus.textContent.trim() === 'pendente') {
+                toggle.disabled = false;
+                label.classList.add('pendente');
+            }
+        });
     </script>
 </body>
-
 </html>

@@ -14,7 +14,7 @@ if ($usuarioLogado && isset($_SESSION['usuarioNome'])) {
 // Verificar se é admin
 $linkPerfil = '../perfil.php';
 if ($usuarioLogado && isset($_SESSION['usuarioAdmin']) && $_SESSION['usuarioAdmin'] == 1) {
-    $linkPerfil = 'php/admin_dashboard.php';
+    $linkPerfil = 'admin_dashboard.php';
 }
 
 // Mapeamento das capitais
@@ -272,6 +272,40 @@ if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
         }
     }
 }
+
+// Buscar o primeiro veículo disponível (em estoque) para o modelo exibido
+$veiculo_id_disponivel = null;
+// Busca a quantidade de veículos disponíveis para o modelo
+$sqlEstoque = "SELECT COUNT(*) FROM veiculos WHERE modelo_id = ? AND (status = 'disponivel' OR status IS NULL)";
+$stmtEstoque = $conn->prepare($sqlEstoque);
+$stmtEstoque->bind_param("i", $id_modelo);
+$stmtEstoque->execute();
+$stmtEstoque->bind_result($quantidadeEstoque);
+$stmtEstoque->fetch();
+$stmtEstoque->close();
+
+if (!empty($quantidadeEstoque) && $quantidadeEstoque > 0) {
+    // Se há estoque, pega o primeiro veículo disponível desse modelo
+    $sqlVeiculo = "SELECT id FROM veiculos WHERE modelo_id = ? AND (status = 'disponivel' OR status IS NULL) LIMIT 1";
+    $stmtVeiculo = $conn->prepare($sqlVeiculo);
+    $stmtVeiculo->bind_param("i", $id_modelo);
+    $stmtVeiculo->execute();
+    $stmtVeiculo->bind_result($veiculo_id_disponivel);
+    $stmtVeiculo->fetch();
+    $stmtVeiculo->close();
+}
+// Se não houver veículo disponível, pega o primeiro do modelo (pode ser null)
+if (!$veiculo_id_disponivel) {
+    $sqlVeiculo = "SELECT id FROM veiculos WHERE modelo_id = ? LIMIT 1";
+    $stmtVeiculo = $conn->prepare($sqlVeiculo);
+    $stmtVeiculo->bind_param("i", $id_modelo);
+    $stmtVeiculo->execute();
+    $stmtVeiculo->bind_result($veiculo_id_disponivel);
+    $stmtVeiculo->fetch();
+    $stmtVeiculo->close();
+}
+
+$botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $veiculo_id_disponivel > 0);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -419,7 +453,7 @@ if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
                     <a href="<?php echo $linkPerfil; ?>"><span><?php echo htmlspecialchars($nomeUsuario); ?></span></a>
                 <?php else: ?>
                     <!-- Se não estiver logado, mostra o link para login -->
-                    <a href="login.html">
+                    <a href="../login.html">
                         <img src="../img/navbar/usercomcontorno.png" alt="Login">
                     </a>
                     <a href="../login.html"><span>Entrar</span></a>
@@ -518,7 +552,11 @@ if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
                     <a href="#" class="payment-link" id="abrirModal">Formas de pagamento</a>
                 </div>
 
-                <button class="buy-button" id="btn-comprar" data-id="<?= $id_modelo ?>">Compre agora</button>
+                <?php if ($botaoComprarHabilitado): ?>
+                <button class="buy-button" id="btn-comprar" data-id="<?= (int)$veiculo_id_disponivel ?>" data-modelo-id="<?= (int)$id_modelo ?>">Compre agora</button>
+                <?php else: ?>
+                <button class="buy-button" id="btn-comprar" disabled style="opacity:0.6;cursor:not-allowed;">Indisponível</button>
+                <?php endif; ?>
                 <button class="visit-button">Agendar visita</button>
             </aside>
 
@@ -734,7 +772,7 @@ if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
                             class="accessory-icon">
                         <p>Rodas de liga leve</p>
                     </div>
-                    <div class="accessory-item">
+                    <div class="
                         <img src="../img/acessorios-veiculos/sensor-de-estacionamento.svg"
                             alt="Sensor de estacionamento" class="accessory-icon">
                         <p>Sensor de estacionamento</p>
@@ -1102,29 +1140,36 @@ if ($usuarioLogado && isset($_SESSION['usuarioId'])) {
         const btnComprar = document.getElementById('btn-comprar');
         if (btnComprar) {
             btnComprar.addEventListener('click', function () {
-                // Pega a cor selecionada (primeiro checkbox marcado)
                 const corSelecionada = document.querySelector('.color-checkbox:checked');
                 const cor = corSelecionada ? encodeURIComponent(corSelecionada.value) : '';
-                const id = btnComprar.getAttribute('data-id');
+                const modeloId = btnComprar.getAttribute('data-modelo-id'); // Corrigido para pegar o modelo_id
                 if (!cor) {
                     alert('Selecione uma cor antes de comprar!');
                     return;
                 }
-                // Verifica se já existe sessão Pix válida para este veículo/cor
-                fetch('verifica_pix_session.php?id=' + encodeURIComponent(id) + '&cor=' + cor)
-                    .then(response => response.json())
-                    .then(function(data) {
-                        if (data && data.pix_valido) {
-                            window.location.href = `realizar_pagamento_pix.php?id=${id}&cor=${cor}`;
+                // Verificação de estoque via AJAX
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', 'verifica_estoque.php?id=' + encodeURIComponent(modeloId), true); // Corrigido para enviar modelo_id
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            try {
+                                var data = JSON.parse(xhr.responseText);
+                                if (data && data.disponivel) {
+                                    window.location.href = 'pagamento.php?id=' + encodeURIComponent(modeloId) + '&cor=' + cor;
+                                } else {
+                                    alert('Este veículo está sem estoque no momento.');
+                                }
+                            } catch (e) {
+                                alert('Erro ao processar resposta do servidor.');
+                                console.error('Erro ao processar resposta:', xhr.responseText, e);
+                            }
                         } else {
-                            // Sempre inclui &redir=1 ao redirecionar para pagamento.php
-                            window.location.href = `pagamento.php?id=${id}&cor=${cor}&redir=1`;
+                            alert('Erro ao verificar estoque. Tente novamente.');
                         }
-                    })
-                    .catch(function() {
-                        // fallback: vai para pagamento normal, sempre com &redir=1
-                        window.location.href = `pagamento.php?id=${id}&cor=${cor}&redir=1`;
-                    });
+                    }
+                };
+                xhr.send();
             });
         }
     </script>

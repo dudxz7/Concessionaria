@@ -1,0 +1,110 @@
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', Arial, sans-serif;
+    background: #000;
+    overflow: hidden;
+}
+
+.logout-container {
+    border-radius: 60px;
+    padding: 100px 100px 80px 100px;
+    text-align: center;
+    color: #fff;
+    min-width: 600px;
+    max-width: 98vw;
+    font-size: 1.45rem;
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 0.7s;
+    backdrop-filter: blur(8px) saturate(1.1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(60px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.bmw-cyber-loader {
+    width: 220px;
+    height: 220px;
+    margin: 0 auto 48px auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bmw-cyber-loader svg {
+    width: 220px;
+    height: 220px;
+    display: block;
+}
+
+.bmw-cyber-loader .bmw-logo-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 32px #00b4d8cc;
+}
+
+.bmw-cyber-loader .bmw-logo-center img {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+}
+
+.logout-redirect {
+    font-size: 2.1rem;
+    color: #b3c6ff;
+    margin-top: 48px;
+    text-shadow: 0 2px 8px #000a;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 900px) {
+    .logout-container {
+        min-width: 0;
+        padding: 32px 2vw 32px 2vw;
+        font-size: 1.1rem;
+    }
+
+    .bmw-cyber-loader,
+    .bmw-cyber-loader svg {
+        width: 120px;
+        height: 120px;
+    }
+
+    .bmw-logo-center {
+        width: 54px;
+        height: 54px;
+    }
+
+    .bmw-logo-center img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .logout-redirect {
+        font-size: 1.25rem;
+        margin-top: 32px;
+    }
+}

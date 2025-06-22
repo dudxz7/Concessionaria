@@ -43,7 +43,7 @@ if ($filtro) {
     $sql = "SELECT veiculos.id, modelos.modelo, modelos.fabricante, modelos.ano, modelos.preco, veiculos.numero_chassi 
             FROM veiculos 
             JOIN modelos ON veiculos.modelo_id = modelos.id 
-            WHERE modelos.modelo LIKE ? OR veiculos.numero_chassi LIKE ?
+            WHERE (modelos.modelo LIKE ? OR veiculos.numero_chassi LIKE ?) AND veiculos.status = 'disponivel'
             ORDER BY veiculos.id ASC
             LIMIT ?, ?";
     $stmt = $conn->prepare($sql);
@@ -53,7 +53,7 @@ if ($filtro) {
     $sql = "SELECT veiculos.id, modelos.modelo, modelos.fabricante, modelos.ano, modelos.preco, veiculos.numero_chassi 
             FROM veiculos 
             JOIN modelos ON veiculos.modelo_id = modelos.id 
-            WHERE modelos.modelo LIKE ?
+            WHERE modelos.modelo LIKE ? AND veiculos.status = 'disponivel'
             ORDER BY veiculos.id ASC
             LIMIT ?, ?";
     $stmt = $conn->prepare($sql);
@@ -63,6 +63,7 @@ if ($filtro) {
     $sql = "SELECT veiculos.id, modelos.modelo, modelos.fabricante, modelos.ano, modelos.preco, veiculos.numero_chassi 
             FROM veiculos 
             JOIN modelos ON veiculos.modelo_id = modelos.id 
+            WHERE veiculos.status = 'disponivel'
             ORDER BY veiculos.id ASC
             LIMIT ?, ?";
     $stmt = $conn->prepare($sql);
@@ -78,18 +79,18 @@ if ($filtro) {
     $sql_total = "SELECT COUNT(*) as total 
                 FROM veiculos 
                 JOIN modelos ON veiculos.modelo_id = modelos.id 
-                WHERE modelos.modelo LIKE ? OR veiculos.numero_chassi LIKE ?";
+                WHERE (modelos.modelo LIKE ? OR veiculos.numero_chassi LIKE ?) AND veiculos.status = 'disponivel'";
     $stmt_total = $conn->prepare($sql_total);
     $stmt_total->bind_param("ss", $param, $param);
 } elseif ($letra_filtro) {
     $sql_total = "SELECT COUNT(*) as total 
                 FROM veiculos 
                 JOIN modelos ON veiculos.modelo_id = modelos.id 
-                WHERE modelos.modelo LIKE ?";
+                WHERE modelos.modelo LIKE ? AND veiculos.status = 'disponivel'";
     $stmt_total = $conn->prepare($sql_total);
     $stmt_total->bind_param("s", $param);
 } else {
-    $sql_total = "SELECT COUNT(*) as total FROM veiculos";
+    $sql_total = "SELECT COUNT(*) as total FROM veiculos WHERE status = 'disponivel'";
     $stmt_total = $conn->prepare($sql_total);
 }
 $stmt_total->execute();

@@ -109,6 +109,23 @@ if ($modelo_id > 0 && $cor_param && trim($cor_param) !== '' && $usuarioId && $re
     }
 }
 
+// --- BLOQUEIO DE ACESSO SE VEÍCULO SEM ESTOQUE ---
+function modeloTemEstoque($conn, $modelo_id) {
+    $sql = "SELECT 1 FROM estoque WHERE modelo_id = ? AND quantidade > 0 LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $modelo_id);
+    $stmt->execute();
+    $stmt->store_result();
+    $tem = $stmt->num_rows > 0;
+    $stmt->close();
+    return $tem;
+}
+
+if ($modelo_id > 0 && !modeloTemEstoque($conn, $modelo_id)) {
+    header('Location: pagina_veiculo.php?id=' . $modelo_id);
+    exit;
+}
+
 $sql = "
 SELECT 
     mo.modelo, 

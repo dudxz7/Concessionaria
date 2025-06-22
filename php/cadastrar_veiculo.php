@@ -45,15 +45,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $update_stmt->bind_param("si", $chassi_final, $veiculo_id);
             $update_stmt->execute();
             $update_stmt->close();
-
-            // Insere o estoque (1 por veículo individual)
-            $stmt_estoque = $conn->prepare("INSERT INTO estoque (veiculo_id, quantidade) VALUES (?, 1)");
-            $stmt_estoque->bind_param("i", $veiculo_id);
-            if (!$stmt_estoque->execute()) {
-                $sucesso = false;
-                break;
+            
+            // Atualiza ou insere o estoque por modelo_id (garante 1 linha por modelo)
+            $stmt_check = $conn->prepare("SELECT id FROM estoque WHERE modelo_id = ? LIMIT 1");
+            $stmt_check->bind_param("i", $modelo_id);
+            $stmt_check->execute();
+            $stmt_check->store_result();
+            if ($stmt_check->num_rows > 0) {
+                // Já existe, faz update
+                $stmt_update = $conn->prepare("UPDATE estoque SET quantidade = quantidade + 1 WHERE modelo_id = ?");
+                $stmt_update->bind_param("i", $modelo_id);
+                $stmt_update->execute();
+                $stmt_update->close();
+            } else {
+                // Não existe, faz insert
+                $stmt_insert = $conn->prepare("INSERT INTO estoque (modelo_id, quantidade) VALUES (?, 1)");
+                $stmt_insert->bind_param("i", $modelo_id);
+                $stmt_insert->execute();
+                $stmt_insert->close();
             }
-            $stmt_estoque->close();
+            $stmt_check->close();
         } else {
             $sucesso = false;
             break;
@@ -83,6 +94,50 @@ $conn->close();
     <title>Cadastrar Veículo</title>
     <link rel="stylesheet" href="../css/registro.css">
     <link rel="icon" href="../img/logos/logoofcbmw.png">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <style>
+    #estoque_id {
+        background: #f2f2f2 !important;
+        border-radius: 20px !important;
+        padding: 10px !important;
+        border: 1.5px solid #d1d1d1 !important;
+        font-size: 1rem !important;
+        outline: none !important;
+        transition: border 0.2s !important;
+    }
+    #estoque_id:focus {
+        border-color: #2f4eda !important;
+    }
+    /* Força o visual do select2 para ficar igual ao input */
+    .select2-container--default .select2-selection--single {
+        background: #f2f2f2 !important;
+        border-radius: 20px !important;
+        padding: 10px !important;
+        border: 1.5px solid #d1d1d1 !important;
+        font-size: 1rem !important;
+        outline: none !important;
+        transition: border 0.2s !important;
+        height: auto !important;
+        min-height: 40px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    .select2-container--default .select2-selection--single:focus,
+    .select2-container--default .select2-selection--single.select2-selection--focus {
+        border-color: #2f4eda !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #222 !important;
+        line-height: normal !important;
+        padding-left: 0 !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 100% !important;
+        right: 10px !important;
+    }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -104,7 +159,7 @@ $conn->close();
                             </option>
                         <?php } ?>
                     </select>
-                    <img src="../img/carro.png" alt="Ícone modelo">
+                    <img src="../img/veiculos/carro.png" alt="Ícone modelo">
                 </div>
             </div>
 
@@ -113,7 +168,7 @@ $conn->close();
                 <label>Quantidade em Estoque</label>
                 <div class="input-wrapper">
                     <input type="number" id="estoque_id" name="estoque" required min="1">
-                    <img src="../img/estoque.png" alt="Ícone estoque">
+                    <img src="../img/veiculos/estoque.png" alt="Ícone estoque">
                 </div>
             </div>
 
@@ -130,39 +185,46 @@ $conn->close();
     </div>
     <script>
     document.addEventListener("DOMContentLoaded", function () {
-    const selectInput = document.getElementById("modelo_id");
-    const estoqueInput = document.getElementById("estoque_id");
-    const botao = document.querySelector(".btn");
+        // Select2 para forçar dropdown para baixo
+        $('#modelo_id').select2({
+            dropdownParent: $('#modelo_id').parent(),
+            dropdownPosition: 'below',
+            width: '100%'
+        });
 
-    // Desativa o botão no início
-    botao.disabled = true;
-    botao.style.opacity = "0.5";
-    botao.style.cursor = "not-allowed";
+        const selectInput = document.getElementById("modelo_id");
+        const estoqueInput = document.getElementById("estoque_id");
+        const botao = document.querySelector(".btn");
 
-    // Armazena os valores originais
-    const valorOriginal = {
-        select: selectInput.value,
-        estoque: estoqueInput.value
-    };
+        // Desativa o botão no início
+        botao.disabled = true;
+        botao.style.opacity = "0.5";
+        botao.style.cursor = "not-allowed";
 
-    function verificarAlteracoes() {
-        const selectAlterado = selectInput.value !== valorOriginal.select;
-        const estoqueAlterado = estoqueInput.value !== valorOriginal.estoque;
+        // Armazena os valores originais
+        const valorOriginal = {
+            select: selectInput.value,
+            estoque: estoqueInput.value
+        };
 
-        if (selectAlterado && estoqueAlterado) {
-            botao.disabled = false;
-            botao.style.opacity = "1";
-            botao.style.cursor = "pointer";
-        } else {
-            botao.disabled = true;
-            botao.style.opacity = "0.5";
-            botao.style.cursor = "not-allowed";
+        function verificarAlteracoes() {
+            const selectAlterado = selectInput.value !== valorOriginal.select;
+            const estoqueAlterado = estoqueInput.value !== valorOriginal.estoque;
+
+            if (selectAlterado && estoqueAlterado) {
+                botao.disabled = false;
+                botao.style.opacity = "1";
+                botao.style.cursor = "pointer";
+            } else {
+                botao.disabled = true;
+                botao.style.opacity = "0.5";
+                botao.style.cursor = "not-allowed";
+            }
         }
-    }
 
-    selectInput.addEventListener("input", verificarAlteracoes);
-    estoqueInput.addEventListener("input", verificarAlteracoes);
-});
+        selectInput.addEventListener("input", verificarAlteracoes);
+        estoqueInput.addEventListener("input", verificarAlteracoes);
+    });
     </script>
 </body>
 </html>
