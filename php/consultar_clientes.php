@@ -199,14 +199,114 @@ $conn->close();
                             <td><?php echo $row['telefone']; ?></td>
                             <td><?php echo $row['registrado_em']; ?></td>
                             <td>
-                                <a class="a-btn" href="editar_cliente.php?id=<?php echo $row['id']; ?>">
+                                <a class="a-btn btn-editar" href="editar_cliente.php?id=<?php echo $row['id']; ?>">
                                     <img src="../img/editar.png" alt="Editar" class="btn-editar">
                                 </a>
+                                <button class="a-btn btn-editar" id="remover-cliente-<?php echo $row['id']; ?>" data-id="<?php echo $row['id']; ?>" style="background:none;border:none;cursor:pointer;">
+                                    <img src="../img/lixeira.png" alt="Remover" class="btn-editar">
+                                </button>
                             </td>
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
             </table>
+
+            <!-- Modal de confirmação de remoção -->
+            <div class="modal-remover" id="modal-remover">
+                <div class="modal-remover-content">
+                    <h3>Remover cliente</h3>
+                    <p id="modal-remover-msg">Tem certeza que deseja remover este cliente?</p>
+                    <div class="modal-remover-botoes">
+                        <button id="btn-cancelar-remover">Cancelar</button>
+                        <button id="btn-confirmar-remover">Remover</button>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+            .modal-remover {
+                display: none;
+                position: fixed;
+                top: 0; left: 0; width: 100vw; height: 100vh;
+                background: rgba(0,0,0,0.5);
+                z-index: 9999;
+                align-items: center;
+                justify-content: center;
+            }
+            .modal-remover.ativa { display: flex; }
+            .modal-remover-content {
+                background: #fff;
+                padding: 32px 24px;
+                border-radius: 10px;
+                max-width: 350px;
+                margin: auto;
+                text-align: center;
+                box-shadow: 0 2px 16px #0002;
+            }
+            .modal-remover-botoes {
+                margin-top: 24px;
+                display: flex;
+                gap: 16px;
+                justify-content: center;
+            }
+            .modal-remover-botoes button {
+                padding: 8px 18px;
+                border: none;
+                border-radius: 5px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+            #btn-cancelar-remover {
+                background: #eee;
+                color: #222;
+                border: 1px solid #bbb;
+                font-weight: 600;
+            }
+            #btn-cancelar-remover:hover {
+                background: #ddd;
+                color: #111;
+            }
+            #btn-confirmar-remover { background: #e53935; color: #fff; }
+            </style>
+
+            <script>
+            let idParaRemover = null;
+            document.querySelectorAll('button[id^="remover-cliente-"]').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    idParaRemover = this.getAttribute('data-id');
+                    document.getElementById('modal-remover').classList.add('ativa');
+                });
+            });
+            document.getElementById('btn-cancelar-remover').onclick = function() {
+                document.getElementById('modal-remover').classList.remove('ativa');
+                idParaRemover = null;
+            };
+            document.getElementById('btn-confirmar-remover').onclick = function() {
+                if (!idParaRemover) return;
+                fetch('remover_cliente.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'id=' + encodeURIComponent(idParaRemover)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.sucesso) {
+                        const linha = document.querySelector('button[data-id="'+idParaRemover+'"').closest('tr');
+                        if (linha) linha.remove();
+                    } else {
+                        alert(data.erro || 'Erro ao remover cliente.');
+                    }
+                    document.getElementById('modal-remover').classList.remove('ativa');
+                    idParaRemover = null;
+                })
+                .catch(() => {
+                    alert('Erro ao conectar com o servidor.');
+                    document.getElementById('modal-remover').classList.remove('ativa');
+                    idParaRemover = null;
+                });
+            };
+            </script>
 
             <!-- Paginação -->
             <div class="paginacao">

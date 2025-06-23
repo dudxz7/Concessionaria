@@ -1,0 +1,140 @@
+body {
+    background: #181f2a;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.saque-container {
+    max-width: 420px;
+    min-width: 0;
+    margin: 0 auto;
+    background: #202b3a;
+    border-radius: 16px;
+    box-shadow: 0 8px 40px 0 #0003, 0 2px 10px 0 #0001;
+    padding: 36px 18px 28px 18px;
+    text-align: center;
+    color: #f5f6fa;
+}
+.saque-container h2 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: #f5f6fa;
+    font-weight: 600;
+}
+.saque-via {
+    color: #7fa1e3;
+    font-size: 1rem;
+    font-weight: 400;
+}
+.saque-saldo {
+    color: #bfc9d9;
+    font-size: 1.02rem;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.saque-saldo-valor {
+    color: #fff;
+    font-weight: 600;
+    margin-left: 4px;
+}
+.saque-copiar-icon {
+    width: 18px;
+    height: 18px;
+    margin-left: 6px;
+    cursor: pointer;
+}
+.saque-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+.saque-form-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+.saque-input, .saque-select {
+    width: 100%;
+    background: #232f41;
+    border: 1.5px solid #3b4a5a;
+    border-radius: 10px;
+    height: 44px;
+    color: #fff;
+    font-size: 1rem;
+    padding: 0 16px;
+    margin-bottom: 0;
+    outline: none;
+    transition: border-color 0.18s, box-shadow 0.18s;
+}
+.saque-input:focus, .saque-select:focus {
+    border-color: #7fa1e3;
+    box-shadow: 0 0 0 2px #7fa1e355;
+}
+.saque-info {
+    color: #bfc9d9;
+    font-size: 0.92rem;
+    margin-top: 2px;
+    margin-bottom: 0;
+    text-align: left;
+}
+.saque-btn-submit {
+    width: 100%;
+    background: #181f2a;
+    color: #1abc9c;
+    border: 1.5px solid #1abc9c;
+    border-radius: 22px;
+    height: 44px;
+    font-size: 1.08rem;
+    font-weight: 600;
+    margin-top: 8px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+}
+.saque-btn-submit:hover {
+    background: #1abc9c;
+    color: #fff;
+    border-color: #fff;
+}
+.saque-alerta {
+    background: #232f41;
+    color: #bfc9d9;
+    font-size: 0.92rem;
+    border-radius: 10px;
+    padding: 12px 14px 12px 38px;
+    margin-top: 18px;
+    text-align: left;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+.saque-alerta-icon {
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    width: 18px;
+    height: 18px;
+}
+@media (max-width: 600px) {
+    .saque-container {
+        max-width: 99vw;
+        min-width: 0;
+        padding: 12px 2vw 12px 2vw;
+    }
+    .saque-form {
+        gap: 8px;
+    }
+    .saque-btn-submit {
+        height: 38px;
+        font-size: 0.98rem;
+    }
+}

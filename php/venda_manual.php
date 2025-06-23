@@ -68,6 +68,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         if ($ok) {
             $venda_id = $stmt2->insert_id;
+            // Calcula comissão do funcionário (0,5% do total)
+            $comissao = round($total * 0.005, 2);
+            // Cria tabela de comissão se não existir
+            $conn->query("CREATE TABLE IF NOT EXISTS comissoes_vendas (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                venda_id INT NOT NULL,
+                funcionario_id INT NOT NULL,
+                valor_comissao DECIMAL(10,2) NOT NULL,
+                data_comissao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (venda_id) REFERENCES vendas_fisicas(id),
+                FOREIGN KEY (funcionario_id) REFERENCES clientes(id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+            // Insere comissão
+            $stmtCom = $conn->prepare('INSERT INTO comissoes_vendas (venda_id, funcionario_id, valor_comissao) VALUES (?, ?, ?)');
+            $stmtCom->bind_param('iid', $venda_id, $usuario_id, $comissao);
+            $stmtCom->execute();
+            $stmtCom->close();
             $conn->commit();
             // Redireciona para cupom fiscal
             header('Location: cupom_fiscal.php?venda_id=' . $venda_id);
