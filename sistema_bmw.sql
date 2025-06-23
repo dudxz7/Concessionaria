@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 17/06/2025 às 11:00
+-- Tempo de geração: 23/06/2025 às 11:13
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -51,7 +51,7 @@ CREATE TABLE `clientes` (
 --
 
 INSERT INTO `clientes` (`id`, `nome_completo`, `email`, `cpf`, `telefone`, `rg`, `cidade`, `estado`, `cnh`, `senha`, `admin`, `cargo`, `endereco`, `pis`, `foto_perfil`, `registrado_em`) VALUES
-(1, 'a', 'a@gmail.com', '111.111.111-11', '(11) 11111-1122', '1111111111-1', 'FORTALEZA', 'CE', '11111111111', '$2y$10$qz4/R1dWGZ2XZiS8pJyUOunwuI6vWpJrhJFt3Lev36iOgEqiU9kg.', 0, 'Funcionario', 'Rua bem ali', '00000000001', 'img/perfis/perfil_1_1748854813.jpg', '2025-03-25 14:57:44'),
+(1, 'a', 'a@gmail.com', '111.111.111-11', '(11) 11111-1122', '1111111111-1', 'FORTALEZA', 'CE', '11111111111', '$2y$10$qz4/R1dWGZ2XZiS8pJyUOunwuI6vWpJrhJFt3Lev36iOgEqiU9kg.', 0, 'Funcionario', 'Rua bem ali', '00000000001', 'img/perfis/perfil_1_1750365616.jpg', '2025-03-25 14:57:44'),
 (3, 'dudu', 'dudu@gmail.com', '111.111.111-12', '(11) 11111-1212', '1111111111-2', 'FORTALEZA', 'CE', '11111111112', '$2y$10$O8qhgRi8muvTFkbKBlvmfuA3UBaeSQTP/7ugvT2RBKQW47FnXzsJO', 0, 'Cliente', '', NULL, NULL, '2025-03-25 14:57:44'),
 (5, 'ana', 'analinda@gmail.com', '111.111.111-13', '(11) 11111-1113', '1111111111-3', 'SAO PAULO', 'SP', '11111111113', '$2y$10$u0m/mLqzNLsVbYLFcNEJCOdcbIVEPIr8bkWlqP0jnyHQYkAC.hBS6', 0, 'Cliente', '', NULL, NULL, '2025-03-25 14:57:44'),
 (8, 'Administrador', 'admin@gmail.com', '12345678910', '999999999', '111234567', 'Fortal', 'CE', '222123456', '$2y$10$Afu4U38UJS88pOf2KtkJ2.3Y9e0BTp11WYhPFADyKYl.2Cl4LF.Bu', 1, 'Admin', '', NULL, 'img/perfis/perfil_8_1750137288.jpg', '2025-03-25 14:57:44'),
@@ -91,7 +91,34 @@ INSERT INTO `clientes` (`id`, `nome_completo`, `email`, `cpf`, `telefone`, `rg`,
 (60, 'teste', 'teste4@gmail.com', '173.718.909-99', '(11) 94714-8184', '4167481476-1', 'FORTALEZA', 'CE', '71737173717', '$2y$10$1GZZNjXgvNRaaaKBxDCGu.R5GKXiArhMyPwXZG1nEXe6jrCL7puBa', 0, 'Cliente', '', '', NULL, '2025-06-17 01:26:27'),
 (61, 'teste', 'teste5@gmail.com', '111.117.371-38', '(11) 74318-3813', '1837163183-8', 'FORTALEZA', 'CE', '11173718381', '$2y$10$Ao1I8pladqjl.zkcKBJXye9U3h3KjBRMPTRngvly5ERib9LGLy9/i', 0, 'Cliente', '', '', NULL, '2025-06-17 01:27:40'),
 (62, 'teste', 'teste6@gmail.com', '017.431.938-71', '(11) 74381-3819', '5128191991-9', 'FORTALEZA', 'CE', '00176300317', '$2y$10$geGnMfjIjptkj2RF0fjs9ekbrYa0ZV51TOqHoAreDMa.HgLwnBTMO', 0, 'Cliente', '', '', NULL, '2025-06-17 01:28:45'),
-(63, 'teste', 'teste7@gmail.com', '177.138.183-91', '(85) 91736-1381', '1301948104-9', 'FORTALEZA', 'CE', '17361831938', '$2y$10$0qbygKoeXAuBSncoZZOI1.sCKxzTDBs51jBRkFaMpaPmpFkr28gwO', 0, 'Cliente', '', '', NULL, '2025-06-17 01:37:56');
+(63, 'teste', 'teste7@gmail.com', '177.138.183-91', '(85) 91736-1381', '1301948104-9', 'FORTALEZA', 'CE', '17361831938', '$2y$10$0qbygKoeXAuBSncoZZOI1.sCKxzTDBs51jBRkFaMpaPmpFkr28gwO', 0, 'Cliente', '', '', NULL, '2025-06-17 01:37:56'),
+(64, 'Voltan', 'voltan@gmail.com', '747.618.788-43', '(21) 17371-7371', '7777351566-1', 'BELFORT ROXO', 'RJ', '73618471438', '$2y$10$ROQyeFv5wRvWUiRTnGC/JujV2sGjDLYFx/.pmfAYSX..8EI9QTz/q', 0, 'Gerente', 'Rua muito top aqui 1900  segundo andar', '18476878841', NULL, '2025-06-17 06:11:14'),
+(65, 'teste sla qaunto', 'ttttt1@gmail.com', '194.914.919-49', '(11) 11431-4155', '1783871819-3', 'FORTALEZA', 'CE', '14818313919', '$2y$10$.APGOZNkUMxfarvl09w7uu4fN1ZlGSSf3Nf7pgJQYPOaTrS1iLIju', 0, 'Cliente', '', '', NULL, '2025-06-23 03:31:30'),
+(66, 'again love ', 'zz@gmail.com', '481.001.438-17', '(11) 43715-4317', '0043713881-3', 'WASHINTON DC', 'CE', '33331135256', '$2y$10$NmlRuSPJSeornQlNepYtEua9aGiJrRnl11aYk21e.XNEi7XOz2Yf6', 0, 'Cliente', '', '', NULL, '2025-06-23 03:34:43');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `comissoes_vendas`
+--
+
+CREATE TABLE `comissoes_vendas` (
+  `id` int(11) NOT NULL,
+  `venda_id` int(11) NOT NULL,
+  `funcionario_id` int(11) NOT NULL,
+  `valor_comissao` decimal(10,2) NOT NULL,
+  `data_comissao` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `comissoes_vendas`
+--
+
+INSERT INTO `comissoes_vendas` (`id`, `venda_id`, `funcionario_id`, `valor_comissao`, `data_comissao`) VALUES
+(2, 1, 35, 1444.28, '2025-06-23 01:10:14'),
+(3, 3, 34, 1283.80, '2025-06-23 01:19:15'),
+(4, 4, 34, 1604.75, '2025-06-23 01:24:19'),
+(5, 6, 35, 1604.75, '2025-06-23 05:49:50');
 
 -- --------------------------------------------------------
 
@@ -158,29 +185,16 @@ INSERT INTO `detalhes_modelos` (`id`, `modelo_id`, `cor_principal`, `descricao`)
 
 CREATE TABLE `estoque` (
   `id` int(11) NOT NULL,
-  `veiculo_id` int(11) NOT NULL,
-  `quantidade` int(11) NOT NULL DEFAULT 1
+  `modelo_id` int(11) NOT NULL,
+  `quantidade` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `estoque`
 --
 
-INSERT INTO `estoque` (`id`, `veiculo_id`, `quantidade`) VALUES
-(1, 2, 1),
-(2, 3, 0),
-(3, 4, 1),
-(4, 5, 1),
-(5, 6, 0),
-(6, 7, 1),
-(7, 8, 1),
-(8, 9, 1),
-(9, 10, 1),
-(10, 11, 1),
-(11, 12, 1),
-(12, 13, 1),
-(13, 14, 1),
-(14, 15, 1);
+INSERT INTO `estoque` (`id`, `modelo_id`, `quantidade`) VALUES
+(1, 1, 9);
 
 -- --------------------------------------------------------
 
@@ -826,11 +840,10 @@ CREATE TABLE `pagamentos_pix` (
 --
 
 INSERT INTO `pagamentos_pix` (`id`, `usuario_id`, `veiculo_id`, `cor`, `criado_em`, `expira_em`, `status`, `valor`, `observacao`, `forma_pagamento`) VALUES
-(15, 34, 1, 'Azul', '2025-06-16 04:08:54', '2025-06-16 04:23:54', 'aprovado', 320950.00, NULL, 'pix'),
-(16, 34, 27, 'Azul-bebe', '2025-06-16 04:17:12', '2025-06-16 04:32:12', 'aprovado', 726950.00, NULL, 'pix'),
-(17, 34, 6, 'Azul', '2025-06-16 04:29:13', '2025-06-16 04:44:13', 'aprovado', 503950.00, NULL, 'pix'),
-(18, 12, 27, 'Azul-bebe', '2025-06-17 02:50:10', '2025-06-17 03:05:10', 'aprovado', 726950.00, NULL, 'pix'),
-(19, 12, 16, 'Laranja', '2025-06-17 02:55:14', '2025-06-17 03:10:14', 'aprovado', 649950.00, NULL, 'pix');
+(1, 34, 2, 'Azul', '2025-06-21 17:19:28', '2025-06-21 17:34:28', 'recusado', 320950.00, NULL, 'pix'),
+(2, 34, 2, 'Azul', '2025-06-21 18:31:03', '2025-06-21 18:46:03', 'aprovado', 320950.00, NULL, 'pix'),
+(3, 34, 1, 'Azul', '2025-06-21 19:01:10', '2025-06-21 19:16:10', 'aprovado', 320950.00, NULL, 'pix'),
+(4, 34, 1, 'Prata', '2025-06-22 17:26:33', '2025-06-22 17:41:33', 'aprovado', 320950.00, NULL, 'pix');
 
 -- --------------------------------------------------------
 
@@ -855,13 +868,14 @@ CREATE TABLE `pagamento_boleto` (
 --
 
 INSERT INTO `pagamento_boleto` (`id`, `usuario_id`, `veiculo_id`, `cor`, `codigo_barras`, `status`, `data_criacao`, `data_expiracao`, `valor`) VALUES
-(1, 12, 2, 'Preto', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'recusado', '2025-06-15 17:51:43', '2025-06-15 17:52:43', 320950.00),
-(2, 12, 27, 'Prata', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-15 17:59:19', '2025-06-15 18:00:19', 726950.00),
-(3, 12, 3, 'Branco', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'aprovado', '2025-06-15 18:03:49', '2025-06-15 18:04:49', 371655.00),
-(4, 12, 2, 'Preto', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'cancelado', '2025-06-15 18:39:53', '2025-06-15 18:40:53', 320950.00),
-(5, 12, 2, 'Preto', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-15 19:28:12', '2025-06-15 19:29:12', 320950.00),
-(6, 12, 2, 'Preto', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-15 19:34:56', '2025-06-15 19:35:56', 320950.00),
-(7, 12, 1, 'Prata', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-15 20:47:01', '2025-06-15 20:48:01', 320950.00);
+(1, 34, 1, 'Prata', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'aprovado', '2025-06-21 17:22:22', '2025-06-21 17:23:22', 320950.00),
+(2, 34, 1, 'Azul', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-21 18:28:20', '2025-06-21 18:29:20', 320950.00),
+(3, 34, 1, 'Prata', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-21 18:30:45', '2025-06-21 18:31:45', 320950.00),
+(4, 34, 1, 'Prata', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'aprovado', '2025-06-22 17:29:39', '2025-06-22 17:30:39', 320950.00),
+(5, 34, 1, 'Azul', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-22 17:35:48', '2025-06-22 17:36:48', 320950.00),
+(6, 34, 1, 'Prata', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-22 17:38:19', '2025-06-22 17:39:19', 320950.00),
+(7, 34, 1, 'Azul', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-22 17:42:41', '2025-06-22 17:43:41', 320950.00),
+(8, 34, 1, 'Azul', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-22 17:45:58', '2025-06-22 17:46:58', 320950.00);
 
 -- --------------------------------------------------------
 
@@ -887,7 +901,7 @@ INSERT INTO `promocoes` (`id`, `modelo_id`, `desconto`, `preco_com_desconto`, `d
 (1, 4, 10.00, 409455.00, '2025-05-13 10:27:00', 1, 'Inativa'),
 (2, 2, 10.00, 288855.00, '2025-05-23 22:01:00', 1, 'Inativa'),
 (3, 3, 10.00, 371655.00, '2025-04-09 22:01:00', 1, 'Inativa'),
-(4, 3, 10.00, 371655.00, '2025-06-20 14:56:00', 1, 'Ativa');
+(4, 3, 10.00, 371655.00, '2025-06-21 14:56:00', 1, 'Inativa');
 
 -- --------------------------------------------------------
 
@@ -898,29 +912,53 @@ INSERT INTO `promocoes` (`id`, `modelo_id`, `desconto`, `preco_com_desconto`, `d
 CREATE TABLE `veiculos` (
   `id` int(11) NOT NULL,
   `modelo_id` int(11) NOT NULL,
-  `numero_chassi` varchar(100) NOT NULL
+  `numero_chassi` varchar(100) NOT NULL,
+  `status` varchar(20) NOT NULL DEFAULT 'disponivel'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `veiculos`
 --
 
-INSERT INTO `veiculos` (`id`, `modelo_id`, `numero_chassi`) VALUES
-(1, 2, 'BMW00000000000001'),
-(2, 2, 'BMW00000000000002'),
-(3, 3, 'BMW00000000000003'),
-(4, 2, 'BMW00000000000004'),
-(5, 2, 'BMW00000000000005'),
-(6, 3, 'BMW00000000000006'),
-(7, 3, 'BMW00000000000007'),
-(8, 3, 'BMW00000000000008'),
-(9, 4, 'BMW00000000000009'),
-(10, 4, 'BMW00000000000010'),
-(11, 1, 'BMW00000000000011'),
-(12, 4, 'BMW00000000000012'),
-(13, 4, 'BMW00000000000013'),
-(14, 1, 'BMW00000000000014'),
-(15, 1, 'BMW00000000000015');
+INSERT INTO `veiculos` (`id`, `modelo_id`, `numero_chassi`, `status`) VALUES
+(1, 1, 'BMW00000000000001', 'vendido'),
+(2, 1, 'BMW00000000000002', 'vendido'),
+(3, 1, 'BMW00000000000003', 'vendido'),
+(4, 1, 'BMW00000000000004', 'vendido'),
+(5, 1, 'BMW00000000000005', 'vendido'),
+(6, 1, 'BMW00000000000006', 'vendido'),
+(7, 1, 'BMW00000000000007', 'vendido_M'),
+(8, 1, 'BMW00000000000008', 'vendido_M'),
+(9, 1, 'BMW00000000000009', 'vendido_M');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `vendas_fisicas`
+--
+
+CREATE TABLE `vendas_fisicas` (
+  `id` int(11) NOT NULL,
+  `cliente_id` int(11) NOT NULL,
+  `veiculo_id` int(11) NOT NULL,
+  `cor_veiculo` varchar(50) NOT NULL,
+  `forma_pagamento` varchar(50) NOT NULL,
+  `desconto` decimal(5,2) DEFAULT 0.00,
+  `total` decimal(10,2) NOT NULL,
+  `servicos_adicionais` varchar(255) DEFAULT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
+  `data_venda` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `vendas_fisicas`
+--
+
+INSERT INTO `vendas_fisicas` (`id`, `cliente_id`, `veiculo_id`, `cor_veiculo`, `forma_pagamento`, `desconto`, `total`, `servicos_adicionais`, `usuario_id`, `data_venda`) VALUES
+(1, 35, 6, 'Azul', 'Dinheiro', 10.00, 288855.00, '', 35, '2025-06-23 01:10:14'),
+(3, 35, 7, 'Azul', 'Cartão', 20.00, 256760.00, '', 34, '2025-06-23 01:19:15'),
+(4, 35, 8, 'Prata', 'Cartão', 0.00, 320950.00, '', 34, '2025-06-23 01:24:19'),
+(6, 35, 9, 'Azul', 'Dinheiro', 0.00, 320950.00, '', 35, '2025-06-23 05:49:50');
 
 --
 -- Índices para tabelas despejadas
@@ -937,6 +975,14 @@ ALTER TABLE `clientes`
   ADD UNIQUE KEY `cnh` (`cnh`);
 
 --
+-- Índices de tabela `comissoes_vendas`
+--
+ALTER TABLE `comissoes_vendas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `venda_id` (`venda_id`),
+  ADD KEY `funcionario_id` (`funcionario_id`);
+
+--
 -- Índices de tabela `detalhes_modelos`
 --
 ALTER TABLE `detalhes_modelos`
@@ -948,7 +994,7 @@ ALTER TABLE `detalhes_modelos`
 --
 ALTER TABLE `estoque`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `veiculo_id` (`veiculo_id`);
+  ADD KEY `modelo_id` (`modelo_id`);
 
 --
 -- Índices de tabela `favoritos`
@@ -1011,6 +1057,14 @@ ALTER TABLE `veiculos`
   ADD KEY `modelo_id` (`modelo_id`);
 
 --
+-- Índices de tabela `vendas_fisicas`
+--
+ALTER TABLE `vendas_fisicas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cliente_id` (`cliente_id`),
+  ADD KEY `veiculo_id` (`veiculo_id`);
+
+--
 -- AUTO_INCREMENT para tabelas despejadas
 --
 
@@ -1018,7 +1072,13 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+
+--
+-- AUTO_INCREMENT de tabela `comissoes_vendas`
+--
+ALTER TABLE `comissoes_vendas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `detalhes_modelos`
@@ -1030,7 +1090,7 @@ ALTER TABLE `detalhes_modelos`
 -- AUTO_INCREMENT de tabela `estoque`
 --
 ALTER TABLE `estoque`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `favoritos`
@@ -1060,13 +1120,13 @@ ALTER TABLE `modelos`
 -- AUTO_INCREMENT de tabela `pagamentos_pix`
 --
 ALTER TABLE `pagamentos_pix`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `pagamento_boleto`
 --
 ALTER TABLE `pagamento_boleto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `promocoes`
@@ -1078,11 +1138,24 @@ ALTER TABLE `promocoes`
 -- AUTO_INCREMENT de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT de tabela `vendas_fisicas`
+--
+ALTER TABLE `vendas_fisicas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restrições para tabelas despejadas
 --
+
+--
+-- Restrições para tabelas `comissoes_vendas`
+--
+ALTER TABLE `comissoes_vendas`
+  ADD CONSTRAINT `comissoes_vendas_ibfk_1` FOREIGN KEY (`venda_id`) REFERENCES `vendas_fisicas` (`id`),
+  ADD CONSTRAINT `comissoes_vendas_ibfk_2` FOREIGN KEY (`funcionario_id`) REFERENCES `clientes` (`id`);
 
 --
 -- Restrições para tabelas `detalhes_modelos`
@@ -1094,7 +1167,7 @@ ALTER TABLE `detalhes_modelos`
 -- Restrições para tabelas `estoque`
 --
 ALTER TABLE `estoque`
-  ADD CONSTRAINT `estoque_ibfk_1` FOREIGN KEY (`veiculo_id`) REFERENCES `veiculos` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `estoque_ibfk_1` FOREIGN KEY (`modelo_id`) REFERENCES `modelos` (`id`) ON DELETE CASCADE;
 
 --
 -- Restrições para tabelas `favoritos`
@@ -1127,6 +1200,13 @@ ALTER TABLE `promocoes`
 --
 ALTER TABLE `veiculos`
   ADD CONSTRAINT `veiculos_ibfk_1` FOREIGN KEY (`modelo_id`) REFERENCES `modelos` (`id`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `vendas_fisicas`
+--
+ALTER TABLE `vendas_fisicas`
+  ADD CONSTRAINT `vendas_fisicas_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
+  ADD CONSTRAINT `vendas_fisicas_ibfk_2` FOREIGN KEY (`veiculo_id`) REFERENCES `veiculos` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
