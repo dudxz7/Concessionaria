@@ -38,6 +38,9 @@ if ($cargoUsuario !== 'Admin' && $cargoUsuario !== 'Gerente') {
         <h2>Criar uma conta</h2>
         <form action="register.php" method="post">
             <input type="hidden" name="redir" id="redir" value="3">
+            <?php if (isset($_GET['redirect']) && $_GET['redirect'] === 'venda_manual'): ?>
+                <input type="hidden" name="redirect" value="venda_manual">
+            <?php endif; ?>
             <div class="input-group">
                 <label>Nome completo</label>
                 <div class="input-wrapper">

@@ -17,6 +17,38 @@ $stmt->execute();
 $result = $stmt->get_result();
 $carro = $result->fetch_assoc();
 
+// Busca dados do veículo individual (chassi, status)
+$sql_veiculo = "SELECT numero_chassi, status FROM veiculos WHERE id = ?";
+$stmt_veiculo = $conn->prepare($sql_veiculo);
+$stmt_veiculo->bind_param('i', $veiculo_id);
+$stmt_veiculo->execute();
+$res_veiculo = $stmt_veiculo->get_result();
+$dados_veiculo = $res_veiculo->fetch_assoc();
+$numero_chassi = $dados_veiculo['numero_chassi'] ?? '';
+$status_veiculo = $dados_veiculo['status'] ?? '';
+
+// Busca cor da venda (pagamento)
+$cor_venda = '';
+if ($tipo === 'PIX') {
+    $sqlCor = "SELECT cor FROM pagamentos_pix WHERE veiculo_id = ? AND status = ? AND expira_em = ? LIMIT 1";
+    $stmtCor = $conn->prepare($sqlCor);
+    $stmtCor->bind_param('iss', $veiculo_id, $status, $data_expiracao);
+    $stmtCor->execute();
+    $resCor = $stmtCor->get_result();
+    if ($rowCor = $resCor->fetch_assoc()) {
+        $cor_venda = $rowCor['cor'];
+    }
+} elseif ($tipo === 'BOLETO') {
+    $sqlCor = "SELECT cor FROM pagamento_boleto WHERE veiculo_id = ? AND status = ? AND data_expiracao = ? LIMIT 1";
+    $stmtCor = $conn->prepare($sqlCor);
+    $stmtCor->bind_param('iss', $veiculo_id, $status, $data_expiracao);
+    $stmtCor->execute();
+    $resCor = $stmtCor->get_result();
+    if ($rowCor = $resCor->fetch_assoc()) {
+        $cor_venda = $rowCor['cor'];
+    }
+}
+
 // Corrige data de criação se vier vazia
 if (empty($data_criacao)) {
     if ($tipo === 'PIX') {
@@ -70,6 +102,25 @@ $pdf->Cell(50,8,'Tipo de Pagamento:',0,0); $pdf->Cell(0,8,$tipo,0,1);
 $pdf->Cell(50,8,'Status:',0,0); $pdf->Cell(0,8,ucfirst($status),0,1);
 $pdf->Cell(50,8,'Data de Criacao:',0,0); $pdf->Cell(0,8,($data_criacao ? date('d/m/Y H:i', strtotime($data_criacao)) : '-'),0,1);
 $pdf->Cell(50,8,'Data de Expiracao:',0,0); $pdf->Cell(0,8,($data_expiracao ? date('d/m/Y H:i', strtotime($data_expiracao)) : '-'),0,1);
+
+// Se venda aprovada, mostra detalhes do veículo vendido (chassi, cor, status)
+if ($status === 'aprovado' && strtolower($status_veiculo) === 'vendido') {
+    $pdf->Ln(6);
+    $pdf->SetFont('Arial','B',12);
+    $pdf->Cell(0,8,'Detalhes do Veiculo:',0,1);
+    $pdf->SetFont('Arial','',12);
+    $pdf->Cell(50,8,'Chassi:',0,0); $pdf->Cell(0,8,$numero_chassi,0,1);
+    $pdf->Cell(50,8,'Cor:',0,0); $pdf->Cell(0,8,$cor_venda,0,1);
+    $pdf->Cell(50,8,'Status do Veiculo:',0,0); $pdf->Cell(0,8,ucfirst($status_veiculo),0,1);
+}
+// Se não for vendido, mas tiver cor, mostra só a cor
+elseif (!empty($cor_venda)) {
+    $pdf->Ln(6);
+    $pdf->SetFont('Arial','B',12);
+    $pdf->Cell(0,8,'Detalhes do Veiculo:',0,1);
+    $pdf->SetFont('Arial','',12);
+    $pdf->Cell(50,8,'Cor:',0,0); $pdf->Cell(0,8,$cor_venda,0,1);
+}
 
 // Exibe o PDF no navegador, sem salvar no servidor
 $pdf->Output('I', 'relatorio_pagamento.pdf');

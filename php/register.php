@@ -89,8 +89,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt_check_func->close();
         }
         // Redirecionamento dinâmico por parâmetro
-        $redir = $_POST['redir'] ?? $_GET['redir'] ?? null;
-        if ($redir) {
+        $redirect = $_POST['redirect'] ?? $_GET['redirect'] ?? null;
+        if ($redirect === 'venda_manual') {
+            // Busca o id do cliente recém-cadastrado
+            $stmt_id = $conn->prepare("SELECT id FROM clientes WHERE cpf = ? LIMIT 1");
+            $stmt_id->bind_param("s", $cpf);
+            $stmt_id->execute();
+            $stmt_id->bind_result($novo_cliente_id);
+            $stmt_id->fetch();
+            $stmt_id->close();
+            if ($novo_cliente_id) {
+                header("Location: venda_manual.php?etapa=modelo&cliente_id=" . $novo_cliente_id);
+                exit();
+            } else {
+                header("Location: venda_manual.php");
+                exit();
+            }
+        } else {
             switch ($redir) {
                 case '2':
                     header("Location: consultar_clientes.php");
@@ -102,9 +117,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: ../index.php");
                     exit();
             }
-        } else {
-            header("Location: ../login.html");
-            exit();
         }
     } else {
         if ($conn->errno == 1062) {

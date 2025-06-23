@@ -196,6 +196,10 @@ $conn->close();
                     <span>Esqueceu a Senha</span>
                 </div>
                 <?php if ($cargo !== 'Cliente'): ?>
+                    <div class="icon-item" onclick="window.location.href='php/venda_manual.php'">
+                        <img src="img/pagar.png" alt="Realizar Venda">
+                        <span>Realizar Venda</span>
+                    </div>
                     <div class="icon-item" onclick="window.location.href='php/consultar_clientes.php'">
                         <img src="img/lupa.png" alt="Consultar clientes">
                         <span>Consultar Clientes</span>

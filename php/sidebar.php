@@ -144,6 +144,10 @@ if ($usuario_id) {
                 <img src="../img/ajudando.png" alt="Esqueceu a Senha">
                 <span>Esqueceu a Senha</span>
             </div>
+            <div class="icon-item" onclick="window.location.href='venda_manual.php'">
+                <img src="../img/pagar.png" alt="Realizar Venda">
+                <span>Realizar Venda</span>
+            </div>
             <div class="icon-item" onclick="window.location.href='consultar_clientes.php'">
                 <img src="../img/lupa.png" alt="Consultar clientes">
                 <span>Consultar Clientes</span>
