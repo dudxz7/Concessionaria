@@ -198,11 +198,11 @@ $conn->close();
                             <td><?php echo $row['email']; ?></td>
                             <td><?php echo $row['telefone']; ?></td>
                             <td><?php echo $row['registrado_em']; ?></td>
-                            <td>
-                                <a class="a-btn btn-editar" href="editar_cliente.php?id=<?php echo $row['id']; ?>">
+                            <td style="white-space:nowrap;">
+                                <a class="a-btn btn-editar" href="editar_cliente.php?id=<?php echo $row['id']; ?>" style="text-decoration:none;outline:none;margin-right:2px;vertical-align:middle;">
                                     <img src="../img/editar.png" alt="Editar" class="btn-editar">
                                 </a>
-                                <button class="a-btn btn-editar" id="remover-cliente-<?php echo $row['id']; ?>" data-id="<?php echo $row['id']; ?>" style="background:none;border:none;cursor:pointer;">
+                                <button class="a-btn btn-editar" id="remover-cliente-<?php echo $row['id']; ?>" data-id="<?php echo $row['id']; ?>" data-nome="<?php echo htmlspecialchars($row['nome_completo'], ENT_QUOTES); ?>" style="background:none;border:none;cursor:pointer;text-decoration:none;padding:0;margin-left:2px;vertical-align:middle;">
                                     <img src="../img/lixeira.png" alt="Remover" class="btn-editar">
                                 </button>
                             </td>
@@ -228,59 +228,95 @@ $conn->close();
                 display: none;
                 position: fixed;
                 top: 0; left: 0; width: 100vw; height: 100vh;
-                background: rgba(0,0,0,0.5);
+                background: rgba(30, 32, 38, 0.55);
                 z-index: 9999;
                 align-items: center;
                 justify-content: center;
+                transition: background 0.2s;
             }
             .modal-remover.ativa { display: flex; }
             .modal-remover-content {
-                background: #fff;
-                padding: 32px 24px;
-                border-radius: 10px;
-                max-width: 350px;
+                background: #23272f;
+                padding: 32px 28px 24px 28px;
+                border-radius: 18px;
+                max-width: 480px;
+                min-width: 340px;
+                width: 100%;
                 margin: auto;
                 text-align: center;
-                box-shadow: 0 2px 16px #0002;
+                box-shadow: 0 8px 32px 0 rgba(0,0,0,0.25), 0 1.5px 8px 0 #0002;
+                color: #f3f3f3;
+                border: 1.5px solid #23272f;
+                font-family: 'Segoe UI', 'Arial', sans-serif;
+            }
+            .modal-remover-content h3 {
+                margin-top: 0;
+                margin-bottom: 18px;
+                font-size: 1.25rem;
+                color: #e53935;
+                letter-spacing: 0.5px;
+            }
+            #modal-remover-msg {
+                font-size: 1.08rem;
+                margin-bottom: 18px;
+                color: #f3f3f3;
+                word-break: break-word;
+                line-height: 1.5;
             }
             .modal-remover-botoes {
-                margin-top: 24px;
+                margin-top: 10px;
                 display: flex;
-                gap: 16px;
+                gap: 18px;
                 justify-content: center;
             }
             .modal-remover-botoes button {
-                padding: 8px 18px;
+                padding: 9px 22px;
                 border: none;
-                border-radius: 5px;
+                border-radius: 6px;
                 font-weight: 600;
+                font-size: 1rem;
                 cursor: pointer;
+                transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+                box-shadow: 0 1.5px 6px #0001;
             }
             #btn-cancelar-remover {
-                background: #eee;
-                color: #222;
-                border: 1px solid #bbb;
-                font-weight: 600;
+                background: #2d313a;
+                color: #f3f3f3;
+                border: 1px solid #444;
             }
             #btn-cancelar-remover:hover {
-                background: #ddd;
-                color: #111;
+                background: #23272f;
+                color: #e53935;
+                border: 1px solid #e53935;
             }
-            #btn-confirmar-remover { background: #e53935; color: #fff; }
+            #btn-confirmar-remover {
+                background: linear-gradient(90deg, #e53935 60%, #b71c1c 100%);
+                color: #fff;
+                border: none;
+            }
+            #btn-confirmar-remover:hover {
+                background: #fff;
+                color: #e53935;
+                border: 1px solid #e53935;
+            }
             </style>
 
             <script>
             let idParaRemover = null;
+            let nomeParaRemover = '';
             document.querySelectorAll('button[id^="remover-cliente-"]').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
                     idParaRemover = this.getAttribute('data-id');
+                    nomeParaRemover = this.getAttribute('data-nome');
+                    document.getElementById('modal-remover-msg').innerHTML = `Tem certeza que deseja excluir o cliente <b>${nomeParaRemover}</b> <span style='color:#e53935;font-weight:bold;'>(ID: ${idParaRemover})</span>?`;
                     document.getElementById('modal-remover').classList.add('ativa');
                 });
             });
             document.getElementById('btn-cancelar-remover').onclick = function() {
                 document.getElementById('modal-remover').classList.remove('ativa');
                 idParaRemover = null;
+                nomeParaRemover = '';
             };
             document.getElementById('btn-confirmar-remover').onclick = function() {
                 if (!idParaRemover) return;
@@ -299,11 +335,15 @@ $conn->close();
                     }
                     document.getElementById('modal-remover').classList.remove('ativa');
                     idParaRemover = null;
+                    nomeParaRemover = '';
+                    document.getElementById('modal-remover-msg').textContent = 'Tem certeza que deseja remover este cliente?';
                 })
                 .catch(() => {
                     alert('Erro ao conectar com o servidor.');
                     document.getElementById('modal-remover').classList.remove('ativa');
                     idParaRemover = null;
+                    nomeParaRemover = '';
+                    document.getElementById('modal-remover-msg').textContent = 'Tem certeza que deseja remover este cliente?';
                 });
             };
             </script>

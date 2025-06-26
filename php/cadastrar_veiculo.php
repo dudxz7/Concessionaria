@@ -45,26 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $update_stmt->bind_param("si", $chassi_final, $veiculo_id);
             $update_stmt->execute();
             $update_stmt->close();
-            
-            // Atualiza ou insere o estoque por modelo_id (garante 1 linha por modelo)
-            $stmt_check = $conn->prepare("SELECT id FROM estoque WHERE modelo_id = ? LIMIT 1");
-            $stmt_check->bind_param("i", $modelo_id);
-            $stmt_check->execute();
-            $stmt_check->store_result();
-            if ($stmt_check->num_rows > 0) {
-                // Já existe, faz update
-                $stmt_update = $conn->prepare("UPDATE estoque SET quantidade = quantidade + 1 WHERE modelo_id = ?");
-                $stmt_update->bind_param("i", $modelo_id);
-                $stmt_update->execute();
-                $stmt_update->close();
-            } else {
-                // Não existe, faz insert
-                $stmt_insert = $conn->prepare("INSERT INTO estoque (modelo_id, quantidade) VALUES (?, 1)");
-                $stmt_insert->bind_param("i", $modelo_id);
-                $stmt_insert->execute();
-                $stmt_insert->close();
-            }
-            $stmt_check->close();
         } else {
             $sucesso = false;
             break;

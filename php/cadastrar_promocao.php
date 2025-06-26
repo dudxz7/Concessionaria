@@ -198,14 +198,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </option>
                         <?php endwhile; ?>
                     </select>
-                    <img src="../img/carro.png" alt="Ícone modelo">
+                    <img src="../img/veiculos/carro.png" alt="Ícone modelo">
                 </div>
             </div>
             <div class="input-group">
                 <label for="desconto">Desconto (%)</label>
                 <div class="input-wrapper">
                     <input type="number" placeholder="digite a porcentagem" name="desconto" id="desconto" min="0" max="100" step="1" required oninput="if(this.value>100)this.value=100;if(this.value<0)this.value=0;">
-                    <img src="../img/preco.png" alt="Ícone desconto">
+                    <img src="../img/veiculos/preco.png" alt="Ícone desconto">
                 </div>
             </div>
 

@@ -57,6 +57,13 @@ if (!function_exists('gerarNota')) {
         return rand(1, 1500);
     }
 }
+// Busca histórico de vendas manuais (vendas_fisicas)
+$sqlManual = "SELECT veiculo_id, cor_veiculo as cor, total as valor, 'aprovado' as status, data_venda as data, 'MANUAL' as tipo FROM vendas_fisicas WHERE cliente_id = ? ORDER BY data DESC";
+$stmtManual = $conn->prepare($sqlManual);
+$stmtManual->bind_param('i', $usuarioId);
+$stmtManual->execute();
+$resultManual = $stmtManual->get_result();
+$historicoManual = $resultManual->fetch_all(MYSQLI_ASSOC);
 // Busca histórico de pagamentos PIX (todas tentativas exceto pendentes)
 $sqlPix = "SELECT veiculo_id, cor, valor, status, expira_em as data, 'PIX' as tipo FROM pagamentos_pix WHERE usuario_id = ? AND status != 'pendente' ORDER BY data DESC";
 $stmtPix = $conn->prepare($sqlPix);
@@ -72,21 +79,35 @@ $stmtBoleto->execute();
 $resultBoleto = $stmtBoleto->get_result();
 $historicoBoleto = $resultBoleto->fetch_all(MYSQLI_ASSOC);
 // Junta e ordena tudo por data desc
-$historico = array_merge($historicoPix, $historicoBoleto);
+$historico = array_merge($historicoPix, $historicoBoleto, $historicoManual);
 usort($historico, function($a, $b) { return strtotime($b['data']) - strtotime($a['data']); });
 if (empty($historico)) {
     echo '<p style="margin-left:20px;">Nenhum pagamento realizado ou expirado encontrado.</p>';
     return;
 }
 foreach ($historico as $pagamento) {
+    $tipo = $pagamento['tipo'];
     // Busca dados do veículo
     $id = $pagamento['veiculo_id'];
     $cor = $pagamento['cor'] ?? '';
+    // Para vendas manuais, buscar o modelo_id a partir do veiculo_id
+    if ($tipo === 'MANUAL') {
+        $sqlBuscaModelo = "SELECT modelo_id FROM veiculos WHERE id = ? LIMIT 1";
+        $stmtBuscaModelo = $conn->prepare($sqlBuscaModelo);
+        $stmtBuscaModelo->bind_param('i', $id);
+        $stmtBuscaModelo->execute();
+        $stmtBuscaModelo->bind_result($modelo_id_manual);
+        $stmtBuscaModelo->fetch();
+        $stmtBuscaModelo->close();
+        $id_modelo = $modelo_id_manual;
+    } else {
+        $id_modelo = $id;
+    }
     $sqlModelos = "SELECT m.id, m.modelo, m.ano, m.preco, d.descricao, (
         SELECT i.imagem FROM imagens_secundarias i WHERE i.modelo_id = m.id AND i.cor = ? AND i.ordem = 1 LIMIT 1
     ) AS imagem_padrao FROM modelos m LEFT JOIN detalhes_modelos d ON m.id = d.modelo_id WHERE m.id = ? GROUP BY m.id";
     $stmtModelos = $conn->prepare($sqlModelos);
-    $stmtModelos->bind_param('si', $cor, $id);
+    $stmtModelos->bind_param('si', $cor, $id_modelo);
     $stmtModelos->execute();
     $resultModelos = $stmtModelos->get_result();
     if ($carro = $resultModelos->fetch_assoc()) {
@@ -107,11 +128,13 @@ foreach ($historico as $pagamento) {
         // Badge de tipo de pagamento
         if ($tipo === 'PIX') {
             echo '<span class="forma-pagamento-overlay"><span class="forma-pagamento-card pix"><img src="../img/formas-de-pagamento/icons8-foto-240.png" alt="Pix"></span></span>';
-        } else {
+        } elseif ($tipo === 'BOLETO') {
             echo '<span class="forma-pagamento-overlay"><span class="forma-pagamento-card boleto"><img src="../img/formas-de-pagamento/boletov2.png" alt="Boleto"></span></span>';
+        } elseif ($tipo === 'MANUAL') {
+            echo '<span class="forma-pagamento-overlay"><span class="forma-pagamento-card manual" style="background:#2d313a;color:#fff;padding:4px 12px;border-radius:12px;font-weight:bold;font-size:0.98em;">Venda Manual</span></span>';
         }
-        // Badge de status
-        if ($statusLabel) {
+        // Badge de status (apenas para pagamentos)
+        if ($tipo !== 'MANUAL' && $statusLabel) {
             echo '<span style="position:absolute;top:10px;right:10px;background:' . $statusColor . ';color:#fff;padding:4px 12px;border-radius:12px;font-weight:bold;font-size:0.98em;z-index:2;">' . $statusLabel . '</span>';
         }
         echo '</div>';
@@ -125,7 +148,53 @@ foreach ($historico as $pagamento) {
         }
         echo '<span class="nota">(' . number_format($nota, 0, ',', '.') . ')</span></div>';
         echo '<h2>R$ ' . $valor . '</h2>';
-        // Botão STATUS mostrando o status real (Aprovado, Expirado, Cancelado) com cor forte e !important
+        if ($tipo === 'MANUAL') {
+            // Card especial para venda manual/física
+            // Não exibe mais o texto "Venda física realizada em ..."
+            $cupomVendaId = $pagamento['venda_id'] ?? ($pagamento['id'] ?? null);
+            if (!$cupomVendaId && isset($pagamento['data'], $pagamento['valor'], $pagamento['veiculo_id'])) {
+                // Busca o id da venda_fisica pelo cliente, veiculo, valor e data exata
+                $sqlBuscaVendaId = "SELECT id FROM vendas_fisicas WHERE cliente_id = ? AND veiculo_id = ? AND total = ? AND data_venda = ? LIMIT 1";
+                $stmtBuscaVendaId = $conn->prepare($sqlBuscaVendaId);
+                $stmtBuscaVendaId->bind_param('iids', $usuarioId, $pagamento['veiculo_id'], $pagamento['valor'], $pagamento['data']);
+                $stmtBuscaVendaId->execute();
+                $stmtBuscaVendaId->bind_result($cupomVendaId);
+                $stmtBuscaVendaId->fetch();
+                $stmtBuscaVendaId->close();
+            }
+            if ($cupomVendaId) {
+                $cupomUrl = '../php/cupom_fiscal.php?venda_id=' . urlencode($cupomVendaId);
+                echo '<a href="' . $cupomUrl . '" target="_blank" style="text-decoration:none;display:inline-block;margin-top:12px;">';
+                echo '<button class="btn-send" style="margin-bottom:8px;background:linear-gradient(90deg,#2d313a,#23272f)!important;color:#fff!important;border:none!important;box-shadow:0 2px 12px 0 #23272f55!important;font-weight:bold !important;cursor:pointer;width:100%;width:240px;">Ver cupom fiscal</button>';
+                echo '</a>';
+            } else {
+                echo '<div style="color:#c00;margin-top:12px;">Cupom fiscal não encontrado.</div>';
+            }
+            echo '</div>';
+            continue;
+        }
+        // Pega data de criação corretamente para cada tipo
+        $dataCriacao = '';
+        if ($tipo === 'PIX' && isset($pagamento['expira_em'])) {
+            $sqlPixData = "SELECT criado_em FROM pagamentos_pix WHERE veiculo_id = ? AND usuario_id = ? AND expira_em = ? LIMIT 1";
+            $stmtPixData = $conn->prepare($sqlPixData);
+            $stmtPixData->bind_param('iis', $id, $usuarioId, $pagamento['expira_em']);
+            $stmtPixData->execute();
+            $resPixData = $stmtPixData->get_result();
+            if ($rowPixData = $resPixData->fetch_assoc()) {
+                $dataCriacao = $rowPixData['criado_em'];
+            }
+        } elseif ($tipo === 'BOLETO' && isset($pagamento['data'])) {
+            $sqlBoletoData = "SELECT data_criacao FROM pagamento_boleto WHERE veiculo_id = ? AND usuario_id = ? AND data_expiracao = ? LIMIT 1";
+            $stmtBoletoData = $conn->prepare($sqlBoletoData);
+            $stmtBoletoData->bind_param('iis', $id, $usuarioId, $pagamento['data']);
+            $stmtBoletoData->execute();
+            $resBoletoData = $stmtBoletoData->get_result();
+            if ($rowBoletoData = $resBoletoData->fetch_assoc()) {
+                $dataCriacao = $rowBoletoData['data_criacao'];
+            }
+        }
+        $relatorioUrl = '../php/gerar_relatorio.php?tipo=' . urlencode($tipo) . '&veiculo_id=' . urlencode($id) . '&status=' . urlencode($pagamento['status']) . '&data=' . urlencode($pagamento['data']) . '&data_criacao=' . urlencode($dataCriacao);
         if ($pagamento['status'] === 'aprovado') {
             $statusBtn = 'Aprovado';
             $btnColor = 'background:linear-gradient(90deg,#43a047 0%,#90EE90 100%)!important;color:#fff!important;border:none!important;box-shadow:0 2px 12px 0 #1de9b655!important;';
@@ -139,30 +208,6 @@ foreach ($historico as $pagamento) {
             $statusBtn = ucfirst($pagamento['status']);
             $btnColor = 'background:linear-gradient(90deg, #8b0000, #b71c1c)!important;color:#fff!important;border:none!important;';
         }
-        // Pega data de criação corretamente para cada tipo
-        $dataCriacao = '';
-        if ($tipo === 'PIX' && isset($pagamento['expira_em'])) {
-            // Para PIX, pega a data de criação do campo criado_em se existir
-            $sqlPixData = "SELECT criado_em FROM pagamentos_pix WHERE veiculo_id = ? AND usuario_id = ? AND expira_em = ? LIMIT 1";
-            $stmtPixData = $conn->prepare($sqlPixData);
-            $stmtPixData->bind_param('iis', $id, $usuarioId, $pagamento['expira_em']);
-            $stmtPixData->execute();
-            $resPixData = $stmtPixData->get_result();
-            if ($rowPixData = $resPixData->fetch_assoc()) {
-                $dataCriacao = $rowPixData['criado_em'];
-            }
-        } elseif ($tipo === 'BOLETO' && isset($pagamento['data'])) {
-            // Para BOLETO, pega a data de criação do campo data_criacao se existir
-            $sqlBoletoData = "SELECT data_criacao FROM pagamento_boleto WHERE veiculo_id = ? AND usuario_id = ? AND data_expiracao = ? LIMIT 1";
-            $stmtBoletoData = $conn->prepare($sqlBoletoData);
-            $stmtBoletoData->bind_param('iis', $id, $usuarioId, $pagamento['data']);
-            $stmtBoletoData->execute();
-            $resBoletoData = $stmtBoletoData->get_result();
-            if ($rowBoletoData = $resBoletoData->fetch_assoc()) {
-                $dataCriacao = $rowBoletoData['data_criacao'];
-            }
-        }
-        $relatorioUrl = '../php/gerar_relatorio.php?tipo=' . urlencode($tipo) . '&veiculo_id=' . urlencode($id) . '&status=' . urlencode($pagamento['status']) . '&data=' . urlencode($pagamento['data']) . '&data_criacao=' . urlencode($dataCriacao);
         echo '<a href="' . $relatorioUrl . '" target="_blank" style="text-decoration:none;display:inline-block;">';
         echo '<button class="btn-send" style="margin-bottom:8px;'.$btnColor.'font-weight:bold !important;cursor:pointer;width:100%;width:240px;">' . $statusBtn . '</button>';
         echo '</a>';

@@ -123,6 +123,11 @@ $result = $stmt->get_result();
 
         .btn-editar {
             display: inline-block;
+            vertical-align: middle;
+            margin: 0 2px;
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -187,17 +192,19 @@ $result = $stmt->get_result();
                             <td>R$ <?php echo number_format($row['preco'], 2, ',', '.'); ?></td>
                             <td><?php echo $row['cor']; ?></td>
                             <td><?php echo $row['quantidade_veiculos']; ?></td> <!-- Exibe a quantidade de veículos -->
-                            <td>
-                                <a class="a-btn" href="editar_modelo.php?id=<?php echo $row['modelo_id']; ?>">
+                            <td style="white-space:nowrap;">
+                                <a class="a-btn" href="editar_modelo.php?id=<?php echo $row['modelo_id']; ?>" style="text-decoration:none;outline:none;margin-right:2px;vertical-align:middle;">
                                     <img src="../img/editar.png" alt="Editar" class="btn-editar">
                                 </a>
-                                <a class="a-btn"
-                                    href="cadastrar_imagens_secundarias.php?modelo_id=<?php echo $row['modelo_id']; ?>">
+                                <a class="a-btn" href="cadastrar_imagens_secundarias.php?modelo_id=<?php echo $row['modelo_id']; ?>">
                                     <img src="../img/envio.png" alt="Upload Imagens" class="btn-editar">
                                 </a>
                                 <a class="a-btn" href="editar_ordem_imagens.php?modelo_id=<?php echo $row['modelo_id']; ?>">
                                     <img src="../img/layer.png" alt="Editar Ordem de Imagens" class="btn-editar">
                                 </a>
+                                <button class="a-btn btn-editar" id="remover-modelo-<?php echo $row['modelo_id']; ?>" data-id="<?php echo $row['modelo_id']; ?>" data-nome="<?php echo htmlspecialchars($row['modelo'], ENT_QUOTES); ?>" style="background:none;border:none;cursor:pointer;text-decoration:none;padding:0;margin-left:2px;vertical-align:middle;">
+                                    <img src="../img/lixeira.png" alt="Remover" class="btn-editar">
+                                </button>
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -221,5 +228,140 @@ $result = $stmt->get_result();
             </div>
         </div>
     </div>
+
+    <!-- Modal de confirmação de remoção -->
+    <div class="modal-remover" id="modal-remover">
+        <div class="modal-remover-content">
+            <h3>Remover modelo</h3>
+            <p id="modal-remover-msg">Tem certeza que deseja remover este modelo?</p>
+            <div class="modal-remover-botoes">
+                <button id="btn-cancelar-remover">Cancelar</button>
+                <button id="btn-confirmar-remover">Remover</button>
+            </div>
+        </div>
+    </div>
+    <style>
+    .modal-remover {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(30, 32, 38, 0.55);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+    .modal-remover.ativa { display: flex; }
+    .modal-remover-content {
+        background: #23272f;
+        padding: 32px 28px 24px 28px;
+        border-radius: 18px;
+        max-width: 480px;
+        min-width: 340px;
+        width: 100%;
+        margin: auto;
+        text-align: center;
+        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.25), 0 1.5px 8px 0 #0002;
+        color: #f3f3f3;
+        border: 1.5px solid #23272f;
+        font-family: 'Segoe UI', 'Arial', sans-serif;
+    }
+    .modal-remover-content h3 {
+        margin-top: 0;
+        margin-bottom: 18px;
+        font-size: 1.25rem;
+        color: #e53935;
+        letter-spacing: 0.5px;
+    }
+    #modal-remover-msg {
+        font-size: 1.08rem;
+        margin-bottom: 18px;
+        color: #f3f3f3;
+        word-break: break-word;
+        line-height: 1.5;
+    }
+    .modal-remover-botoes {
+        margin-top: 10px;
+        display: flex;
+        gap: 18px;
+        justify-content: center;
+    }
+    .modal-remover-botoes button {
+        padding: 9px 22px;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+        box-shadow: 0 1.5px 6px #0001;
+    }
+    #btn-cancelar-remover {
+        background: #2d313a;
+        color: #f3f3f3;
+        border: 1px solid #444;
+    }
+    #btn-cancelar-remover:hover {
+        background: #23272f;
+        color: #e53935;
+        border: 1px solid #e53935;
+    }
+    #btn-confirmar-remover {
+        background: linear-gradient(90deg, #e53935 60%, #b71c1c 100%);
+        color: #fff;
+        border: none;
+    }
+    #btn-confirmar-remover:hover {
+        background: #fff;
+        color: #e53935;
+        border: 1px solid #e53935;
+    }
+    </style>
+    <script>
+    let idParaRemover = null;
+    let nomeParaRemover = '';
+    document.querySelectorAll('button[id^="remover-modelo-"]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            idParaRemover = this.getAttribute('data-id');
+            nomeParaRemover = this.getAttribute('data-nome');
+            document.getElementById('modal-remover-msg').innerHTML = `Tem certeza que deseja excluir o modelo <b>${nomeParaRemover}</b> (ID: <span style='color:#e53935;font-weight:bold;'>${idParaRemover}</span>)?`;
+            document.getElementById('modal-remover').classList.add('ativa');
+        });
+    });
+    document.getElementById('btn-cancelar-remover').onclick = function() {
+        document.getElementById('modal-remover').classList.remove('ativa');
+        idParaRemover = null;
+        nomeParaRemover = '';
+    };
+    document.getElementById('btn-confirmar-remover').onclick = function() {
+        if (!idParaRemover) return;
+        fetch('remover_modelo.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'id=' + encodeURIComponent(idParaRemover)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.sucesso) {
+                const linha = document.querySelector('button[data-id="'+idParaRemover+'"').closest('tr');
+                if (linha) linha.remove();
+            } else {
+                alert(data.erro || 'Erro ao remover modelo.');
+            }
+            document.getElementById('modal-remover').classList.remove('ativa');
+            idParaRemover = null;
+            nomeParaRemover = '';
+            document.getElementById('modal-remover-msg').textContent = 'Tem certeza que deseja remover este modelo?';
+        })
+        .catch(() => {
+            alert('Erro ao conectar com o servidor.');
+            document.getElementById('modal-remover').classList.remove('ativa');
+            idParaRemover = null;
+            nomeParaRemover = '';
+            document.getElementById('modal-remover-msg').textContent = 'Tem certeza que deseja remover este modelo?';
+        });
+    };
+    </script>
 </body>
 </html>
