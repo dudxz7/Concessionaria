@@ -309,6 +309,7 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -358,11 +359,19 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
             display: none;
             position: fixed;
             z-index: 9999;
-            left: 0; top: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.95);
-            justify-content: center; align-items: center;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
         }
-        .modal-360.active { display: flex; }
+
+        .modal-360.active {
+            display: flex;
+        }
+
         .modal-360-content {
             position: relative;
             max-width: 90vw;
@@ -371,6 +380,7 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
             align-items: center;
             justify-content: center;
         }
+
         #img360 {
             max-width: 100vw;
             max-height: 80vh;
@@ -379,6 +389,7 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
             border-radius: 12px;
             box-shadow: 0 4px 32px #000a;
         }
+
         .modal-360-indicators {
             position: absolute;
             bottom: 32px;
@@ -387,12 +398,15 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
             display: flex;
             gap: 6px;
         }
+
         .modal-360-indicators .dot {
-            width: 10px; height: 10px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             background: #fff3;
             border: 1.5px solid #fff8;
         }
+
         .modal-360-indicators .dot.active {
             background: #2f4eda;
             border-color: #fff;
@@ -493,9 +507,11 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
             <aside class="side-card">
                 <div class="header">
                     <h2><span><?= htmlspecialchars($modelo) ?></span></h2>
-                    <button type="button" class="btn-favoritar" data-modelo-id="<?= (int)$id_modelo ?>" style="background:none;border:none;padding:0;cursor:pointer;">
-                            <img src="../img/coracoes/<?= $coracaoImg ?>" alt="Favoritar" class="heart-icon" draggable="false"> Favoritar
-                        </button>
+                    <button type="button" class="btn-favoritar" data-modelo-id="<?= (int) $id_modelo ?>"
+                        style="background:none;border:none;padding:0;cursor:pointer;">
+                        <img src="../img/coracoes/<?= $coracaoImg ?>" alt="Favoritar" class="heart-icon"
+                            draggable="false"> Favoritar
+                    </button>
 
                 </div>
 
@@ -553,9 +569,11 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
                 </div>
 
                 <?php if ($botaoComprarHabilitado): ?>
-                <button class="buy-button" id="btn-comprar" data-id="<?= (int)$veiculo_id_disponivel ?>" data-modelo-id="<?= (int)$id_modelo ?>">Compre agora</button>
+                    <button class="buy-button" id="btn-comprar" data-id="<?= (int) $veiculo_id_disponivel ?>"
+                        data-modelo-id="<?= (int) $id_modelo ?>">Compre agora</button>
                 <?php else: ?>
-                <button class="buy-button" id="btn-comprar" disabled style="opacity:0.6;cursor:not-allowed;">Indisponível</button>
+                    <button class="buy-button" id="btn-comprar" disabled
+                        style="opacity:0.6;cursor:not-allowed;">Indisponível</button>
                 <?php endif; ?>
                 <button class="visit-button">Agendar visita</button>
             </aside>
@@ -772,9 +790,8 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
                             class="accessory-icon">
                         <p>Rodas de liga leve</p>
                     </div>
-                    <div class="
-                        <img src="../img/acessorios-veiculos/sensor-de-estacionamento.svg"
-                            alt="Sensor de estacionamento" class="accessory-icon">
+                    <div class="accessory-item">
+                        <img src="../img/acessorios-veiculos/sensor-de-estacionamento.svg" alt="Sensor de estacionamento" class="accessory-icon">
                         <p>Sensor de estacionamento</p>
                     </div>
                     <div class="accessory-item">
@@ -825,7 +842,7 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
                         </p>
                     </div>
                     <div class="link-verificacao">
-                        <a href="#">Abrir itens verificados</a>
+                        <a href="#" id="abrirItensVerificados">Abrir itens verificados</a>
                     </div>
                 </div>
             </div>
@@ -836,7 +853,9 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
             <h2>Conheça esse carro em nossa loja</h2>
             <div class="conteudo-visita">
                 <div class="mapa">
-                    <img src="../img/mapa/mapa-consorcio.webp" alt="Mapa da loja">
+                    <iframe src="https://www.google.com/maps?q=Rua+J%C3%BAlio+Siqueira+390+Fortaleza+CE&output=embed"
+                        width="450" height="200" style="border:0;border-radius:12px;box-shadow:0 2px 12px #0001;"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
                 <div class="info">
 
@@ -845,7 +864,8 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
                         <img class="icone" src="../img/mapa/endereco.svg" alt="Localização">
                         <div>
                             <strong>Endereço</strong><br>
-                            <a href="#">Avenida General Carneiro - 2523 SOROCABA / SP</a>
+                            <a href="https://maps.google.com/?q=Rua+J%C3%BAlio+Siqueira+390+Fortaleza+CE"
+                                target="_blank">Rua Júlio Siqueira, 390 - Fortaleza/CE</a>
                         </div>
                     </div>
 
@@ -1028,7 +1048,602 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
         </div>
         <div class="modal-360-indicators" id="modal360Indicators"></div>
     </div>
-        <script src="../js/veiculo-carrossel.js"></script>
+
+    <!-- Modal Itens Verificados -->
+    <div class="modal" id="modalItensVerificados">
+        <div class="modal-content" style="max-width:700px;text-align:left;">
+            <span class="close" id="fecharItensVerificados"
+                style="position:absolute;font-size:28px;cursor:pointer;">&times;</span>
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:10px;">
+                <img src="../img/certificado/360-itens-verificados.webp" alt="360 verificados"
+                    style="width:48px;height:48px;">
+                <div>
+                    <h2 style="margin:0;font-size:1.5em;">360 Itens verificados.</h2>
+                    <p style="margin:0;font-size:1em;color:#444;">Esta é uma lista de todos os itens que o nosso time de
+                        especialistas verificaram neste carro para garantir que você rode com tranquilidade.</p>
+                </div>
+            </div>
+            <hr>
+            <div id="conteudoItensVerificados">
+                <strong style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                    <img src="../img/sobre-veiculos/suv-sobre.svg" alt="Carroceria" style="width:22px;height:22px;">
+                    Carroceria
+                </strong>
+                <ul>
+                    <li>Batente da porta dianteira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Batente da porta dianteira esquerda <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Batente da porta traseira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Batente da porta traseira esquerda <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Batente do porta-malas <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Break light <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Emblema dianteiro <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Emblema traseiro <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Farol de neblina dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Farol de neblina dianteiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Farol direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Farol esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Grade frontal <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Grade frontal central <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Grade frontal inferior <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Higienização da carroceria <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Lanterna de neblina traseira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Lanterna de neblina traseira esquerda <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Lanterna direita <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Lateral traseira direita <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Lateral traseira esquerda <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Lanterna esquerda <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Painel corta-fogo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Palheta do limpador dianteiro <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Palheta do limpador traseiro <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Para-barro dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Para-barro dianteiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Para-barro traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Para-barro traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Refletor dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Refletor dianteiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Refletor traseiro direito <span style="color:green;font_weight:bold;">&#10003;</span></li>
+                    <li>Refletor traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Soleira da porta dianteira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Soleira da porta dianteira esquerda <span style="color:green;font_weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Soleira da porta traseira direita <span style="color:green;font_weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Soleira da porta traseira esquerda <span style="color:green;font_weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Soleira do painel traseiro <span style="color:green;font_weight:bold;">&#10003;</span></li>
+                </ul>
+                <strong style="display:flex;align-items:center;gap:8px;margin:18px 0 8px 0;">
+                    <img src="../img/acessorios-veiculos/direcao-eletrica.svg" alt="Direção"
+                        style="width:22px;height:22px;"> Direção
+                </strong>
+                <ul>
+                    <li>Bomba de direção hidráulica (vazamentos) <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Caixa de direção (vazamentos) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Folga no volante <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Mangueiras de direção hidráulica (vazamentos) <span
+                            style="color:green;font_weight:bold;">&#10003;</span></li>
+                    <li>Terminal de direção direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Terminal de direção esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                </ul>
+                <strong style="display:flex;align-items:center;gap:8px;margin:18px 0 8px 0;">
+                    <img src="../img/acessorios-veiculos/eletricidade.png" alt="Elétrica e Acionamento"
+                        style="width:22px;height:22px;"> Elétrica e Acionamento
+                </strong>
+                <ul>
+                    <li>Acionamento da buzina <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acionamento de abertura do capô <span style="color:green;font_weight:bold;">&#10003;</span></li>
+                    <li>Acionamento de abertura do porta-malas <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acionamento de abertura do tanque de combustível <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acionamento do ar condicionado <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acionamento do desembaçador do vidro traseiro <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acionamento do esguicho dianteiro e traseiro <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acionamento do limpador do para-brisa e do vidro traseiro <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acionamento do teto solar <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acionamento do vidro dianteiro direito <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acionamento do vidro dianteiro esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acionamento do vidro traseiro direito <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acionamento do vidro traseiro esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acionamentos da chave do carro <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Ajuste de temperatura do ar <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Ajuste de velocidade do ar <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Alto-falante dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Alto-falante dianteiro esquerdo <span style="color:green;font_weight:bold;">&#10003;</span></li>
+                    <li>Alto-falante traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Alto-falante traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Antena <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Banco dianteiro direito - Acionamentos <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Banco dianteiro esquerdo - Acionamentos <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Banco traseiro direito - Acionamentos <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Banco traseiro esquerdo - Acionamentos <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Bateria <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Botão de partida <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Botões do volante <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Botões multimídia <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Cabos da bateria <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Chave de ignição <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Chave de seta <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Chave do limpador <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Espelho retrovisor direito - regulagem <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Espelho retrovisor esquerdo - regulagem <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Funcionamento do ar condicionado <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Funcionamento do multimídia <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Maçaneta interna da porta dianteira direita <span
+                            style="color:green;font_weight:bold;">&#10003;</span></li>
+                    <li>Maçaneta interna da porta dianteira esquerda <span
+                            style="color:green;font_weight:bold;">&#10003;</span></li>
+                    <li>Maçaneta interna da porta traseira direita <span
+                            style="color:green;font_weight:bold;">&#10003;</span></li>
+                    <li>Maçaneta interna da porta traseira esquerda <span
+                            style="color:green;font_weight:bold;">&#10003;</span></li>
+                    <li>Medidor do nível do combustível <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Painel de instrumentos <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Tomada 12 V <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Trava central das portas <span style="color:green;font_weight:bold;">&#10003;</span></li>
+                    <li>Trava de segurança infantil - direita <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Trava de segurança infantil - esquerda <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Velocímetro <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                </ul>
+                <strong style="display:flex;align-items:center;gap:8px;margin:18px 0 8px 0;">
+                    <img src="../img/acessorios-veiculos/freio-abs-acc.svg" alt="Freios"
+                        style="width:22px;height:22px;"> Freios
+                </strong>
+                <ul>
+                    <li>Acionamento do pedal de freio <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Central do ABS <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Cilindro de freio traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Cilindro de freio traseiro esquerdo <span style="color:green;font_weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Cilindro mestre de freio <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Conduíte de freio dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Conduíte de freio dianteiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Conduíte de freio traseiro direito <span style="color:green;font_weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Conduíte de freio traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Disco de freio dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Disco de freio dianteiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Disco de freio traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Disco de freio traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Nível de fluído de freio <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pastilha de freio dianteira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Pastilha de freio dianteira esquerda <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Pastilha de freio traseira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Pastilha de freio traseira esquerda <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Pinça de freio dianteira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Pinça de freio dianteira esquerda <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Pinça de freio traseira direita <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pinça de freio traseira esquerda <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Regulagem do freio de mão <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Servo freio <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Tampa do reservatório do fluído de freio <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                </ul>
+                <strong style="display:flex;align-items:center;gap:8px;margin:18px 0 8px 0;">
+                    <img src="../img/sobre-veiculos/placa-sobre.svg" alt="Identificação veicular / Documentos"
+                        style="width:22px;height:22px;"> Identificação veicular / Documentos
+                </strong>
+                <ul>
+                    <li>Chassi (Identificação) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Manual de Condução <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Manual de Garantia <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Manual de Manutenção <span style="color:green;font_weight:bold;">&#10003;</span></li>
+                    <li>Para-brisa (VIS) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Placa dianteira <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Placa traseira <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vidro dianteiro direito (VIS) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vidro dianteiro esquerdo (VIS) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vidro traseiro central (VIS) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vidro traseiro direito (VIS) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vidro traseiro esquerdo (VIS) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                </ul>
+                <strong style="display:flex;align-items:center;gap:8px;margin:18px 0 8px 0;">
+                    <img src="../img/acessorios-veiculos/farol-de-neblina-acc.svg" alt="Iluminação"
+                        style="width:22px;height:22px;"> Iluminação
+                </strong>
+                <ul>
+                    <li>Break light - Luz <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Cabine banco traseiro - Luz <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Cabine motorista - Luz <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Farol de neblina direito - Luz <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Farol de neblina esquerdo - Luz <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Farol direito - Luz alta <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Farol direito - Luz baixa <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Farol direito - Luz de lanterna <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Farol direito - Luz de seta <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Farol esquerdo - Luz alta <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Farol esquerdo - Luz baixa <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Farol esquerdo - Luz de lanterna <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Farol esquerdo - Luz de seta <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Lanterna de neblina direita - Luz <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Lanterna de neblina esquerda - Luz <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Lanterna direita - Luz <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Lanterna direita - Luz de freio <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Lanterna direita - Luz de ré <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Lanterna direita - Luz de seta <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Lanterna esquerda - Luz <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Lanterna esquerda - Luz de freio <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Lanterna esquerda - Luz de ré <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Lanterna esquerda - Luz de seta <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Placa traseira - Luz <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Porta-malas - Luz <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Repetidor direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Repetidor esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                </ul>
+                <strong style="display:flex;align-items:center;gap:8px;margin:18px 0 8px 0;">
+                    <img src="../img/acessorios-veiculos/banco-de-motorista-acc.svg" alt="Interior"
+                        style="width:22px;height:22px;">
+                    Interior
+                </strong>
+                <ul>
+                    <li>Acabamento do banco dianteiro direito <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acabamento do banco dianteiro esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Acabamento do banco traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Acabamento do banco traseiro esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Ajustador do cinto de segurança direito <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Ajustador do cinto de segurança esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Apoio de braço / Console <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Bagagito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Banco dianteiro direito (geral) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Banco dianteiro esquerdo (geral) <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Banco traseiro (geral) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Carpete dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Carpete dianteiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Carpete traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Carpete traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Cinto de segurança dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Cinto de segurança dianteiro esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Cinto de segurança traseiro central <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Cinto de segurança traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Cinto de segurança traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Coifa da manopla do câmbio <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Console Central <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Difusor de ar central <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Difusor de ar direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Difusor de ar esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Difusor de ar traseiro central <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Encosto de cabeça dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Encosto de cabeça dianteiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Encosto de cabeça traseiro central <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Encosto de cabeça traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Encosto de cabeça traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Espelho do quebra-sol direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Espelho do quebra-sol esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Forro da porta dianteira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Forro da porta dianteira esquerda <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Forro da porta traseira direita <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Forro da porta traseira esquerda <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Forro da tampa traseira <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Guarnição de porta dianteira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Guarnição de porta dianteira esquerda <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Guarnição de porta traseira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Guarnição de porta traseira esquerda <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Guarnição do Porta-malas <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Higienização do interior <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Kit de ferramentas <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Manopla do câmbio <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pedal de embreagem - Revestimento <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Pedal de freio - Revestimento <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pedal do acelerador - Revestimento <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Porta-copos <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Porta-luvas <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Quebra-sol direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Quebra-sol esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Rede de carga do compartimento de bagagem <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Retrovisor central <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Revestimento interno do teto <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Suporte do bagagito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Tapete dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Tapete dianteiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Tapete do porta-malas <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Tapete traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Tapete traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Trava do estepe <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vedação da porta dianteira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Vedação da porta dianteira esquerda <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Vedação da porta traseira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Vedação da porta traseira esquerda <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Volante - Revestimento <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                </ul>
+                <strong style="display:flex;align-items:center;gap:8px;margin:18px 0 8px 0;">
+                    <img src="../img/sobre-veiculos/motor-sobre.svg" alt="Motor" style="width:22px;height:22px;"> Motor
+                </strong>
+                <ul>
+                    <li>Bomba d´água (vazamentos) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Bujão do carter (vazamentos) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Cabo de velas / bobina <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Capa da correia dentada <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Carter (vazamentos) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Correia auxiliar <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Correia dentada <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coxim do motor <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coxins do escapamento <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Defletor de calor <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Escapamento final <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Escapamento inicial <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Escapamento intermediário <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Flexível do escapamento <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Hidrovácuo (funcionamento) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Higienização do motor <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Linhas de combustível (vazamentos aparentes) <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Mangueiras de combustível (vazamentos) <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Motor (barulho e vibrações anormais) <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Óleo do motor (nível e alterações aparentes) <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Protetor do carter <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Radiador <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Reservatório de direção hidráulica <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Sistema de arrefecimento (vazamentos) <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Tanque de combustível <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vela de ignição <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                </ul>
+                <strong style="display:flex;align-items:center;gap:8px;margin:18px 0 8px 0;">
+                    <img src="../img/acessorios-veiculos/rodas-acc.svg" alt="Pneus, Rodas e Rolamentos"
+                        style="width:22px;height:22px;"> Pneus, Rodas e Rolamentos
+                </strong>
+                <ul>
+                    <li>Calota dianteira direita <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Calota dianteira esquerda <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Calota traseira direita <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Calota traseira esquerda <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Parafusos da roda dianteira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Parafusos da roda dianteira esquerda <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Parafusos da roda do estepe <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Parafusos da roda traseira direita <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Parafusos da roda traseira esquerda <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Pneu dianteiro direito (danos) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pneu dianteiro direito com medida original <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pneu dianteiro esquerdo (danos) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pneu dianteiro esquerdo com medida original <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pneu estepe (danos) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pneu traseiro direito (danos) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pneu traseiro direito com medida original <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pneu traseiro esquerdo (danos) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pneu traseiro esquerdo com medida original <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pneus com mesma profundidade no eixo dianteiro <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pneus com mesma profundidade no eixo traseiro <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pneus de mesmo modelo no eixo dianteiro <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pneus de mesmo modelo no eixo traseiro <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pneus sem remodelagem <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Profundidade do estepe <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Profundidade do pneu dianteiro direito <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Profundidade do pneu dianteiro esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Profundidade do pneu traseiro direito <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Profundidade do pneu traseiro esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Roda dianteira direita <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Roda dianteira esquerda <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Roda do estepe <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Roda traseira direita <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Roda traseira esquerda <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Rolamento dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Rolamento dianteiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Rolamento traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Rolamento traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Tampa central da roda dianteira direita <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Tampa central da roda dianteira esquerda <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Tampa central da roda do estepe <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Tampa central da roda traseira direita <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Tampa central da roda traseira esquerda <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                </ul>
+                <strong style="display:flex;align-items:center;gap:8px;margin:18px 0 8px 0;">
+                    <img src="../img/acessorios-veiculos/ar-condicionado-acc.svg"" alt=" Revisão"
+                        style="width:22px;height:22px;">
+                    Revisão
+                </strong>
+                <ul>
+                    <li>Filtro de ar <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Filtro de ar condicionado <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Filtro de combustível <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Filtro de óleo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Nível de água do radiador <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Nível de óleo motor <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Realização das revisões <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Reservatório de água do para-brisa <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                </ul>
+                <strong style="display:flex;align-items:center;gap:8px;margin:18px 0 8px 0;">
+                    <img src="../img/sobre-veiculos/suv-sobre.svg" alt="Suspensão" style="width:22px;height:22px;">
+                    Suspensão
+                </strong>
+                <ul>
+                    <li>Agregado da suspensão <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Amortecedor dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Amortecedor dianteiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Amortecedor traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Amortecedor traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Bandeja dianteira direita <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Bandeja dianteira esquerda <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Bandeja traseira direita <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Bandeja traseira esquerda <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Batente do amortecedor traseiro esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Batente do amortecedor dianteiro direito <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Batente do amortecedor dianteiro esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Batente do amortecedor traseiro direito <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Bieleta / Barra estabilizadora direita <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Bieleta / Barra estabilizadora esquerda <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coifa do amortecedor dianteiro direito <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coifa do amortecedor dianteiro esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coifa do amortecedor traseiro direito <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coifa do amortecedor traseiro esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coxim do amortecedor dianteiro direito <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coxim do amortecedor dianteiro esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coxim do amortecedor traseiro direito <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coxim do amortecedor traseiro esquerdo <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Mola dianteira direita <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Mola dianteira esquerda <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Mola traseira direita <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Mola traseira esquerda <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pivô dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pivô dianteiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pivô traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Pivô traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                </ul>
+                <strong style="display:flex;align-items:center;gap:8px;margin:18px 0 8px 0;">
+                    <img src="../img/acessorios-veiculos/transmissao-manual.png" alt="Transmissão"
+                        style="width:22px;height:22px;"> Transmissão
+                </strong>
+                <ul>
+                    <li>Acionamento do pedal de embreagem <span style="color:green;font-weight:bold;">&#10003;</span>
+                    </li>
+                    <li>Caixa de marcha (vazamentos) <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coifa externa da homocinética esquerda <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coifa externa da homocinética direita <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coifa interna da homocinética direita <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Coifa interna da homocinética esquerda <span
+                            style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Embreagem <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Transmissão automática <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Transmissão manual <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Trava da homocinética direita <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Trava da homocinética esquerda <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                </ul>
+                <strong style="display:flex;align-items:center;gap:8px;margin:18px 0 8px 0;">
+                    <img src="../img/acessorios-veiculos/porta-acc.svg" alt="Vidros elétricos"
+                        alt="Vidros e alterações de características" style="width:22px;height:22px;"> Vidros e
+                    alterações de características
+                </strong>
+                <ul>
+                    <li>Capota de fibra <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Capota marítima <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>GNV <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Insulfilm dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Insulfilm dianteiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Insulfilm traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Insulfilm traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Insulfilm para-brisa <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Insulfilm vidro vigia <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Para-brisa <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vidro dianteiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vidro dianteiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vidro traseiro direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vidro traseiro esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vidro vigia <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vidro do retrovisor direito <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vidro do retrovisor esquerdo <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                    <li>Vidro do retrovisor central <span style="color:green;font-weight:bold;">&#10003;</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/veiculo-carrossel.js"></script>
     <script src="../js/only-one-selected.js"></script>
     <script src="../js/mostrar-mais.js"></script>
     <script src="../js/horario-detalhado.js"></script>
@@ -1089,7 +1704,7 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
                             const nomeArquivo = i + '.' + ext;
                             const url = caminhoBase + nomeArquivo;
                             const testImg = new Image();
-                            testImg.onload = function() {
+                            testImg.onload = function () {
                                 if (!encontrada) {
                                     encontrada = true;
                                     // Cria miniatura
@@ -1098,7 +1713,7 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
                                     thumb.className = 'thumb';
                                     thumb.setAttribute('data-cor', corSelecionada.toLowerCase());
                                     thumb.alt = 'Imagem do modelo';
-                                    thumb.onclick = function() {
+                                    thumb.onclick = function () {
                                         document.getElementById('imagem-principal').src = url;
                                     };
                                     thumbnailRow.appendChild(thumb);
@@ -1110,7 +1725,7 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
                                     miniaturasValidas++;
                                 }
                             };
-                            testImg.onerror = function() {
+                            testImg.onerror = function () {
                                 imagensCarregadas++;
                                 // Se terminou de tentar todas e nenhuma válida, mostra padrão
                                 if (imagensCarregadas === maxImagens * extensoes.length && miniaturasValidas === 0) {
@@ -1121,7 +1736,7 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
                         }
                     }
                     // Se nenhuma miniatura válida após um tempo, mostra imagem padrão
-                    setTimeout(function() {
+                    setTimeout(function () {
                         if (miniaturasValidas === 0) {
                             document.getElementById('imagem-principal').src = '../img/modelos/padrao.webp';
                         }
@@ -1150,7 +1765,7 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
                 // Verificação de estoque via AJAX
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', 'verifica_estoque.php?id=' + encodeURIComponent(modeloId), true); // Corrigido para enviar modelo_id
-                xhr.onreadystatechange = function() {
+                xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4) {
                         if (xhr.status === 200) {
                             try {
@@ -1172,204 +1787,175 @@ $botaoComprarHabilitado = ($quantidadeEstoque > 0 && $veiculo_id_disponivel && $
                 xhr.send();
             });
         }
-    </script>
-    <style>
-        .modal-360 {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            left: 0; top: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.95);
-            justify-content: center; align-items: center;
-        }
-        .modal-360.active { display: flex; }
-        .modal-360-content {
-            position: relative;
-            max-width: 90vw;
-            max-height: 80vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #img360 {
-            max-width: 90vw;
-            max-height: 80vh;
-            user-select: none;
-            background: #222;
-            border-radius: 12px;
-            box-shadow: 0 4px 32px #000a;
-        }
-        .modal-360-indicators {
-            position: absolute;
-            bottom: 32px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 6px;
-        }
-        .modal-360-indicators .dot {
-            width: 10px; height: 10px;
-            border-radius: 50%;
-            background: #fff3;
-            border: 1.5px solid #fff8;
-        }
-        .modal-360-indicators .dot.active {
-            background: #2f4eda;
-            border-color: #fff;
-        }
-    </style>
-    <script>
-    // --- Script ISOLADO do 360° Modal (agora pega imagens até max-1 igual ao PHP original) ---
-    document.addEventListener('DOMContentLoaded', function() {
-        let imagens360 = [];
-        let idxAtual = 0;
-        let isDragging = false;
-        let startX = 0;
-        let lastIdx = 0;
-        let img360 = null;
-        let modal360 = null;
-        let indicators = null;
-        let dragAccum = 0;
-        const PIXELS_PER_FRAME =  15; // Quantidade de pixels para cada "frame" de arrasto
 
-        // Função para buscar as imagens da cor selecionada (igual carrossel, mas só até max-1)
-        function buscarImagens360(cor) {
-            const modeloSlug = '<?= $modelo_slug ?>';
-            const caminhoBase = `../img/modelos/cores/${modeloSlug}/${cor.toLowerCase()}/`;
-            const extensoes = ['webp', 'png', 'jpg', 'jpeg'];
-            const maxImagens = 12;
-            let imgs = [];
-            let carregadas = 0;
-            let totalValidas = 0;
-            let promises = [];
-            for (let i = 1; i <= maxImagens; i++) {
-                for (let ext of extensoes) {
-                    const url = caminhoBase + i + '.' + ext;
-                    promises.push(new Promise(resolve => {
-                        const testImg = new Image();
-                        testImg.onload = function() {
-                            resolve(url);
-                        };
-                        testImg.onerror = function() {
-                            resolve(null);
-                        };
-                        testImg.src = url;
-                    }));
-                }
-            }
-            // Só retorna as imagens válidas, e remove a última (imagens.length - 1)
-            return Promise.all(promises).then(results => {
-                let validas = results.filter(Boolean);
-                if (validas.length > 1) {
-                    validas = validas.slice(0, validas.length - 1);
-                }
-                return validas;
-            });
-        }
+        // --- Script ISOLADO do 360° Modal (agora pega imagens até max-1 igual ao PHP original) ---
+        document.addEventListener('DOMContentLoaded', function () {
+            let imagens360 = [];
+            let idxAtual = 0;
+            let isDragging = false;
+            let startX = 0;
+            let lastIdx = 0;
+            let img360 = null;
+            let modal360 = null;
+            let indicators = null;
+            let dragAccum = 0;
+            const PIXELS_PER_FRAME = 15; // Quantidade de pixels para cada "frame" de arrasto
 
-        async function showModal360(startIdx = 0) {
-            // Pega a cor atualmente selecionada
-            const corCheckbox = document.querySelector('.color-checkbox:checked');
-            let cor = corCheckbox ? corCheckbox.getAttribute('data-cor') : '<?= $corPrincipal ?>';
-            imagens360 = await buscarImagens360(cor);
-            if (!imagens360.length) return;
-            idxAtual = startIdx;
-            modal360 = document.getElementById('modal360');
-            img360 = document.getElementById('img360');
-            indicators = document.getElementById('modal360Indicators');
-            modal360.classList.add('active');
-            modal360.style.display = 'flex';
-            updateImg360();
-            renderIndicators();
-        }
-        function closeModal360() {
-            document.getElementById('modal360').classList.remove('active');
-            document.getElementById('modal360').style.display = 'none';
-        }
-        function updateImg360() {
-            if (img360 && imagens360[idxAtual]) {
-                img360.src = imagens360[idxAtual];
-                updateIndicators();
+            // Função para buscar as imagens da cor selecionada (igual carrossel, mas só até max-1)
+
+
+            function buscarImagens360(cor) {
+                const modeloSlug = '<?= $modelo_slug ?>';
+                const caminhoBase = `../img/modelos/cores/${modeloSlug}/${cor.toLowerCase()}/`;
+                const extensoes = ['webp', 'png', 'jpg', 'jpeg'];
+                const maxImagens = 12;
+                let imgs = [];
+                let carregadas = 0;
+                let totalValidas = 0;
+                let promises = [];
+                for (let i = 1; i <= maxImagens; i++) {
+                    for (let ext of extensoes) {
+                        const url = caminhoBase + i + '.' + ext;
+                        promises.push(new Promise(resolve => {
+                            const testImg = new Image();
+                            testImg.onload = function () {
+                                resolve(url);
+                            };
+                            testImg.onerror = function () {
+                                resolve(null);
+                            };
+                            testImg.src = url;
+                        }));
+                    }
+                }
+                // Só retorna as imagens válidas, e remove a última (imagens.length - 1)
+                return Promise.all(promises).then(results => {
+                    let validas = results.filter(Boolean);
+                    if (validas.length > 1) {
+                        validas = validas.slice(0, validas.length - 1);
+                    }
+                    return validas;
+                });
             }
-        }
-        function renderIndicators() {
-            if (!indicators) return;
-            indicators.innerHTML = '';
-            for (let i = 0; i < imagens360.length; i++) {
-                const dot = document.createElement('span');
-                dot.className = 'dot' + (i === idxAtual ? ' active' : '');
-                indicators.appendChild(dot);
+
+            async function showModal360(startIdx = 0) {
+                // Pega a cor atualmente selecionada
+                const corCheckbox = document.querySelector('.color-checkbox:checked');
+                let cor = corCheckbox ? corCheckbox.getAttribute('data-cor') : '<?= $corPrincipal ?>';
+                imagens360 = await buscarImagens360(cor);
+                if (!imagens360.length) return;
+                idxAtual = startIdx;
+                modal360 = document.getElementById('modal360');
+                img360 = document.getElementById('img360');
+                indicators = document.getElementById('modal360Indicators');
+                modal360.classList.add('active');
+                modal360.style.display = 'flex';
+                updateImg360();
+                renderIndicators();
             }
-        }
-        function updateIndicators() {
-            if (!indicators) return;
-            Array.from(indicators.children).forEach((dot, i) => {
-                dot.className = 'dot' + (i === idxAtual ? ' active' : '');
-            });
-        }
-        // Mouse/touch events
-        function onDragStart(e) {
-            isDragging = true;
-            startX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
-            lastIdx = idxAtual;
-            dragAccum = 0;
-        }
-        function onDragMove(e) {
-            if (!isDragging) return;
-            const x = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
-            const delta = x - startX;
-            dragAccum = delta;
-            if (Math.abs(dragAccum) >= PIXELS_PER_FRAME) {
-                let steps = Math.floor(dragAccum / PIXELS_PER_FRAME);
-                let novoIdx = (lastIdx - steps) % imagens360.length;
-                if (novoIdx < 0) novoIdx += imagens360.length;
-                if (novoIdx !== idxAtual) {
-                    idxAtual = novoIdx;
-                    updateImg360();
+            function closeModal360() {
+                document.getElementById('modal360').classList.remove('active');
+                document.getElementById('modal360').style.display = 'none';
+            }
+            function updateImg360() {
+                if (img360 && imagens360[idxAtual]) {
+                    img360.src = imagens360[idxAtual];
+                    updateIndicators();
                 }
             }
-        }
-        function onDragEnd() {
-            if (!isDragging) return;
-            lastIdx = idxAtual;
-            dragAccum = 0;
-            isDragging = false;
-        }
-        // Sempre reatribui o click na imagem principal (caso DOM mude)
-        function bindImagemPrincipalClick() {
-            var imgPrincipal = document.getElementById('imagem-principal');
-            if (imgPrincipal) {
-                imgPrincipal.removeEventListener('click', showModal360Handler);
-                imgPrincipal.addEventListener('click', showModal360Handler);
+            function renderIndicators() {
+                if (!indicators) return;
+                indicators.innerHTML = '';
+                for (let i = 0; i < imagens360.length; i++) {
+                    const dot = document.createElement('span');
+                    dot.className = 'dot' + (i === idxAtual ? ' active' : '');
+                    indicators.appendChild(dot);
+                }
             }
-        }
-        async function showModal360Handler(e) {
-            e.preventDefault();
-            await showModal360(0);
-        }
-        bindImagemPrincipalClick();
-        // Também reatribui após troca de cor/miniaturas
-        document.querySelectorAll('.color-checkbox').forEach(function(cb) {
-            cb.addEventListener('change', function() {
-                bindImagemPrincipalClick();
+            function updateIndicators() {
+                if (!indicators) return;
+                Array.from(indicators.children).forEach((dot, i) => {
+                    dot.className = 'dot' + (i === idxAtual ? ' active' : '');
+                });
+            }
+            // Mouse/touch events
+            function onDragStart(e) {
+                isDragging = true;
+                startX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+                lastIdx = idxAtual;
+                dragAccum = 0;
+            }
+            function onDragMove(e) {
+                if (!isDragging) return;
+                const x = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+                const delta = x - startX;
+                dragAccum = delta;
+                if (Math.abs(dragAccum) >= PIXELS_PER_FRAME) {
+                    let steps = Math.floor(dragAccum / PIXELS_PER_FRAME);
+                    let novoIdx = (lastIdx - steps) % imagens360.length;
+                    if (novoIdx < 0) novoIdx += imagens360.length;
+                    if (novoIdx !== idxAtual) {
+                        idxAtual = novoIdx;
+                        updateImg360();
+                    }
+                }
+            }
+            function onDragEnd() {
+                if (!isDragging) return;
+                lastIdx = idxAtual;
+                dragAccum = 0;
+                isDragging = false;
+            }
+            // Sempre reatribui o click na imagem principal (caso DOM mude)
+            function bindImagemPrincipalClick() {
+                var imgPrincipal = document.getElementById('imagem-principal');
+                if (imgPrincipal) {
+                    imgPrincipal.removeEventListener('click', showModal360Handler);
+                    imgPrincipal.addEventListener('click', showModal360Handler);
+                }
+            }
+            async function showModal360Handler(e) {
+                e.preventDefault();
+                await showModal360(0);
+            }
+            bindImagemPrincipalClick();
+            // Também reatribui após troca de cor/miniaturas
+            document.querySelectorAll('.color-checkbox').forEach(function (cb) {
+                cb.addEventListener('change', function () {
+                    bindImagemPrincipalClick();
+                });
             });
+            var closeBtn = document.getElementById('closeModal360');
+            if (closeBtn) closeBtn.addEventListener('click', closeModal360);
+            var modalEl = document.getElementById('modal360');
+            if (modalEl) {
+                modalEl.addEventListener('mousedown', onDragStart);
+                modalEl.addEventListener('mousemove', onDragMove);
+                modalEl.addEventListener('mouseup', onDragEnd);
+                modalEl.addEventListener('mouseleave', onDragEnd);
+                modalEl.addEventListener('touchstart', onDragStart);
+                modalEl.addEventListener('touchmove', onDragMove);
+                modalEl.addEventListener('touchend', onDragEnd);
+                modalEl.addEventListener('click', function (e) {
+                    if (e.target === this) closeModal360();
+                });
+            }
         });
-        var closeBtn = document.getElementById('closeModal360');
-        if (closeBtn) closeBtn.addEventListener('click', closeModal360);
-        var modalEl = document.getElementById('modal360');
-        if (modalEl) {
-            modalEl.addEventListener('mousedown', onDragStart);
-            modalEl.addEventListener('mousemove', onDragMove);
-            modalEl.addEventListener('mouseup', onDragEnd);
-            modalEl.addEventListener('mouseleave', onDragEnd);
-            modalEl.addEventListener('touchstart', onDragStart);
-            modalEl.addEventListener('touchmove', onDragMove);
-            modalEl.addEventListener('touchend', onDragEnd);
-            modalEl.addEventListener('click', function(e) {
-                if (e.target === this) closeModal360();
-            });
-        }
-    });
+
+        // Abrir modal de itens verificados
+        document.getElementById('abrirItensVerificados').onclick = function (e) {
+            e.preventDefault();
+            document.getElementById('modalItensVerificados').style.display = 'flex';
+        };
+        document.getElementById('fecharItensVerificados').onclick = function () {
+            document.getElementById('modalItensVerificados').style.display = 'none';
+        };
+        window.onclick = function (event) {
+            var modal = document.getElementById('modalItensVerificados');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
     </script>
 </body>
 

@@ -19,6 +19,19 @@ document.addEventListener("DOMContentLoaded", function () {
                     icone.src = "../img/seta-para-baixo-preta.png"; // Ícone para baixo
                 }
             }
+
+            // ANIMAÇÃO DO MAPA
+            // Procura o .mapa mais próximo (pode haver mais de um bloco de visita)
+            const visitaSection = this.closest('.container-visita');
+            if (visitaSection) {
+                const mapaDiv = visitaSection.querySelector('.mapa iframe');
+                if (mapaDiv) {
+                    // Se os detalhes estão ativos, expande, senão retrai
+                    const expandir = detalhes && detalhes.classList.contains('ativo');
+                    mapaDiv.style.transition = 'height 0.5s cubic-bezier(0.4,0,0.2,1)';
+                    mapaDiv.style.height = expandir ? '420px' : '200px';
+                }
+            }
         });
     });
 });
