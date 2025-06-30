@@ -1,0 +1,162 @@
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: #f4f6fa;
+    margin: 0;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-container {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+    padding: 32px 36px 28px 36px;
+    min-width: 380px;
+    max-width: 420px;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: none;
+    border: none;
+    font-size: 1.7rem;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.close-btn:hover { color: #222; }
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 28px;
+    font-weight: 700;
+    font-size: 1.45rem;
+    text-align: left;
+}
+
+.event-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #222;
+}
+.event-form input[type="text"],
+.event-form select {
+    width: 93%;
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    font-size: 1rem;
+    background: #fafbfc;
+    transition: border 0.2s;
+}
+.event-form input[type="text"]:focus,
+.event-form select:focus {
+    border-color: #3b82f6;
+    outline: none;
+}
+.event-form input[type="date"] {
+    width: 93%;
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    font-size: 1rem;
+    background: #fafbfc;
+    color: #222;
+    transition: border 0.2s;
+}
+.event-form input[type="date"]:focus {
+    border-color: #3b82f6;
+    outline: none;
+}
+.event-form label[for="data-inicio"],
+.event-form label[for="data-fim"] {
+    margin-top: 6px;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #222;
+}
+
+.file-upload-section {
+    margin-bottom: 22px;
+}
+.file-box {
+    display: flex;
+    align-items: center;
+    background: #f7f8fa;
+    border: 1.5px dashed #d1d5db;
+    border-radius: 10px;
+    padding: 14px 18px;
+    gap: 14px;
+    margin-top: 2px;
+}
+.pdf-icon {
+    width: 32px;
+    height: 32px;
+}
+.file-box span {
+    flex: 1;
+    font-size: 1.08rem;
+    color: #222;
+}
+.delete-btn {
+    background: none;
+    border: none;
+    color: #ef4444;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.delete-btn:hover { color: #b91c1c; }
+
+.form-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    margin-top: 18px;
+}
+.cancel-btn,
+.update-btn {
+    width: 50%;
+    border-radius: 12px;
+    padding: 12px 0;
+    font-size: 1.08rem;
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.cancel-btn {
+    background: #f3f4f6;
+    color: #222;
+}
+.cancel-btn:hover {
+    background: #e5e7eb;
+}
+.update-btn {
+    background: #2563eb;
+    color: #fff;
+}
+.update-btn:hover {
+    background: #1d4ed8;
+}
+.event-form input[type="text"]:nth-child(2) {
+    width: 93%;
+}
+.event-form select:nth-child(4) {
+    width: 100%;
+}

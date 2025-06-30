@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 23/06/2025 às 11:13
+-- Tempo de geração: 30/06/2025 às 18:17
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -18,8 +18,447 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
+-- Banco de dados: `phpmyadmin`
+--
+CREATE DATABASE IF NOT EXISTS `phpmyadmin` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+USE `phpmyadmin`;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__bookmark`
+--
+
+CREATE TABLE `pma__bookmark` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `dbase` varchar(255) NOT NULL DEFAULT '',
+  `user` varchar(255) NOT NULL DEFAULT '',
+  `label` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `query` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Bookmarks';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__central_columns`
+--
+
+CREATE TABLE `pma__central_columns` (
+  `db_name` varchar(64) NOT NULL,
+  `col_name` varchar(64) NOT NULL,
+  `col_type` varchar(64) NOT NULL,
+  `col_length` text DEFAULT NULL,
+  `col_collation` varchar(64) NOT NULL,
+  `col_isNull` tinyint(1) NOT NULL,
+  `col_extra` varchar(255) DEFAULT '',
+  `col_default` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Central list of columns';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__column_info`
+--
+
+CREATE TABLE `pma__column_info` (
+  `id` int(5) UNSIGNED NOT NULL,
+  `db_name` varchar(64) NOT NULL DEFAULT '',
+  `table_name` varchar(64) NOT NULL DEFAULT '',
+  `column_name` varchar(64) NOT NULL DEFAULT '',
+  `comment` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `mimetype` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `transformation` varchar(255) NOT NULL DEFAULT '',
+  `transformation_options` varchar(255) NOT NULL DEFAULT '',
+  `input_transformation` varchar(255) NOT NULL DEFAULT '',
+  `input_transformation_options` varchar(255) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Column information for phpMyAdmin';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__designer_settings`
+--
+
+CREATE TABLE `pma__designer_settings` (
+  `username` varchar(64) NOT NULL,
+  `settings_data` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Settings related to Designer';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__export_templates`
+--
+
+CREATE TABLE `pma__export_templates` (
+  `id` int(5) UNSIGNED NOT NULL,
+  `username` varchar(64) NOT NULL,
+  `export_type` varchar(10) NOT NULL,
+  `template_name` varchar(64) NOT NULL,
+  `template_data` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Saved export templates';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__favorite`
+--
+
+CREATE TABLE `pma__favorite` (
+  `username` varchar(64) NOT NULL,
+  `tables` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Favorite tables';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__history`
+--
+
+CREATE TABLE `pma__history` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `username` varchar(64) NOT NULL DEFAULT '',
+  `db` varchar(64) NOT NULL DEFAULT '',
+  `table` varchar(64) NOT NULL DEFAULT '',
+  `timevalue` timestamp NOT NULL DEFAULT current_timestamp(),
+  `sqlquery` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='SQL history for phpMyAdmin';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__navigationhiding`
+--
+
+CREATE TABLE `pma__navigationhiding` (
+  `username` varchar(64) NOT NULL,
+  `item_name` varchar(64) NOT NULL,
+  `item_type` varchar(64) NOT NULL,
+  `db_name` varchar(64) NOT NULL,
+  `table_name` varchar(64) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Hidden items of navigation tree';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__pdf_pages`
+--
+
+CREATE TABLE `pma__pdf_pages` (
+  `db_name` varchar(64) NOT NULL DEFAULT '',
+  `page_nr` int(10) UNSIGNED NOT NULL,
+  `page_descr` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='PDF relation pages for phpMyAdmin';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__recent`
+--
+
+CREATE TABLE `pma__recent` (
+  `username` varchar(64) NOT NULL,
+  `tables` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Recently accessed tables';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__relation`
+--
+
+CREATE TABLE `pma__relation` (
+  `master_db` varchar(64) NOT NULL DEFAULT '',
+  `master_table` varchar(64) NOT NULL DEFAULT '',
+  `master_field` varchar(64) NOT NULL DEFAULT '',
+  `foreign_db` varchar(64) NOT NULL DEFAULT '',
+  `foreign_table` varchar(64) NOT NULL DEFAULT '',
+  `foreign_field` varchar(64) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Relation table';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__savedsearches`
+--
+
+CREATE TABLE `pma__savedsearches` (
+  `id` int(5) UNSIGNED NOT NULL,
+  `username` varchar(64) NOT NULL DEFAULT '',
+  `db_name` varchar(64) NOT NULL DEFAULT '',
+  `search_name` varchar(64) NOT NULL DEFAULT '',
+  `search_data` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Saved searches';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__table_coords`
+--
+
+CREATE TABLE `pma__table_coords` (
+  `db_name` varchar(64) NOT NULL DEFAULT '',
+  `table_name` varchar(64) NOT NULL DEFAULT '',
+  `pdf_page_number` int(11) NOT NULL DEFAULT 0,
+  `x` float UNSIGNED NOT NULL DEFAULT 0,
+  `y` float UNSIGNED NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Table coordinates for phpMyAdmin PDF output';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__table_info`
+--
+
+CREATE TABLE `pma__table_info` (
+  `db_name` varchar(64) NOT NULL DEFAULT '',
+  `table_name` varchar(64) NOT NULL DEFAULT '',
+  `display_field` varchar(64) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Table information for phpMyAdmin';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__table_uiprefs`
+--
+
+CREATE TABLE `pma__table_uiprefs` (
+  `username` varchar(64) NOT NULL,
+  `db_name` varchar(64) NOT NULL,
+  `table_name` varchar(64) NOT NULL,
+  `prefs` text NOT NULL,
+  `last_update` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Tables'' UI preferences';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__tracking`
+--
+
+CREATE TABLE `pma__tracking` (
+  `db_name` varchar(64) NOT NULL,
+  `table_name` varchar(64) NOT NULL,
+  `version` int(10) UNSIGNED NOT NULL,
+  `date_created` datetime NOT NULL,
+  `date_updated` datetime NOT NULL,
+  `schema_snapshot` text NOT NULL,
+  `schema_sql` text DEFAULT NULL,
+  `data_sql` longtext DEFAULT NULL,
+  `tracking` set('UPDATE','REPLACE','INSERT','DELETE','TRUNCATE','CREATE DATABASE','ALTER DATABASE','DROP DATABASE','CREATE TABLE','ALTER TABLE','RENAME TABLE','DROP TABLE','CREATE INDEX','DROP INDEX','CREATE VIEW','ALTER VIEW','DROP VIEW') DEFAULT NULL,
+  `tracking_active` int(1) UNSIGNED NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Database changes tracking for phpMyAdmin';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__userconfig`
+--
+
+CREATE TABLE `pma__userconfig` (
+  `username` varchar(64) NOT NULL,
+  `timevalue` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `config_data` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='User preferences storage for phpMyAdmin';
+
+--
+-- Despejando dados para a tabela `pma__userconfig`
+--
+
+INSERT INTO `pma__userconfig` (`username`, `timevalue`, `config_data`) VALUES
+('root', '2025-06-23 09:13:36', '{\"Console\\/Mode\":\"collapse\",\"lang\":\"pt_BR\"}');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__usergroups`
+--
+
+CREATE TABLE `pma__usergroups` (
+  `usergroup` varchar(64) NOT NULL,
+  `tab` varchar(64) NOT NULL,
+  `allowed` enum('Y','N') NOT NULL DEFAULT 'N'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='User groups with configured menu items';
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `pma__users`
+--
+
+CREATE TABLE `pma__users` (
+  `username` varchar(64) NOT NULL,
+  `usergroup` varchar(64) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Users and their assignments to user groups';
+
+--
+-- Índices para tabelas despejadas
+--
+
+--
+-- Índices de tabela `pma__bookmark`
+--
+ALTER TABLE `pma__bookmark`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Índices de tabela `pma__central_columns`
+--
+ALTER TABLE `pma__central_columns`
+  ADD PRIMARY KEY (`db_name`,`col_name`);
+
+--
+-- Índices de tabela `pma__column_info`
+--
+ALTER TABLE `pma__column_info`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `db_name` (`db_name`,`table_name`,`column_name`);
+
+--
+-- Índices de tabela `pma__designer_settings`
+--
+ALTER TABLE `pma__designer_settings`
+  ADD PRIMARY KEY (`username`);
+
+--
+-- Índices de tabela `pma__export_templates`
+--
+ALTER TABLE `pma__export_templates`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `u_user_type_template` (`username`,`export_type`,`template_name`);
+
+--
+-- Índices de tabela `pma__favorite`
+--
+ALTER TABLE `pma__favorite`
+  ADD PRIMARY KEY (`username`);
+
+--
+-- Índices de tabela `pma__history`
+--
+ALTER TABLE `pma__history`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `username` (`username`,`db`,`table`,`timevalue`);
+
+--
+-- Índices de tabela `pma__navigationhiding`
+--
+ALTER TABLE `pma__navigationhiding`
+  ADD PRIMARY KEY (`username`,`item_name`,`item_type`,`db_name`,`table_name`);
+
+--
+-- Índices de tabela `pma__pdf_pages`
+--
+ALTER TABLE `pma__pdf_pages`
+  ADD PRIMARY KEY (`page_nr`),
+  ADD KEY `db_name` (`db_name`);
+
+--
+-- Índices de tabela `pma__recent`
+--
+ALTER TABLE `pma__recent`
+  ADD PRIMARY KEY (`username`);
+
+--
+-- Índices de tabela `pma__relation`
+--
+ALTER TABLE `pma__relation`
+  ADD PRIMARY KEY (`master_db`,`master_table`,`master_field`),
+  ADD KEY `foreign_field` (`foreign_db`,`foreign_table`);
+
+--
+-- Índices de tabela `pma__savedsearches`
+--
+ALTER TABLE `pma__savedsearches`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `u_savedsearches_username_dbname` (`username`,`db_name`,`search_name`);
+
+--
+-- Índices de tabela `pma__table_coords`
+--
+ALTER TABLE `pma__table_coords`
+  ADD PRIMARY KEY (`db_name`,`table_name`,`pdf_page_number`);
+
+--
+-- Índices de tabela `pma__table_info`
+--
+ALTER TABLE `pma__table_info`
+  ADD PRIMARY KEY (`db_name`,`table_name`);
+
+--
+-- Índices de tabela `pma__table_uiprefs`
+--
+ALTER TABLE `pma__table_uiprefs`
+  ADD PRIMARY KEY (`username`,`db_name`,`table_name`);
+
+--
+-- Índices de tabela `pma__tracking`
+--
+ALTER TABLE `pma__tracking`
+  ADD PRIMARY KEY (`db_name`,`table_name`,`version`);
+
+--
+-- Índices de tabela `pma__userconfig`
+--
+ALTER TABLE `pma__userconfig`
+  ADD PRIMARY KEY (`username`);
+
+--
+-- Índices de tabela `pma__usergroups`
+--
+ALTER TABLE `pma__usergroups`
+  ADD PRIMARY KEY (`usergroup`,`tab`,`allowed`);
+
+--
+-- Índices de tabela `pma__users`
+--
+ALTER TABLE `pma__users`
+  ADD PRIMARY KEY (`username`,`usergroup`);
+
+--
+-- AUTO_INCREMENT para tabelas despejadas
+--
+
+--
+-- AUTO_INCREMENT de tabela `pma__bookmark`
+--
+ALTER TABLE `pma__bookmark`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `pma__column_info`
+--
+ALTER TABLE `pma__column_info`
+  MODIFY `id` int(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `pma__export_templates`
+--
+ALTER TABLE `pma__export_templates`
+  MODIFY `id` int(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `pma__history`
+--
+ALTER TABLE `pma__history`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `pma__pdf_pages`
+--
+ALTER TABLE `pma__pdf_pages`
+  MODIFY `page_nr` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `pma__savedsearches`
+--
+ALTER TABLE `pma__savedsearches`
+  MODIFY `id` int(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
 -- Banco de dados: `sistema_bmw`
 --
+CREATE DATABASE IF NOT EXISTS `sistema_bmw` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `sistema_bmw`;
 
 -- --------------------------------------------------------
 
@@ -78,7 +517,6 @@ INSERT INTO `clientes` (`id`, `nome_completo`, `email`, `cpf`, `telefone`, `rg`,
 (47, 'Carlos Souza', 'carlos.souza@email.com', '11122233344', '(31) 98888-7777', '1122334', 'Belo Horizonte', 'MG', '11223344556', '$2y$10$hashfunc1', 0, 'Funcionario', 'Rua das Flores, 100', '12345678901', NULL, '2025-06-16 05:41:29'),
 (48, 'Duda araújo', 'dudinhaaa@gmail.com', '747.567.439-18', '(31) 51113-4564', '1444444231-2', 'BROOKLYN', 'SP', '11133455665', '$2y$10$K67KgG2AG0AdLTJbSu0liOYm/G4orJ2KR6IA5BMRdp0tFr5QnmoXK', 0, 'Funcionario', 'Rua de cereja, 1100', '91749183811', NULL, '2025-06-16 05:44:01'),
 (49, 'Ana Maria braga', 'anamaria@gmail.com', '176.461.837-61', '(77) 34517-3454', '9991654536-7', 'SAO PAULO', 'SP', '99341556628', '$2y$10$Bwkaf.my9d2N44.B72JujeGbs4.Ex8zkQ8XpsBamwd0Z7XBBcCfzu', 0, 'Cliente', '', '', NULL, '2025-06-16 05:52:17'),
-(50, 'louro jose', 'louro@gmai.com', '773.554.355-11', '(55) 35547-5565', '7766655674-4', 'FORTALEZA', 'CE', '19427492555', '$2y$10$/jGhekwXnCfsXiRVMIsw4ujIZnXXaunUBOrw5CyKjdzSGN89GxtQ2', 0, 'Cliente', '', '', NULL, '2025-06-16 05:59:26'),
 (51, 'Elinardy', 'elinardy@gmail.com', '998.877.665-54', '(88) 95353-5321', '1312421224-2', 'FORTALEZA', 'CE', '86423455543', '$2y$10$1CJ3uL6Eno/xNZrBbBuRb.bAbXuu0/5WYun1WDtrmTv4.WFgetxYu', 0, 'Cliente', '', '', NULL, '2025-06-16 22:17:19'),
 (52, 'Margot Robbie', 'margot@gmail.com', '112.347.313-15', '(11) 15252-1145', '1699153778-3', 'WASHINTON DC', 'SP', '99999144124', '$2y$10$/2WG8X0fNQYjcVhs26Gskez1lALS5YQanluW30XF2tIakrjJNvC1W', 0, 'Funcionario', 'Rua muito top aqui', '88776611314', 'img/perfis/perfil_52_1750125789.jpg', '2025-06-16 22:57:14'),
 (53, 'anakin', 'anakinisgone@gmail.com', '198.176.378-17', '(71) 77771-1132', '7766559198-2', 'FORTALEZA', 'CE', '24252525256', '$2y$10$k3L6.Dw2P8F9o9YzTdzGn.88qYA3hXUWv0G/4fMATDUOn3txxoTZa', 0, 'Funcionario', 'Rua onde nao existe lei 99', '99776666666', NULL, '2025-06-16 23:11:06'),
@@ -87,7 +525,6 @@ INSERT INTO `clientes` (`id`, `nome_completo`, `email`, `cpf`, `telefone`, `rg`,
 (56, 'Clarinha =)', 'mairaescura@gmail.com', '717.437.478-13', '(10) 00414-7184', '1100000517-3', 'BELEM', 'PA', '10041781014', '$2y$10$1hveWMBik7bNpZZBwZHmTOS0hV/D2ig1lLeU9CfwxhQDL.YS588Iy', 0, 'Cliente', '', '', NULL, '2025-06-16 23:50:34'),
 (57, 'teste', 'ttt1@gmail.com', '001.437.818-38', '(10) 01473-9173', '1881839103-0', 'FORTALEZA', 'CE', '17361738139', '$2y$10$Zlvp4MwtQMtDtO.Ixo4p..e9v1Q.Gxv6VmXUxRkPU6hfHFadN/K8G', 0, 'Cliente', '', '', NULL, '2025-06-17 01:17:11'),
 (58, 'teste', 'teste2@gmail.com', '104.719.317-68', '(74) 93719-7130', '8317893816-3', 'FORTALEZA', 'CE', '', '$2y$10$8aOM3kVdVaIaV2u2FRfXFeYTlgmXTNK1FlOc6af2CR6MJCXt7f42q', 0, 'Cliente', '', '', NULL, '2025-06-17 01:20:17'),
-(59, 'teste ', 'teste3@gmail.com', '818.300.371-04', '(11) 73927-6801', '1831738193-9', 'FORTALEZA', 'CE', '18387818381', '$2y$10$x.oH0.9GQY9QPM1pC0RWkeLyjQHPk3UQRQbRxFpmZU2YFmTdG5OUW', 0, 'Funcionario', 'Rua bem ali no escuro 170', '91889001376', NULL, '2025-06-17 01:22:11'),
 (60, 'teste', 'teste4@gmail.com', '173.718.909-99', '(11) 94714-8184', '4167481476-1', 'FORTALEZA', 'CE', '71737173717', '$2y$10$1GZZNjXgvNRaaaKBxDCGu.R5GKXiArhMyPwXZG1nEXe6jrCL7puBa', 0, 'Cliente', '', '', NULL, '2025-06-17 01:26:27'),
 (61, 'teste', 'teste5@gmail.com', '111.117.371-38', '(11) 74318-3813', '1837163183-8', 'FORTALEZA', 'CE', '11173718381', '$2y$10$Ao1I8pladqjl.zkcKBJXye9U3h3KjBRMPTRngvly5ERib9LGLy9/i', 0, 'Cliente', '', '', NULL, '2025-06-17 01:27:40'),
 (62, 'teste', 'teste6@gmail.com', '017.431.938-71', '(11) 74381-3819', '5128191991-9', 'FORTALEZA', 'CE', '00176300317', '$2y$10$geGnMfjIjptkj2RF0fjs9ekbrYa0ZV51TOqHoAreDMa.HgLwnBTMO', 0, 'Cliente', '', '', NULL, '2025-06-17 01:28:45'),
@@ -118,7 +555,11 @@ INSERT INTO `comissoes_vendas` (`id`, `venda_id`, `funcionario_id`, `valor_comis
 (2, 1, 35, 1444.28, '2025-06-23 01:10:14'),
 (3, 3, 34, 1283.80, '2025-06-23 01:19:15'),
 (4, 4, 34, 1604.75, '2025-06-23 01:24:19'),
-(5, 6, 35, 1604.75, '2025-06-23 05:49:50');
+(5, 6, 35, 1604.75, '2025-06-23 05:49:50'),
+(6, 7, 34, 1604.75, '2025-06-24 05:59:27'),
+(7, 8, 34, 2064.75, '2025-06-24 17:43:22'),
+(8, 9, 34, 1524.51, '2025-06-25 04:58:52'),
+(9, 10, 35, 1444.28, '2025-06-25 05:10:29');
 
 -- --------------------------------------------------------
 
@@ -180,21 +621,24 @@ INSERT INTO `detalhes_modelos` (`id`, `modelo_id`, `cor_principal`, `descricao`)
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `estoque`
+-- Estrutura stand-in para view `estoque`
+-- (Veja abaixo para a visão atual)
 --
-
 CREATE TABLE `estoque` (
-  `id` int(11) NOT NULL,
-  `modelo_id` int(11) NOT NULL,
-  `quantidade` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+`modelo_id` int(11)
+,`quantidade` bigint(21)
+);
+
+-- --------------------------------------------------------
 
 --
--- Despejando dados para a tabela `estoque`
+-- Estrutura stand-in para view `estoque_view`
+-- (Veja abaixo para a visão atual)
 --
-
-INSERT INTO `estoque` (`id`, `modelo_id`, `quantidade`) VALUES
-(1, 1, 9);
+CREATE TABLE `estoque_view` (
+`modelo_id` int(11)
+,`quantidade` bigint(21)
+);
 
 -- --------------------------------------------------------
 
@@ -259,6 +703,34 @@ INSERT INTO `funcionarios` (`id`, `nome_completo`, `email`, `cpf`, `rg`, `telefo
 (4, 'anakin', 'anakinisgone@gmail.com', '198.176.378', '7766559198-2', '(71) 77771-1132', '99776666666', 'Rua onde nao existe lei 99', 'FORTALEZA', 'CE'),
 (5, 'Scarface', 'scar2@gmail.com', '063.581.649', '8651918947-1', '(99) 90016-3617', '81764891749', 'Rua Itália 1917', 'FORTALEZA', 'CE'),
 (6, 'teste ', 'teste3@gmail.com', '818.300.371', '1831738193-9', '(11) 73927-6801', '91889001376', 'Rua bem ali no escuro 101', 'FORTALEZA', 'CE');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `historico_relatorios`
+--
+
+CREATE TABLE `historico_relatorios` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(255) NOT NULL,
+  `tipo` varchar(100) NOT NULL,
+  `caminho` varchar(255) NOT NULL,
+  `data_geracao` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `historico_relatorios`
+--
+
+INSERT INTO `historico_relatorios` (`id`, `nome`, `tipo`, `caminho`, `data_geracao`) VALUES
+(1, 'Relatório de Pagamentos', 'vendas_funcionario', 'relatorio_20250630_165849_6862a6290954f.pdf', '2025-06-30 16:58:49'),
+(2, 'Relatório de Pagamentos', 'estoque', 'relatorio_20250630_170007_6862a6774b9c4.pdf', '2025-06-30 17:00:07'),
+(3, 'Relatório de Pagamentos', 'vendas_funcionario', 'relatorio_20250630_170209_6862a6f15a5af.pdf', '2025-06-30 17:02:09'),
+(4, 'Relatório de Pagamentos', 'vendas_modelo', 'relatorio_20250630_170226_6862a702b51a7.pdf', '2025-06-30 17:02:26'),
+(5, 'Relatório de Pagamentos', 'vendas_funcionario', 'relatorio_20250630_180635_6862b60bdf7fc.pdf', '2025-06-30 18:06:35'),
+(6, 'Relatório de Pagamentos', 'estoque', 'relatorio_20250630_180643_6862b6138f8ae.pdf', '2025-06-30 18:06:43'),
+(7, 'Relatório de Pagamentos', 'estoque', 'relatorio_20250630_180829_6862b67dbe5af.pdf', '2025-06-30 18:08:29'),
+(8, 'Relatório de Pagamentos', 'estoque', 'relatorio_20250630_180929_6862b6b9d0290.pdf', '2025-06-30 18:09:29');
 
 -- --------------------------------------------------------
 
@@ -819,6 +1291,32 @@ INSERT INTO `modelos` (`id`, `modelo`, `fabricante`, `cor`, `ano`, `preco`, `est
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `pagamentos_cartao`
+--
+
+CREATE TABLE `pagamentos_cartao` (
+  `id` int(11) NOT NULL,
+  `cliente_id` int(11) NOT NULL,
+  `veiculo_id` int(11) NOT NULL,
+  `cor` varchar(50) NOT NULL,
+  `nome_impresso` varchar(100) NOT NULL,
+  `numero_cartao_final` varchar(4) NOT NULL,
+  `bandeira` varchar(30) NOT NULL,
+  `valor` decimal(10,2) NOT NULL,
+  `status` varchar(20) NOT NULL,
+  `parcelas` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `pagamentos_cartao`
+--
+
+INSERT INTO `pagamentos_cartao` (`id`, `cliente_id`, `veiculo_id`, `cor`, `nome_impresso`, `numero_cartao_final`, `bandeira`, `valor`, `status`, `parcelas`) VALUES
+(1, 34, 1, 'Prata', 'Dudxz Salvatore', '5555', 'amex', 320950.00, 'aprovado', 9);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `pagamentos_pix`
 --
 
@@ -840,10 +1338,7 @@ CREATE TABLE `pagamentos_pix` (
 --
 
 INSERT INTO `pagamentos_pix` (`id`, `usuario_id`, `veiculo_id`, `cor`, `criado_em`, `expira_em`, `status`, `valor`, `observacao`, `forma_pagamento`) VALUES
-(1, 34, 2, 'Azul', '2025-06-21 17:19:28', '2025-06-21 17:34:28', 'recusado', 320950.00, NULL, 'pix'),
-(2, 34, 2, 'Azul', '2025-06-21 18:31:03', '2025-06-21 18:46:03', 'aprovado', 320950.00, NULL, 'pix'),
-(3, 34, 1, 'Azul', '2025-06-21 19:01:10', '2025-06-21 19:16:10', 'aprovado', 320950.00, NULL, 'pix'),
-(4, 34, 1, 'Prata', '2025-06-22 17:26:33', '2025-06-22 17:41:33', 'aprovado', 320950.00, NULL, 'pix');
+(1, 34, 1, 'Prata', '2025-06-30 10:56:36', '2025-06-30 11:11:36', 'aprovado', 320950.00, NULL, 'pix');
 
 -- --------------------------------------------------------
 
@@ -862,20 +1357,6 @@ CREATE TABLE `pagamento_boleto` (
   `data_expiracao` datetime NOT NULL,
   `valor` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `pagamento_boleto`
---
-
-INSERT INTO `pagamento_boleto` (`id`, `usuario_id`, `veiculo_id`, `cor`, `codigo_barras`, `status`, `data_criacao`, `data_expiracao`, `valor`) VALUES
-(1, 34, 1, 'Prata', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'aprovado', '2025-06-21 17:22:22', '2025-06-21 17:23:22', 320950.00),
-(2, 34, 1, 'Azul', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-21 18:28:20', '2025-06-21 18:29:20', 320950.00),
-(3, 34, 1, 'Prata', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-21 18:30:45', '2025-06-21 18:31:45', 320950.00),
-(4, 34, 1, 'Prata', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'aprovado', '2025-06-22 17:29:39', '2025-06-22 17:30:39', 320950.00),
-(5, 34, 1, 'Azul', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-22 17:35:48', '2025-06-22 17:36:48', 320950.00),
-(6, 34, 1, 'Prata', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-22 17:38:19', '2025-06-22 17:39:19', 320950.00),
-(7, 34, 1, 'Azul', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-22 17:42:41', '2025-06-22 17:43:41', 320950.00),
-(8, 34, 1, 'Azul', '34191.79001 01043.510047 91020.150008 6 12340000010000', 'expirado', '2025-06-22 17:45:58', '2025-06-22 17:46:58', 320950.00);
 
 -- --------------------------------------------------------
 
@@ -898,10 +1379,7 @@ CREATE TABLE `promocoes` (
 --
 
 INSERT INTO `promocoes` (`id`, `modelo_id`, `desconto`, `preco_com_desconto`, `data_limite`, `ativo`, `status`) VALUES
-(1, 4, 10.00, 409455.00, '2025-05-13 10:27:00', 1, 'Inativa'),
-(2, 2, 10.00, 288855.00, '2025-05-23 22:01:00', 1, 'Inativa'),
-(3, 3, 10.00, 371655.00, '2025-04-09 22:01:00', 1, 'Inativa'),
-(4, 3, 10.00, 371655.00, '2025-06-21 14:56:00', 1, 'Inativa');
+(10, 3, 10.00, 371655.00, '2025-06-26 08:05:00', 1, 'Ativa');
 
 -- --------------------------------------------------------
 
@@ -913,23 +1391,39 @@ CREATE TABLE `veiculos` (
   `id` int(11) NOT NULL,
   `modelo_id` int(11) NOT NULL,
   `numero_chassi` varchar(100) NOT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'disponivel'
+  `status` varchar(20) NOT NULL DEFAULT 'disponivel',
+  `id_pagamento` int(11) DEFAULT NULL,
+  `tipo_pagamento` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `veiculos`
 --
 
-INSERT INTO `veiculos` (`id`, `modelo_id`, `numero_chassi`, `status`) VALUES
-(1, 1, 'BMW00000000000001', 'vendido'),
-(2, 1, 'BMW00000000000002', 'vendido'),
-(3, 1, 'BMW00000000000003', 'vendido'),
-(4, 1, 'BMW00000000000004', 'vendido'),
-(5, 1, 'BMW00000000000005', 'vendido'),
-(6, 1, 'BMW00000000000006', 'vendido'),
-(7, 1, 'BMW00000000000007', 'vendido_M'),
-(8, 1, 'BMW00000000000008', 'vendido_M'),
-(9, 1, 'BMW00000000000009', 'vendido_M');
+INSERT INTO `veiculos` (`id`, `modelo_id`, `numero_chassi`, `status`, `id_pagamento`, `tipo_pagamento`) VALUES
+(1, 1, 'BMW00000000000001', 'vendido', NULL, NULL),
+(2, 1, 'BMW00000000000002', 'vendido', NULL, NULL),
+(3, 1, 'BMW00000000000003', 'vendido', NULL, NULL),
+(4, 1, 'BMW00000000000004', 'vendido', NULL, NULL),
+(5, 1, 'BMW00000000000005', 'vendido', NULL, NULL),
+(6, 1, 'BMW00000000000006', 'vendido', NULL, NULL),
+(7, 1, 'BMW00000000000007', 'vendido_M', NULL, NULL),
+(8, 1, 'BMW00000000000008', 'vendido_M', NULL, NULL),
+(9, 1, 'BMW00000000000009', 'vendido_M', NULL, NULL),
+(10, 2, 'BMW00000000000010', 'vendido_M', NULL, NULL),
+(11, 3, 'BMW00000000000011', 'vendido_M', NULL, NULL),
+(12, 1, 'BMW00000000000012', 'vendido_M', NULL, NULL),
+(13, 1, 'BMW00000000000013', 'vendido_M', NULL, NULL),
+(14, 1, 'BMW00000000000014', 'vendido', NULL, NULL),
+(16, 1, 'BMW00000000000016', 'vendido', NULL, NULL),
+(17, 1, 'BMW00000000000017', 'vendido', NULL, NULL),
+(18, 1, 'BMW00000000000018', 'vendido', NULL, NULL),
+(19, 1, 'BMW00000000000019', 'vendido', 1, 'Pix'),
+(20, 1, 'BMW00000000000020', 'vendido', 1, 'CARTAO'),
+(21, 1, 'BMW00000000000021', 'disponivel', NULL, NULL),
+(22, 1, 'BMW00000000000022', 'disponivel', NULL, NULL),
+(23, 1, 'BMW00000000000023', 'disponivel', NULL, NULL),
+(24, 2, 'BMW00000000000024', 'vendido', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -958,7 +1452,29 @@ INSERT INTO `vendas_fisicas` (`id`, `cliente_id`, `veiculo_id`, `cor_veiculo`, `
 (1, 35, 6, 'Azul', 'Dinheiro', 10.00, 288855.00, '', 35, '2025-06-23 01:10:14'),
 (3, 35, 7, 'Azul', 'Cartão', 20.00, 256760.00, '', 34, '2025-06-23 01:19:15'),
 (4, 35, 8, 'Prata', 'Cartão', 0.00, 320950.00, '', 34, '2025-06-23 01:24:19'),
-(6, 35, 9, 'Azul', 'Dinheiro', 0.00, 320950.00, '', 35, '2025-06-23 05:49:50');
+(6, 35, 9, 'Azul', 'Dinheiro', 0.00, 320950.00, '', 35, '2025-06-23 05:49:50'),
+(7, 35, 10, 'Preto', 'Cartão', 0.00, 320950.00, '', 34, '2025-06-24 05:59:27'),
+(8, 1, 11, 'Branco', 'Transferência', 0.00, 412950.00, '', 34, '2025-06-24 17:43:22'),
+(9, 35, 12, 'Azul', 'Dinheiro', 5.00, 304902.50, '', 34, '2025-06-25 04:58:52'),
+(10, 34, 13, 'Azul', 'Dinheiro', 10.00, 288855.00, '', 35, '2025-06-25 05:10:29');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para view `estoque`
+--
+DROP TABLE IF EXISTS `estoque`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `estoque`  AS SELECT `veiculos`.`modelo_id` AS `modelo_id`, count(0) AS `quantidade` FROM `veiculos` WHERE `veiculos`.`status` = 'disponivel' GROUP BY `veiculos`.`modelo_id` ;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para view `estoque_view`
+--
+DROP TABLE IF EXISTS `estoque_view`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `estoque_view`  AS SELECT `veiculos`.`modelo_id` AS `modelo_id`, count(0) AS `quantidade` FROM `veiculos` WHERE `veiculos`.`status` = 'disponivel' GROUP BY `veiculos`.`modelo_id` ;
 
 --
 -- Índices para tabelas despejadas
@@ -990,13 +1506,6 @@ ALTER TABLE `detalhes_modelos`
   ADD UNIQUE KEY `modelo_id` (`modelo_id`);
 
 --
--- Índices de tabela `estoque`
---
-ALTER TABLE `estoque`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `modelo_id` (`modelo_id`);
-
---
 -- Índices de tabela `favoritos`
 --
 ALTER TABLE `favoritos`
@@ -1014,6 +1523,12 @@ ALTER TABLE `funcionarios`
   ADD UNIQUE KEY `pis` (`pis`);
 
 --
+-- Índices de tabela `historico_relatorios`
+--
+ALTER TABLE `historico_relatorios`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Índices de tabela `imagens_secundarias`
 --
 ALTER TABLE `imagens_secundarias`
@@ -1024,6 +1539,12 @@ ALTER TABLE `imagens_secundarias`
 -- Índices de tabela `modelos`
 --
 ALTER TABLE `modelos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Índices de tabela `pagamentos_cartao`
+--
+ALTER TABLE `pagamentos_cartao`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1078,19 +1599,13 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de tabela `comissoes_vendas`
 --
 ALTER TABLE `comissoes_vendas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de tabela `detalhes_modelos`
 --
 ALTER TABLE `detalhes_modelos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
-
---
--- AUTO_INCREMENT de tabela `estoque`
---
-ALTER TABLE `estoque`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `favoritos`
@@ -1105,6 +1620,12 @@ ALTER TABLE `funcionarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT de tabela `historico_relatorios`
+--
+ALTER TABLE `historico_relatorios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT de tabela `imagens_secundarias`
 --
 ALTER TABLE `imagens_secundarias`
@@ -1117,34 +1638,40 @@ ALTER TABLE `modelos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
+-- AUTO_INCREMENT de tabela `pagamentos_cartao`
+--
+ALTER TABLE `pagamentos_cartao`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT de tabela `pagamentos_pix`
 --
 ALTER TABLE `pagamentos_pix`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `pagamento_boleto`
 --
 ALTER TABLE `pagamento_boleto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `promocoes`
 --
 ALTER TABLE `promocoes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de tabela `vendas_fisicas`
 --
 ALTER TABLE `vendas_fisicas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restrições para tabelas despejadas
@@ -1162,12 +1689,6 @@ ALTER TABLE `comissoes_vendas`
 --
 ALTER TABLE `detalhes_modelos`
   ADD CONSTRAINT `detalhes_modelos_ibfk_1` FOREIGN KEY (`modelo_id`) REFERENCES `modelos` (`id`) ON DELETE CASCADE;
-
---
--- Restrições para tabelas `estoque`
---
-ALTER TABLE `estoque`
-  ADD CONSTRAINT `estoque_ibfk_1` FOREIGN KEY (`modelo_id`) REFERENCES `modelos` (`id`) ON DELETE CASCADE;
 
 --
 -- Restrições para tabelas `favoritos`
@@ -1207,6 +1728,11 @@ ALTER TABLE `veiculos`
 ALTER TABLE `vendas_fisicas`
   ADD CONSTRAINT `vendas_fisicas_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
   ADD CONSTRAINT `vendas_fisicas_ibfk_2` FOREIGN KEY (`veiculo_id`) REFERENCES `veiculos` (`id`);
+--
+-- Banco de dados: `test`
+--
+CREATE DATABASE IF NOT EXISTS `test` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `test`;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
