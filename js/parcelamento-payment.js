@@ -9,20 +9,21 @@ function atualizarParcelamento(valor) {
     if (!select) return;
     select.innerHTML = '';
 
-    // Sem juros até 3x, depois com juros
+    // Até 10x sem juros, 11x, 12x e 24x com juros
     const opcoes = [
         { qtd: 1, juros: 0 },
         { qtd: 2, juros: 0 },
         { qtd: 3, juros: 0 },
-        { qtd: 4, juros: 0.02 },
-        { qtd: 5, juros: 0.04 },
-        { qtd: 6, juros: 0.06 },
-        { qtd: 7, juros: 0.08 },
-        { qtd: 8, juros: 0.08 },
-        { qtd: 9, juros: 0.09 },
-        { qtd: 10, juros: 0.09 },
-        { qtd: 11, juros: 0.10 },
-        { qtd: 12, juros: 0.12 },
+        { qtd: 4, juros: 0 },
+        { qtd: 5, juros: 0 },
+        { qtd: 6, juros: 0 },
+        { qtd: 7, juros: 0 },
+        { qtd: 8, juros: 0 },
+        { qtd: 9, juros: 0 },
+        { qtd: 10, juros: 0 },
+        { qtd: 11, juros: 0.075 }, // Exemplo: 7.5% juros
+        { qtd: 12, juros: 0.09 },  // Exemplo: 9% juros
+        { qtd: 24, juros: 0.43 }   // Exemplo: 43% juros (ajuste conforme política)
     ];
 
     opcoes.forEach(op => {
@@ -30,9 +31,9 @@ function atualizarParcelamento(valor) {
         let texto = '';
         if (op.juros > 0) {
             total = valor * (1 + op.juros);
-            texto = `${op.qtd} x R$ ${formatarValorBR(total / op.qtd)} = R$ ${formatarValorBR(total)} (Com juros)`;
+            texto = `${op.qtd} x R$ ${formatarValorBR(total / op.qtd)} = R$ ${formatarValorBR(total)} (com juros)`;
         } else {
-            texto = `${op.qtd} x R$ ${formatarValorBR(valor / op.qtd)} = R$ ${formatarValorBR(valor)}`;
+            texto = `${op.qtd} x R$ ${formatarValorBR(valor / op.qtd)} = R$ ${formatarValorBR(valor)} (sem juros)`;
         }
         const option = document.createElement('option');
         option.value = op.qtd;

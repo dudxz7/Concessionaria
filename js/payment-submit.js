@@ -18,15 +18,17 @@ document.addEventListener('DOMContentLoaded', function() {
             cor = document.body.getAttribute('data-cor');
         }
         // Validação dos campos obrigatórios
-        const camposObrigatorios = ['nome', 'email', 'cpf', 'data_nasc', 'telefone'];
+        const camposObrigatorios = (forma && forma.id === 'cartao')
+            ? ['numero_cartao', 'validade', 'cvv', 'nome_cartao']
+            : ['nome', 'email', 'cpf', 'data_nasc', 'telefone'];
         let camposPreenchidos = true;
         camposObrigatorios.forEach(function(campo) {
             const el = document.getElementsByName(campo)[0];
-            if (el && !el.value.trim()) {
+            if (el && !el.disabled && el.offsetParent !== null && !el.value.trim()) {
                 camposPreenchidos = false;
             }
         });
-        aplicarClasseErroTodosInputs();
+        aplicarClasseErroTodosInputs && aplicarClasseErroTodosInputs();
         if (!camposPreenchidos) {
             alert('Preencha todos os campos obrigatórios.');
             return;
@@ -43,11 +45,10 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.text())
             .then(res => {
-                console.log('RESPOSTA_BACKEND:', res);
                 if (res.trim().startsWith('ok')) {
                     window.location.href = `../php/realizar_pagamento_pix.php?id=${encodeURIComponent(id)}&cor=${encodeURIComponent(cor)}`;
                 } else {
-                    alert(res.trim()); // Mostra o erro real do backend
+                    alert(res.trim());
                 }
             })
             .catch(() => {
@@ -71,11 +72,57 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Erro ao conectar com o servidor. Tente novamente.');
             });
         } else if (forma && forma.id === 'cartao') {
-            if (!validarCamposCartao()) {
-                alert('Preencha corretamente todos os campos do cartão.');
+            // Validação local extra: impede envio se número do cartão for inválido ou bandeira não reconhecida
+            const numeroCartao = document.getElementById('numero_cartao').value.trim();
+            const nomeImpresso = document.getElementById('nome_cartao').value.trim();
+            const bandeira = typeof detectarBandeira === 'function' ? detectarBandeira(numeroCartao) : null;
+            if (!validarCamposCartao() || !bandeira || /^1+$/.test(numeroCartao) || numeroCartao.length < 12 || nomeImpresso.length < 3) {
+                mostrarNotificacao && mostrarNotificacao('recusado');
                 return;
             }
-            this.closest('form').submit();
+            // Cria o formData antes de usar
+            const formData = new FormData();
+            formData.append('cliente_id', document.body.getAttribute('data-cliente'));
+            formData.append('veiculo_id', document.body.getAttribute('data-id'));
+            formData.append('cor', cor);
+            formData.append('nome_impresso', nomeImpresso);
+            formData.append('numero_cartao_final', numeroCartao.slice(-4));
+            formData.append('bandeira', bandeira);
+            // Parcelamento
+            const selectParcelamento = document.getElementById('parcelamento');
+            const parcelas = parseInt(selectParcelamento.value, 10);
+            const textoOpcao = selectParcelamento.options[selectParcelamento.selectedIndex].text;
+            const matchValor = textoOpcao.match(/= R\$\s*([\d.,]+)/i);
+            let valorFinal = total;
+            if (matchValor && matchValor[1]) {
+                valorFinal = matchValor[1].replace('.', '').replace(',', '.');
+            }
+            formData.append('parcelas', parcelas);
+            formData.append('valor', valorFinal);
+            formData.append('status', 'aprovado'); // ou 'recusado' se for o caso
+            // Mostra notificação pendente imediatamente
+            mostrarNotificacao && mostrarNotificacao('pendente');
+            setTimeout(() => {
+                fetch('../php/processar_pagamento_cartao.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(res => {
+                    if (res.success) {
+                        mostrarNotificacao && mostrarNotificacao('aprovado');
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1800);
+                    } else {
+                        mostrarNotificacao && mostrarNotificacao('erro', null, res.erro || res.message || 'Erro ao processar pagamento.');
+                    }
+                })
+                .catch(() => {
+                    mostrarNotificacao && mostrarNotificacao('erro', null, 'Erro ao conectar com o servidor. Tente novamente.');
+                });
+            }, 600); // Delay para garantir que o pendente apareça
+            return;
         }
     });
 });

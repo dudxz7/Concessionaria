@@ -78,11 +78,18 @@ $stmtBoleto->bind_param('i', $usuarioId);
 $stmtBoleto->execute();
 $resultBoleto = $stmtBoleto->get_result();
 $historicoBoleto = $resultBoleto->fetch_all(MYSQLI_ASSOC);
+// Busca histórico de pagamentos com CARTÃO (todas tentativas)
+$sqlCartao = "SELECT veiculo_id, cor, valor, status, NOW() as data, 'CARTAO' as tipo, bandeira FROM pagamentos_cartao WHERE cliente_id = ? ORDER BY id DESC";
+$stmtCartao = $conn->prepare($sqlCartao);
+$stmtCartao->bind_param('i', $usuarioId);
+$stmtCartao->execute();
+$resultCartao = $stmtCartao->get_result();
+$historicoCartao = $resultCartao->fetch_all(MYSQLI_ASSOC);
 // Junta e ordena tudo por data desc
-$historico = array_merge($historicoPix, $historicoBoleto, $historicoManual);
+$historico = array_merge($historicoPix, $historicoBoleto, $historicoManual, $historicoCartao);
 usort($historico, function($a, $b) { return strtotime($b['data']) - strtotime($a['data']); });
 if (empty($historico)) {
-    echo '<p style="margin-left:20px;">Nenhum pagamento realizado ou expirado encontrado.</p>';
+    echo '<p style="margin-left:20px;">Nenhum pagamento realizado    ou expirado encontrado.</p>';
     return;
 }
 foreach ($historico as $pagamento) {
@@ -130,6 +137,8 @@ foreach ($historico as $pagamento) {
             echo '<span class="forma-pagamento-overlay"><span class="forma-pagamento-card pix"><img src="../img/formas-de-pagamento/icons8-foto-240.png" alt="Pix"></span></span>';
         } elseif ($tipo === 'BOLETO') {
             echo '<span class="forma-pagamento-overlay"><span class="forma-pagamento-card boleto"><img src="../img/formas-de-pagamento/boletov2.png" alt="Boleto"></span></span>';
+        } elseif ($tipo === 'CARTAO') {
+            echo '<span class="forma-pagamento-overlay"><span class="forma-pagamento-card cartao"><img src="../img/formas-de-pagamento/creditcard_mb.png" alt="Cartão"></span></span>';
         } elseif ($tipo === 'MANUAL') {
             echo '<span class="forma-pagamento-overlay"><span class="forma-pagamento-card manual" style="background:#2d313a;color:#fff;padding:4px 12px;border-radius:12px;font-weight:bold;font-size:0.98em;">Venda Manual</span></span>';
         }
@@ -164,7 +173,7 @@ foreach ($historico as $pagamento) {
             }
             if ($cupomVendaId) {
                 $cupomUrl = '../php/cupom_fiscal.php?venda_id=' . urlencode($cupomVendaId);
-                echo '<a href="' . $cupomUrl . '" target="_blank" style="text-decoration:none;display:inline-block;margin-top:12px;">';
+                echo '<a href="' . $cupomUrl . '" target="_blank" style="text-decoration:none;display:inline-block;">';
                 echo '<button class="btn-send" style="margin-bottom:8px;background:linear-gradient(90deg,#2d313a,#23272f)!important;color:#fff!important;border:none!important;box-shadow:0 2px 12px 0 #23272f55!important;font-weight:bold !important;cursor:pointer;width:100%;width:240px;">Ver cupom fiscal</button>';
                 echo '</a>';
             } else {
@@ -200,7 +209,7 @@ foreach ($historico as $pagamento) {
             $btnColor = 'background:linear-gradient(90deg,#43a047 0%,#90EE90 100%)!important;color:#fff!important;border:none!important;box-shadow:0 2px 12px 0 #1de9b655!important;';
         } elseif ($pagamento['status'] === 'expirado') {
             $statusBtn = 'Expirado';
-            $btnColor = 'background:linear-gradient(90deg, #9e9e9e, #bdbdbd)!important;color:#fff!important;border:none!important;box-shadow:0 2px 12px 0 #ff910055!important;';
+            $btnColor = 'background:linear-gradient(90deg, #9e9e9e, #bdbdbd)!important;color:#fff!important;border:none!important;box-shadow:0 2px 12px 0 rgba(97, 97, 97, 0.33)!important;';
         } elseif ($pagamento['status'] === 'cancelado') {
             $statusBtn = 'Cancelado';
             $btnColor = 'background:linear-gradient(90deg, #e53935, #ef5350)!important;color:#fff!important;border:none!important;box-shadow:0 2px 12px 0 #ff616f55!important;';

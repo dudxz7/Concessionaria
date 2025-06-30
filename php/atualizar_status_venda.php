@@ -69,9 +69,10 @@ if ($status_atual !== $status) {
         $stmt->bind_result($id_vendido);
         if ($stmt->fetch()) {
             $stmt->close();
-            $sql = "UPDATE veiculos SET status = 'vendido' WHERE id = ?";
+            // Atualiza status, id_pagamento e tipo_pagamento
+            $sql = "UPDATE veiculos SET status = 'vendido', id_pagamento = ?, tipo_pagamento = ? WHERE id = ?";
             $stmt2 = $conn->prepare($sql);
-            $stmt2->bind_param('i', $id_vendido);
+            $stmt2->bind_param('isi', $id, $tipo, $id_vendido);
             $stmt2->execute();
             $stmt2->close();
             // Recusa todas as outras tentativas pendentes para o mesmo veiculo/modelo
