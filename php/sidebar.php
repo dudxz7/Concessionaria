@@ -174,6 +174,12 @@ if ($usuario_id) {
                 <img src="../img/venda.png" alt="Consulta Vendas">
                 <span>Consultar Vendas</span>
             </div>
+            <?php if ($cargo_usuario === 'Gerente'):?>
+            <div class="icon-item" onclick="window.location.href='gerar_tipo_relatorio.php'">
+                <img src="../img/documento.png" alt="Gerar Relatórios">
+                <span>Gerar Relatórios</span>
+            </div>
+            <?php endif; ?>
             <div class="icon-item" onclick="window.location.href='logout.php'">
                 <img src="../img/sairr.png" alt="Sair">
                 <span>Sair</span>

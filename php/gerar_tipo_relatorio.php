@@ -63,6 +63,8 @@ const reportType = document.getElementById('report-type');
 const dateFields = document.getElementById('date-range-fields');
 const dataInicio = document.getElementById('data-inicio');
 const dataFim = document.getElementById('data-fim');
+const closeBtn = document.querySelector('.close-btn');
+const cancelBtn = document.querySelector('.cancel-btn');
 function toggleDateFields(force) {
     if (reportType.value === 'vendas_intervalo') {
         dateFields.style.display = 'block';
@@ -87,4 +89,33 @@ function toggleDateFields(force) {
 reportType.addEventListener('change', toggleDateFields);
 window.addEventListener('pageshow', function() { toggleDateFields(true); });
 window.addEventListener('DOMContentLoaded', function() { toggleDateFields(true); });
+
+closeBtn.addEventListener('click', function() {
+    window.location.href = '../perfil.php';
+});
+cancelBtn.addEventListener('click', function() {
+    window.location.href = '../perfil.php';
+});
 </script>
+<style>
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background 0.2s;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.close-btn:hover {
+    background: #e0e0e0;
+    color: #003366;
+}
+</style>

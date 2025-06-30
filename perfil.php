@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ];
         $max_tamanho = 2 * 1024 * 1024; // 2MB
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        
+
         // Verifica extensão
         if (in_array($ext, $extensoes_permitidas) && $file['size'] <= $max_tamanho) {
             // Verifica MIME real
@@ -125,6 +125,7 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -132,27 +133,29 @@ $conn->close();
     <link rel="stylesheet" href="css/perfil.css">
     <link rel="icon" href="img/logos/logoofcbmw.png">
     <style>
-    /* Aura azul ao passar o mouse na imagem de perfil */
-    .profile-icon.has-image:hover .profile-upload-icon {
-        box-shadow: 0 0 0 5px #2196f3, 0 0 20px 10px #2196f3aa;
-        transition: box-shadow 0.3s;
-    }
-    /* Partículas */
-    .profile-particle {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 8px;
-        height: 8px;
-        background: #2196f3;
-        border-radius: 50%;
-        pointer-events: none;
-        opacity: 0.8;
-        z-index: 10;
-        /* Removendo animation fixa, será inline */
-    }
+        /* Aura azul ao passar o mouse na imagem de perfil */
+        .profile-icon.has-image:hover .profile-upload-icon {
+            box-shadow: 0 0 0 5px #2196f3, 0 0 20px 10px #2196f3aa;
+            transition: box-shadow 0.3s;
+        }
+
+        /* Partículas */
+        .profile-particle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: #2196f3;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.8;
+            z-index: 10;
+            /* Removendo animation fixa, será inline */
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="sidebar">
@@ -160,15 +163,21 @@ $conn->close();
                 <source src="videos/overlay_azul.mp4" type="video/mp4">
                 Seu navegador não suporta vídeos.
             </video>
-            <div class="profile-icon<?php if (!empty($foto_perfil) && file_exists($foto_perfil)) echo ' has-image'; ?>" style="position:relative; cursor:pointer;"<?php if (!empty($foto_perfil) && file_exists($foto_perfil)) echo ' class="profile-icon has-image"'; ?>>
+            <div class="profile-icon<?php if (!empty($foto_perfil) && file_exists($foto_perfil))
+                echo ' has-image'; ?>"
+                style="position:relative; cursor:pointer;" <?php if (!empty($foto_perfil) && file_exists($foto_perfil))
+                    echo ' class="profile-icon has-image"'; ?>>
                 <?php if (!empty($foto_perfil) && file_exists($foto_perfil)): ?>
-                    <img class="profile-upload-icon" src="<?php echo $foto_perfil; ?>" alt="Foto de perfil" style="display:block;position:absolute;width:90px;height:90px;object-fit:cover;top:-5px;left:-5px;border-radius:50%;" />
+                    <img class="profile-upload-icon" src="<?php echo $foto_perfil; ?>" alt="Foto de perfil"
+                        style="display:block;position:absolute;width:90px;height:90px;object-fit:cover;top:-5px;left:-5px;border-radius:50%;" />
                     <span class="profile-letter" style="display:none;"></span>
                 <?php else: ?>
                     <span class="profile-letter"><?php echo strtoupper(substr($nome_completo, 0, 1)); ?></span>
-                    <img class="profile-upload-icon" src="img/pasta.png" alt="Upload" style="display:block;position:absolute;width:32px;height:32px;object-fit:cover;cursor:pointer;opacity:0;transition:opacity 0.2s;" />
+                    <img class="profile-upload-icon" src="img/pasta.png" alt="Upload"
+                        style="display:block;position:absolute;width:32px;height:32px;object-fit:cover;cursor:pointer;opacity:0;transition:opacity 0.2s;" />
                 <?php endif; ?>
-                <input type="file" id="profile-image-input" name="profile_image" accept="image/*" style="display:none;" form="form-perfil" />
+                <input type="file" id="profile-image-input" name="profile_image" accept="image/*" style="display:none;"
+                    form="form-perfil" />
             </div>
             <p><strong><?php echo $nome_completo; ?></strong></p>
             <p><?php echo $email; ?></p>
@@ -178,18 +187,18 @@ $conn->close();
                     <span>Minha conta</span>
                 </div>
                 <?php if ($cargo === 'Cliente'): ?>
-                <div class="icon-item" onclick="window.location.href='php/favoritos.php'">
-                    <img src="img/coracoes/coracao.png" alt="Favoritos">
-                    <span>Favoritos</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='php/a_pagar.php'">
-                    <img src="img/apagar.png" alt="A pagar">
-                    <span>A pagar</span>
-                </div>
-                <div class="icon-item" onclick="window.location.href='php/historico_pagamentos.php'">
-                    <img src="img/historico.png" alt="Historico de vendas">
-                    <span>Histórico</span>
-                </div>
+                    <div class="icon-item" onclick="window.location.href='php/favoritos.php'">
+                        <img src="img/coracoes/coracao.png" alt="Favoritos">
+                        <span>Favoritos</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='php/a_pagar.php'">
+                        <img src="img/apagar.png" alt="A pagar">
+                        <span>A pagar</span>
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='php/historico_pagamentos.php'">
+                        <img src="img/historico.png" alt="Historico de vendas">
+                        <span>Histórico</span>
+                    </div>
                 <?php endif; ?>
                 <div class="icon-item" onclick="window.location.href='php/redefinir_a_senha.php'">
                     <img src="img/ajudando.png" alt="Esqueceu a Senha">
@@ -225,7 +234,11 @@ $conn->close();
                     <div class="icon-item" onclick="window.location.href='php/consultar_vendas.php'">
                         <img src="img/venda.png" alt="Consultar Vendas">
                         <span>Consultar Vendas</span>
-                    </div> 
+                    </div>
+                    <div class="icon-item" onclick="window.location.href='php/gerar_tipo_relatorio.php'">
+                        <img src="img/documento.png" alt="Gerar Relatórios">
+                        <span>Gerar Relatórios</span>
+                    </div>
                 <?php endif; ?>
                 <div class="icon-item" onclick="window.location.href='php/logout.php'">
                     <img src="img/sairr.png" alt="Sair">
@@ -331,100 +344,101 @@ $conn->close();
     <script src="js/function-perfil.js"></script>
     <script src="js/mudar-letra.js"></script>
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var icon = document.querySelector('.profile-icon');
-    var uploadIcon = icon.querySelector('.profile-upload-icon');
-    var letter = icon.querySelector('.profile-letter');
-    var fileInput = icon.querySelector('#profile-image-input');
-    var btnSalvar = document.getElementById('btn-salvar');
-    var campos = [
-        document.getElementById('estado'),
-        document.getElementById('cidade'),
-        document.getElementById('endereco')
-    ].filter(Boolean); // só campos existentes
+        document.addEventListener('DOMContentLoaded', function () {
+            var icon = document.querySelector('.profile-icon');
+            var uploadIcon = icon.querySelector('.profile-upload-icon');
+            var letter = icon.querySelector('.profile-letter');
+            var fileInput = icon.querySelector('#profile-image-input');
+            var btnSalvar = document.getElementById('btn-salvar');
+            var campos = [
+                document.getElementById('estado'),
+                document.getElementById('cidade'),
+                document.getElementById('endereco')
+            ].filter(Boolean); // só campos existentes
 
-    // Efeito partículas ao passar mouse na imagem de perfil (em todas as direções)
-    if (icon.classList.contains('has-image')) {
-        icon.addEventListener('mouseenter', function() {
-            for (let i = 0; i < 12; i++) {
-                let particle = document.createElement('div');
-                particle.className = 'profile-particle';
-                let angle = Math.random() * 2 * Math.PI; // 0 a 2PI radianos
-                let distance = 60 + Math.random() * 30; // 60 a 90px
-                let x = Math.cos(angle) * distance;
-                let y = Math.sin(angle) * distance;
-                particle.style.background = '#2196f3';
-                particle.style.transition = 'transform 1.5s cubic-bezier(.22,1.02,.36,.99), opacity 1.5s';
-                particle.style.transform = 'translate(-50%, -50%) scale(1)';
-                icon.appendChild(particle);
-                setTimeout(() => {
-                    particle.style.transform = `translate(${x}px, ${y}px) scale(0.5)`;
-                    particle.style.opacity = '0';
-                }, 10);
-                setTimeout(() => {
-                    particle.remove();
-                }, 1550);
+            // Efeito partículas ao passar mouse na imagem de perfil (em todas as direções)
+            if (icon.classList.contains('has-image')) {
+                icon.addEventListener('mouseenter', function () {
+                    for (let i = 0; i < 12; i++) {
+                        let particle = document.createElement('div');
+                        particle.className = 'profile-particle';
+                        let angle = Math.random() * 2 * Math.PI; // 0 a 2PI radianos
+                        let distance = 60 + Math.random() * 30; // 60 a 90px
+                        let x = Math.cos(angle) * distance;
+                        let y = Math.sin(angle) * distance;
+                        particle.style.background = '#2196f3';
+                        particle.style.transition = 'transform 1.5s cubic-bezier(.22,1.02,.36,.99), opacity 1.5s';
+                        particle.style.transform = 'translate(-50%, -50%) scale(1)';
+                        icon.appendChild(particle);
+                        setTimeout(() => {
+                            particle.style.transform = `translate(${x}px, ${y}px) scale(0.5)`;
+                            particle.style.opacity = '0';
+                        }, 10);
+                        setTimeout(() => {
+                            particle.remove();
+                        }, 1550);
+                    }
+                });
             }
+
+            // só mostra ícone de upload se não houver imagem de perfil e esconde a letra
+            icon.addEventListener('mouseover', function () {
+                if (uploadIcon.src.includes('img/pasta.png')) {
+                    uploadIcon.style.opacity = '1';
+                    letter.style.display = 'none';
+                }
+            });
+            icon.addEventListener('mouseout', function () {
+                if (uploadIcon.src.includes('img/pasta.png')) {
+                    uploadIcon.style.opacity = '0';
+                    letter.style.display = '';
+                }
+            });
+
+            // Clique: abre seletor de arquivo
+            icon.addEventListener('click', function (e) {
+                fileInput.click();
+            });
+
+            // Habilita botão se trocar imagem
+            fileInput.addEventListener('change', function (e) {
+                if (fileInput.files && fileInput.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (ev) {
+                        uploadIcon.src = ev.target.result;
+                        uploadIcon.style.opacity = '1';
+                        uploadIcon.style.width = '90px';
+                        uploadIcon.style.height = '90px';
+                        uploadIcon.style.top = '-5px';
+                        uploadIcon.style.left = '-5px';
+                        uploadIcon.style.transform = '';
+                        uploadIcon.style.borderRadius = '50%';
+                        letter.style.display = 'none';
+                        // Habilita o botão após o preview
+                        btnSalvar.disabled = false;
+                        btnSalvar.classList.remove('disabled');
+                        btnSalvar.style.opacity = '1';
+                        btnSalvar.style.pointerEvents = 'auto';
+                        btnSalvar.style.filter = 'none';
+                    };
+                    reader.readAsDataURL(fileInput.files[0]);
+                    // Fallback: habilita o botão imediatamente também
+                    btnSalvar.disabled = false;
+                    btnSalvar.classList.remove('disabled');
+                    btnSalvar.style.opacity = '1';
+                    btnSalvar.style.pointerEvents = 'auto';
+                    btnSalvar.style.filter = 'none';
+                }
+            });
+
+            // Habilita botão se alterar qualquer campo editável
+            campos.forEach(function (campo) {
+                campo.addEventListener('input', function () {
+                    btnSalvar.disabled = false;
+                });
+            });
         });
-    }
-
-    // só mostra ícone de upload se não houver imagem de perfil e esconde a letra
-    icon.addEventListener('mouseover', function() {
-        if (uploadIcon.src.includes('img/pasta.png')) {
-            uploadIcon.style.opacity = '1';
-            letter.style.display = 'none';
-        }
-    });
-    icon.addEventListener('mouseout', function() {
-        if (uploadIcon.src.includes('img/pasta.png')) {
-            uploadIcon.style.opacity = '0';
-            letter.style.display = '';
-        }
-    });
-
-    // Clique: abre seletor de arquivo
-    icon.addEventListener('click', function(e) {
-        fileInput.click();
-    });
-
-    // Habilita botão se trocar imagem
-    fileInput.addEventListener('change', function(e) {
-        if (fileInput.files && fileInput.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(ev) {
-                uploadIcon.src = ev.target.result;
-                uploadIcon.style.opacity = '1';
-                uploadIcon.style.width = '90px';
-                uploadIcon.style.height = '90px';
-                uploadIcon.style.top = '-5px';
-                uploadIcon.style.left = '-5px';
-                uploadIcon.style.transform = '';
-                uploadIcon.style.borderRadius = '50%';
-                letter.style.display = 'none';
-                // Habilita o botão após o preview
-                btnSalvar.disabled = false;
-                btnSalvar.classList.remove('disabled');
-                btnSalvar.style.opacity = '1';
-                btnSalvar.style.pointerEvents = 'auto';
-                btnSalvar.style.filter = 'none';
-            };
-            reader.readAsDataURL(fileInput.files[0]);
-            // Fallback: habilita o botão imediatamente também
-            btnSalvar.disabled = false;
-            btnSalvar.classList.remove('disabled');
-            btnSalvar.style.opacity = '1';
-            btnSalvar.style.pointerEvents = 'auto';
-            btnSalvar.style.filter = 'none';
-        }
-    });
-
-    // Habilita botão se alterar qualquer campo editável
-    campos.forEach(function(campo) {
-        campo.addEventListener('input', function() {
-            btnSalvar.disabled = false;
-        });
-    });
-});
-</script>
+    </script>
 </body>
+
 </html>

@@ -67,8 +67,8 @@ $email = $_SESSION['email'] ?? 'admin@gmail.com';
             <div class="section">
                 <h2>Relatórios</h2>
                 <div class="buttons">
-                    <div class="button-item"><a href="fechar_venda.php">Fechar Venda</a></div>
-                    <div class="button-item"><a href="gerar_relatorio.php">Gerar Relatório</a></div>
+                    <div class="button-item"><a href="venda_manual.php">Fechar Venda</a></div>
+                    <div class="button-item"><a href="gerar_tipo_relatorio.php">Gerar Relatório</a></div>
                     <div class="button-item"><a href="comissao_funcionario.php">Comissão por Funcionário</a></div>
                 </div>
             </div>
