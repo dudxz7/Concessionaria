@@ -59,9 +59,8 @@ if (!function_exists('gerarNota')) {
     function gerarNota() {
         return rand(1, 1500);
     }
-}
+} 
 
-// Handle filter parameters from POST (AJAX) ou GET (AJAX)
 function getFiltro($key, $default = null) {
     if (isset($_GET[$key])) return trim($_GET[$key]);
     if (isset($_POST[$key])) return trim($_POST[$key]);
@@ -74,6 +73,7 @@ $anoMin = getFiltro('ano_min', null); $anoMin = ($anoMin !== null && $anoMin !==
 $anoMax = getFiltro('ano_max', null); $anoMax = ($anoMax !== null && $anoMax !== '' && $anoMax !== '0') ? intval($anoMax) : null;
 $precoMin = getFiltro('preco_min', null); $precoMin = ($precoMin !== null && $precoMin !== '') ? floatval($precoMin) : null;
 $precoMax = getFiltro('preco_max', null); $precoMax = ($precoMax !== null && $precoMax !== '') ? floatval($precoMax) : null;
+$estoque = getFiltro('estoque', '');
 
 // Build dynamic WHERE clauses
 $where = ["p.status = 'Ativa'", "p.data_limite > NOW()"];
@@ -139,6 +139,12 @@ if (!is_null($precoMax)) {
     $params[] = (float)$precoMax;
     $types .= 'd';
 }
+// Filtro de estoque (tem ou não tem veículo disponível)
+if ($estoque === '1') {
+    $where[] = "EXISTS (SELECT 1 FROM veiculos v WHERE v.modelo_id = m.id AND v.status = 'disponivel')";
+} else if ($estoque === '0') {
+    $where[] = "NOT EXISTS (SELECT 1 FROM veiculos v WHERE v.modelo_id = m.id AND v.status = 'disponivel')";
+}
 
 $whereSql = count($where) ? ('WHERE ' . implode(' AND ', $where)) : '';
 
@@ -168,13 +174,25 @@ $sql = "
     $whereSql
 ";
 
+// --- MONTAGEM E EXECUÇÃO DA QUERY ---
 $stmt = $conn->prepare($sql);
-if (!empty($types) && count($params) === strlen($types)) {
-    $stmt->bind_param($types, ...$params);
+if ($stmt === false) {
+    echo "<div style='color:red;font-weight:bold;'>Erro ao preparar consulta: " . htmlspecialchars($conn->error) . "</div>";
+    exit;
 }
-$stmt->execute();
+if (!empty($types) && count($params) === strlen($types)) {
+    if (!$stmt->bind_param($types, ...$params)) {
+        echo "<div style='color:red;font-weight:bold;'>Erro ao vincular parâmetros: " . htmlspecialchars($stmt->error) . "</div>";
+        exit;
+    }
+}
+if (!$stmt->execute()) {
+    echo "<div style='color:red;font-weight:bold;'>Erro ao executar consulta: " . htmlspecialchars($stmt->error) . "</div>";
+    exit;
+}
 $result = $stmt->get_result();
 
+// --- EXIBIÇÃO DOS CARDS ---
 if ($result->num_rows > 0) {
     while ($carro = $result->fetch_assoc()) {
         $imagemBase = $carro['imagem_padrao'] ?? 'padrao';
@@ -184,14 +202,10 @@ if ($result->num_rows > 0) {
         $rating = gerarRating();
         $nota = gerarNota();
 
-        $precoOriginal = $carro['preco_original'];
-        $precoComDesconto = $carro['preco_com_desconto'];
-        $desconto = $carro['desconto'];
-        // $desconto = floatval(rtrim($carro['desconto'], '%')); se quiser remover o .00 extra  
-
-        $dataAtual = new DateTime();
-        $dataLimite = new DateTime($carro['data_limite']);
-        $diasRest = $dataAtual->diff($dataLimite)->days . ' dias';
+        // Corrige: define variáveis de preço e desconto antes do HTML
+        $precoOriginal = isset($carro['preco_original']) ? $carro['preco_original'] : 0;
+        $precoComDesconto = isset($carro['preco_com_desconto']) ? $carro['preco_com_desconto'] : 0;
+        $desconto = isset($carro['desconto']) ? $carro['desconto'] : 0;
 
         $favorito = false;
         if (isset($_SESSION['usuarioId'])) {
@@ -205,37 +219,23 @@ if ($result->num_rows > 0) {
 
         $coracaoImg = $favorito ? "coracao-salvo.png" : "coracao-nao-salvo.png";
 
-        // HTML do card
         echo '<div class="card">
-                <div class="tempo-restante-wrapper">
-                    <div class="tempo-restante">
-                        <img src="img/cards/relogio-branco.png" class="icon-tempo" alt="Tempo">
-                        <div class="tempo-texto">
-                            <span>Tempo restante</span>
-                            <div class="dias">' . $diasRest . '</div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="favorite-icon">
                     <button type="button" class="btn-favoritar" data-modelo-id="' . (int) $carro['id'] . '" style="background:none;border:none;padding:0;cursor:pointer;">
                         <img src="img/coracoes/' . $coracaoImg . '" alt="Favoritar" class="heart-icon" draggable="false">
                     </button>
                 </div>
-
-                <img src="' . htmlspecialchars($imagemPath) . '" alt="' . htmlspecialchars($carro['modelo']) . '">
+                <img src="' . htmlspecialchars($imagemPath, ENT_QUOTES) . '" alt="' . htmlspecialchars($carro['modelo'], ENT_QUOTES) . '">
                 <h2>' . htmlspecialchars($carro['modelo']) . '</h2>
                 <p>' . htmlspecialchars($carro['descricao']) . '</p>
-                <p>
-                    <img src="img/cards/calendario.png" alt="Ano"> ' . $anoFormatado . '
-                    <img src="img/cards/painel-de-controle.png" alt="Km"> 0 Km
-                </p>
-
+                <p><img src="img/cards/calendario.png" alt="Ano"> ' . $anoFormatado . ' <img src="img/cards/painel-de-controle.png" alt="Km"> 0 Km</p>
                 <div class="rating">';
+
         foreach ($rating as $estrela) {
             echo '<img src="img/cards/' . $estrela . '" alt="estrela">';
         }
-        echo '<span class="nota">(' . $nota . ')</span>
+
+        echo '<span class="nota">(' . number_format($nota, 0, ',', '.') . ')</span>
                 </div>
 
                 <div class="preco-promocao">
@@ -252,6 +252,6 @@ if ($result->num_rows > 0) {
             </div>';
     }
 } else {
-    echo '<p>Nenhum veículo em promoção encontrado.</p>';
+    echo "<p style='width:100%;text-align:center;font-size:1.2rem;padding:2em 0;'>Nenhum modelo encontrado.</p>";
 }
 ?>

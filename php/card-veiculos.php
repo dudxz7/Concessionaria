@@ -151,10 +151,21 @@ if ($estoque === '1') {
 $sql .= " GROUP BY m.id";
 
 $stmt = $conn->prepare($sql);
-if (!empty($types) && count($params) === strlen($types)) {
-    $stmt->bind_param($types, ...$params);
+if ($stmt === false) {
+    // Erro ao preparar statement
+    echo "<div style='color:red;font-weight:bold;'>Erro ao preparar consulta: " . htmlspecialchars($conn->error) . "</div>";
+    exit;
 }
-$stmt->execute();
+if (!empty($types) && count($params) === strlen($types)) {
+    if (!$stmt->bind_param($types, ...$params)) {
+        echo "<div style='color:red;font-weight:bold;'>Erro ao vincular parâmetros: " . htmlspecialchars($stmt->error) . "</div>";
+        exit;
+    }
+}
+if (!$stmt->execute()) {
+    echo "<div style='color:red;font-weight:bold;'>Erro ao executar consulta: " . htmlspecialchars($stmt->error) . "</div>";
+    exit;
+}
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {

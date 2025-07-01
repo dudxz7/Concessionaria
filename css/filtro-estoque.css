@@ -1,0 +1,24 @@
+/* Estilo para o select de estoque no modal de filtros */
+.select-filtro-estoque {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #b0b0b0;
+    border-radius: 6px;
+    background: #f8f8f8;
+    color: #222;
+    font-size: 1rem;
+    transition: border 0.2s;
+    margin-top: 4px;
+    margin-bottom: 2px;
+}
+.select-filtro-estoque:focus {
+    border: 1.5px solid #0071c5;
+    outline: none;
+    background: #fff;
+}
+.campo-modal-filtros label[for="filtro-estoque"] {
+    font-weight: 500;
+    color: #222;
+    margin-bottom: 2px;
+    display: block;
+}

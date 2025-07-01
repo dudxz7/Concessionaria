@@ -89,7 +89,7 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
                     <img src="img/x-fechar.png" alt="Fechar" style="width:22px;height:22px;" />
                 </button>
                 <h3 class="titulo-modal-filtros">Filtrar veículos</h3>
-                <form id="form-filtros">
+                <form id="form-filtros" method="get" action="index.php" onsubmit="aplicarFiltros(event)">
                     <div class="campo-modal-filtros">
                         <label for="filtro-ano-min">Ano mínimo</label>
                         <input type="number" id="filtro-ano-min" name="ano_min" min="1900" max="2025" placeholder="Ex: 2018">
@@ -295,10 +295,52 @@ document.addEventListener('DOMContentLoaded', function() {
     var formFiltros = document.getElementById('form-filtros');
     if (selectEstoque && formFiltros) {
         selectEstoque.addEventListener('change', function() {
-            formFiltros.submit();
+            formFiltros.dispatchEvent(new Event('submit', {cancelable:true}));
         });
     }
 });
+
+function aplicarFiltros(event) {
+    event.preventDefault();
+    const form = event.target;
+    const params = new URLSearchParams(new FormData(form)).toString();
+    // Atualiza a URL sem reload e recarrega os cards via AJAX
+    history.replaceState(null, '', '?' + params);
+    // Recarrega os cards de veículos e promoções via AJAX
+    fetch('php/card-veiculos.php?' + params)
+        .then(r => r.text())
+        .then(html => {
+            document.querySelector('.cards-container').innerHTML = html;
+            // Após atualizar os cards, reativa os scripts de favoritar
+            if (window.initFavoritarCard) window.initFavoritarCard();
+        });
+    fetch('php/card-promocoes.php?' + params)
+        .then(r => r.text())
+        .then(html => {
+            document.querySelectorAll('.cards-container')[1].innerHTML = html;
+            // Após atualizar os cards, reativa os scripts de favoritar
+            if (window.initFavoritarCard) window.initFavoritarCard();
+        });
+    return false;
+}
+</script>
+<script>
+// Função para reativar o JS de favoritar após AJAX
+window.initFavoritarCard = function() {
+    if (typeof FavoritarCard !== 'undefined') {
+        FavoritarCard.init && FavoritarCard.init();
+    }
+    // Ou reatacha eventos manualmente se for jQuery ou vanilla
+    if (typeof attachFavoritarEvents === 'function') {
+        attachFavoritarEvents();
+    }
+    // Ou reexecuta o script favoritar-card.js se for vanilla
+    if (typeof favoritarCardInit === 'function') {
+        favoritarCardInit();
+    }
+};
+// Executa ao carregar a página
+window.initFavoritarCard();
 </script>
 </body>
 </html>
