@@ -175,6 +175,10 @@ if ($usuario_id) {
                 <span>Consultar Vendas</span>
             </div>
             <?php if ($cargo_usuario === 'Gerente'):?>
+            <div class="icon-item" onclick="window.location.href='comissoes.php'">
+                <img src="../img/real.png" alt="Gerar Comissões">
+                <span>Gerar Comissões</span>
+            </div>
             <div class="icon-item" onclick="window.location.href='gerar_tipo_relatorio.php'">
                 <img src="../img/documento.png" alt="Gerar Relatórios">
                 <span>Gerar Relatórios</span>

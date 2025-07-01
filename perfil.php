@@ -235,6 +235,12 @@ $conn->close();
                         <img src="img/venda.png" alt="Consultar Vendas">
                         <span>Consultar Vendas</span>
                     </div>
+                <?php endif; ?>
+                <?php if ($cargo === 'Gerente'): ?>
+                    <div class="icon-item" onclick="window.location.href='php/comissoes.php'">
+                        <img src="img/real.png" alt="Gerar Comissões">
+                        <span>Gerar Comissões</span>
+                    </div>
                     <div class="icon-item" onclick="window.location.href='php/gerar_tipo_relatorio.php'">
                         <img src="img/documento.png" alt="Gerar Relatórios">
                         <span>Gerar Relatórios</span>
