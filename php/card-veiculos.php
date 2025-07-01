@@ -70,6 +70,7 @@ $precoMax = (isset($_GET['preco_max']) && $_GET['preco_max'] !== '' && $_GET['pr
 $anoMin = (isset($_GET['ano_min']) && $_GET['ano_min'] !== '' && $_GET['ano_min'] !== '0') ? intval($_GET['ano_min']) : null;
 $anoMax = (isset($_GET['ano_max']) && $_GET['ano_max'] !== '' && $_GET['ano_max'] !== '0') ? intval($_GET['ano_max']) : null;
 $anoFiltro = (isset($_GET['ano']) && $_GET['ano'] !== '' && $_GET['ano'] !== '0') ? intval($_GET['ano']) : null;
+$estoque = isset($_GET['estoque']) ? $_GET['estoque'] : '';
 
 $params = [];
 $types = '';
@@ -140,6 +141,12 @@ if (!is_null($anoFiltro) && is_null($anoMin) && is_null($anoMax)) {
         $params[] = $anoMax;
         $types .= 'i';
     }
+}
+// Filtro de estoque (tem ou não tem veículo disponível)
+if ($estoque === '1') {
+    $sql .= " AND EXISTS (SELECT 1 FROM veiculos v WHERE v.modelo_id = m.id AND v.status = 'disponivel')";
+} else if ($estoque === '0') {
+    $sql .= " AND NOT EXISTS (SELECT 1 FROM veiculos v WHERE v.modelo_id = m.id AND v.status = 'disponivel')";
 }
 $sql .= " GROUP BY m.id";
 

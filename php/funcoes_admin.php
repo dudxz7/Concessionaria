@@ -52,7 +52,7 @@ $email = $_SESSION['email'] ?? 'admin@gmail.com';
                 <h2>Promoções</h2>
                 <div class="buttons">
                     <div class="button-item"><a href="cadastrar_promocao.php">Cadastrar Promoção</a></div>
-                    <div class="button-item"><a href="consultar_promocao.php">Consultar Promoções</a></div>
+                    <div class="button-item"><a href="consultar_promocoes.php">Consultar Promoções</a></div>
                 </div>
             </div>
 
@@ -69,7 +69,7 @@ $email = $_SESSION['email'] ?? 'admin@gmail.com';
                 <div class="buttons">
                     <div class="button-item"><a href="venda_manual.php">Fechar Venda</a></div>
                     <div class="button-item"><a href="gerar_tipo_relatorio.php">Gerar Relatório</a></div>
-                    <div class="button-item"><a href="comissao_funcionario.php">Comissão por Funcionário</a></div>
+                    <div class="button-item"><a href="comissoes.php">Comissão por Funcionário</a></div>
                 </div>
             </div>
         </div>

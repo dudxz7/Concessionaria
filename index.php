@@ -110,6 +110,14 @@ $capital = isset($capitais[$estado]) ? $capitais[$estado] . " - " . $estado : "C
                         <label for="filtro-cor">Cor</label>
                         <input type="text" id="filtro-cor" name="cor" placeholder="Ex: Preto, Branco, Azul...">
                     </div>
+                    <div class="campo-modal-filtros">
+                        <label for="filtro-estoque">Estoque</label>
+                        <select id="filtro-estoque" name="estoque" class="select-filtro-estoque">
+                            <option value="">Todos</option>
+                            <option value="1">Tem estoque</option>
+                            <option value="0">Sem estoque</option>
+                        </select>
+                    </div>
                     <button type="submit" class="btn-aplicar-filtros">Aplicar Filtros</button>
                 </form>
             </div>
@@ -282,6 +290,15 @@ document.addEventListener('DOMContentLoaded', function() {
             main2.scrollIntoView({ behavior: 'smooth' });
         }
     });
+    // Submete o filtro ao mudar o select de estoque
+    var selectEstoque = document.getElementById('filtro-estoque');
+    var formFiltros = document.getElementById('form-filtros');
+    if (selectEstoque && formFiltros) {
+        selectEstoque.addEventListener('change', function() {
+            formFiltros.submit();
+        });
+    }
 });
 </script>
+</body>
 </html>

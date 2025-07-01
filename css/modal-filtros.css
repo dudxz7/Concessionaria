@@ -123,6 +123,24 @@
     background: #f0f6fa;
     box-shadow: 0 2px 8px rgba(47,78,218,0.10);
 }
+.campo-modal-filtros select, .select-filtro-estoque {
+    padding: 0.8rem 1.2rem;
+    border: 1.5px solid #cfd8dc;
+    border-radius: 10px;
+    font-size: 1.15rem;
+    outline: none;
+    background: #fafdff;
+    transition: border 0.2s, box-shadow 0.2s;
+    font-family: 'Poppins', 'Inter', Arial, sans-serif;
+    box-shadow: 0 1px 4px rgba(10,34,54,0.04);
+    color: #0a2236;
+    margin-top: 0.1rem;
+}
+.campo-modal-filtros select:focus, .select-filtro-estoque:focus {
+    border: 1.5px solid #2f4eda;
+    background: #f0f6fa;
+    box-shadow: 0 2px 8px rgba(47,78,218,0.10);
+}
 .btn-aplicar-filtros {
     background: linear-gradient(to right, #0a1e3f 70%, #004080 100%);
     color: #fff;

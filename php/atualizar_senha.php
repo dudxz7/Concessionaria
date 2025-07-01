@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atualizar Senha - BMW</title>
     <link rel="stylesheet" href="../css/login.css">
-    <link rel="icon" href="../img/logoofcbmw.png">
+    <link rel="icon" href="../img/logos/logoofcbmw.png">
     <style>
     .icone-eye {
         position: absolute;
@@ -148,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <div class="campodoinput">
                     <input type="text" name="email" id="email" required spellcheck="false" autocomplete="off">
                     <label for="email">E-mail do usuário</label>
-                    <img src="../img/usersemfundo.png" alt="Simbolo de usuário" class="icone-eye" id="userIcon">
+                    <img src="../img/user-black.png" alt="Simbolo de usuário" class="icone-eye" id="userIcon">
                     <img src="../img/perigo.png" alt="Alerta" class="icone-alerta" id="alertEmail">
                     <span class="campo-obrigatorio">Campo obrigatório</span>
                 </div>
